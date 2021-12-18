@@ -68,6 +68,7 @@
         <div class="border border-secondary rounded p-3">
             <form th:action="@{/users/save}" method="post" th:object="${user}"
                   class="needs-validation" novalidate
+                  onsubmit="return checkEmailUnique(this)"
                   style="max-width: 700px; margin: 0 auto">
                 <div class="row mb-3">
                     <label class="col-form-label col-sm-4">Email</label>
@@ -123,6 +124,22 @@
                 </div>
             </form>
         </div>
+        <div class="modal fade text-center" tabindex="-1" id="emailCheckModal" aria-labelledby="emailCheckModalTitle" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="emailCheckModalTitle">Warning</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <span id="emailCheckModalBody"></span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="text-center">
             <p>Shopme Control Panel - Copyright &copy; Shopme</p>
         </div>
@@ -133,6 +150,36 @@
                 window.location = "[[@{/users}]]";
             })
         });
+
+        function checkEmailUnique(form) {
+            let url = "[[@{/users/check_email}]]";
+            let userEmail = $("#email").val();
+            let csrf = $("input[name='_csrf']").val();
+
+            let params = {email: userEmail, _csrf: csrf};
+
+            $.post(url, params, function (response) {
+                if (response === "OK") {
+                    form.submit();
+                } else if (response === "Duplicated") {
+                    showModalDialog("Warning", "The email: " + userEmail + " has been registered already.");
+                } else {
+                    show("Error", "An Error occurred.");
+                }
+            }).fail(function () {
+                showModalDialog("Error", "Could not connect to server.")
+            });
+            return false;
+        }
+
+        function showModalDialog(title, message) {
+            $("#emailCheckModalTitle").text(title);
+            $("#emailCheckModalBody").text(message);
+            let myModal = new bootstrap.Modal($("#emailCheckModal"), {
+                keyboard: false
+            });
+            myModal.show();
+        }
     </script>
 </body>
 </html>
