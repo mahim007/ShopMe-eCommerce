@@ -71,6 +71,9 @@
         <div th:if="${message != null}" class="alert alert-success text-center">
             [[${message}]]
         </div>
+        <div th:if="${exceptionMessage != null}" class="alert alert-danger text-center">
+            [[${exceptionMessage}]]
+        </div>
         <div class="table-responsive-xl">
             <table class="table table-striped table-hover table-bordered text-center">
                 <thead class="table-dark">
@@ -97,7 +100,12 @@
                         <a th:if="${user.enabled == true}" href="#"><i class="fas fa-check-circle fa-2x icon-green"></i></a>
                         <a th:if="${user.enabled == false}" href="#"><i class="fas fa-times fa-2x icon-dark"></i></a>
                     </td>
-                    <td><a href="#"><i class="fas fa-edit fa-2x icon-lightblue"></i></a>
+                    <td>
+                        <a th:href="@{'/users/edit/' + ${user.id}}"
+                           title="Edit this user"
+                        >
+                            <i class="fas fa-edit fa-2x icon-lightblue"></i>
+                        </a>
                         &nbsp;
                         <a href="#"><i class="fas fa-trash fa-2x icon-dark"></i></a>
                     </td>
