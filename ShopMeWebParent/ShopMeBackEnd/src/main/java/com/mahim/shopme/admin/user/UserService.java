@@ -5,10 +5,12 @@ import com.mahim.shopme.common.entity.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -60,6 +62,15 @@ public class UserService {
         }
 
         userRepository.deleteById(id);
+    }
+
+    public void updateEnabledStatus(Integer id, boolean enabled) throws UserNotFoundException {
+        Long countById = userRepository.countById(id);
+
+        if (countById == null || countById == 0) {
+            throw new UserNotFoundException("User not found (ID: " + id + ")");
+        }
+        userRepository.updateEnabledStatus(id, !enabled);
     }
 
     private void encodePassword(User user) {

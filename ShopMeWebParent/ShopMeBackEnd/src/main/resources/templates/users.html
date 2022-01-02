@@ -97,8 +97,8 @@
                     <td th:id="@{'user-' + ${user.id} + '-lname'}" th:text="${user.lastName}">mahim</td>
                     <td th:text="${user.roles}">Role</td>
                     <td>
-                        <a th:if="${user.enabled == true}" href="#"><i class="fas fa-check-circle fa-2x icon-green"></i></a>
-                        <a th:if="${user.enabled == false}" href="#"><i class="fas fa-times fa-2x icon-dark"></i></a>
+                        <a th:if="${user.enabled == true}" th:href="@{'/users/' + ${user.id} + '/enabled/' + ${true}}"><i class="fas fa-check-circle fa-2x icon-green"></i></a>
+                        <a th:if="${user.enabled == false}" th:href="@{'/users/' + ${user.id} + '/enabled/' + ${false}}"><i class="fas fa-times fa-2x icon-dark"></i></a>
                     </td>
                     <td>
                         <a th:href="@{'/users/edit/' + ${user.id}}"
