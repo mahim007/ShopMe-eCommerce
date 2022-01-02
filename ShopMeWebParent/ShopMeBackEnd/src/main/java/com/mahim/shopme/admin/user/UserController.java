@@ -62,4 +62,16 @@ public class UserController {
             return "redirect:/users";
         }
     }
+
+    @GetMapping("/delete/{id}")
+    public String deleteUser(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            userService.delete(id);
+            redirectAttributes.addFlashAttribute("message", "The user ( id: " + id +" ) has been deleted");
+        } catch (UserNotFoundException ex) {
+            redirectAttributes.addFlashAttribute("exceptionMessage", "User with id: " + id + " not found.");
+        }
+
+        return "redirect:/users";
+    }
 }

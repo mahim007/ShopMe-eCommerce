@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends CrudRepository<User, Integer> {
 
     User getUserByEmail(@Param("email") String email);
+    Long countById(Integer id);
 }
