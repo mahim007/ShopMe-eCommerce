@@ -3,6 +3,7 @@ package com.mahim.shopme.admin.user;
 import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.common.entity.Role;
 import com.mahim.shopme.common.entity.User;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.util.List;
 
+import static com.mahim.shopme.admin.user.UserService.USERS_PER_PAGE;
 import static com.mahim.shopme.admin.utils.StaticPathUtils.UPLOAD_DIR;
 
 @Controller
@@ -25,8 +27,27 @@ public class UserController {
     }
 
     @GetMapping("")
-    public String listAll(Model model) {
-        model.addAttribute("listUsers", userService.listAll());
+    public String listAll() {
+        return "redirect:/users/page/1";
+    }
+
+    @GetMapping("/page/{pageNo}")
+    public String listByPage(@PathVariable(name = "pageNo") int pageNo, Model model) {
+        Page<User> userPage = userService.listByPage(pageNo);
+        int totalPages = userPage.getTotalPages();
+        long totalElements = userPage.getTotalElements();
+        int currentPageSize = userPage.getNumberOfElements();
+        int startNo = ((pageNo - 1) * USERS_PER_PAGE) + 1;
+        int endNo = (startNo + currentPageSize) - 1;
+
+        List<User> userList = userPage.getContent();
+
+        model.addAttribute("startNo", startNo);
+        model.addAttribute("endNo", endNo);
+        model.addAttribute("totalPageNo", totalPages);
+        model.addAttribute("total", totalElements);
+        model.addAttribute("currentPageNo", pageNo);
+        model.addAttribute("listUsers", userList);
         return "users";
     }
 

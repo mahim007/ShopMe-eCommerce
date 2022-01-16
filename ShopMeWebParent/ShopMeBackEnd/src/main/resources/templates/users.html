@@ -121,6 +121,37 @@
                 </tbody>
             </table>
         </div>
+        <div class="text-center m-1" th:if="${total > 0}">
+            <span>Showing users # [[${startNo}]] to [[${endNo}]] of [[${total}]]</span>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li th:class="${currentPageNo > 1 ? 'page-item' : 'page-item disabled'}">
+                        <a class="page-link" th:href="@{/users/page/1}">First</a>
+                    </li>
+                    <li th:class="${currentPageNo > 1 ? 'page-item' : 'page-item disabled'}">
+                        <a class="page-link" th:href="@{'/users/page/' + ${currentPageNo - 1}}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <th:block th:each="i, stat : ${#numbers.sequence(1,5,1)}">
+                        <li th:class="${currentPageNo == stat.current ? 'page-item active' : 'page-item'}">
+                            <a class="page-link" th:href="@{'/users/page/' + ${stat.current}}">[[${stat.current}]]</a>
+                        </li>
+                    </th:block>
+                    <li th:class="${currentPageNo < totalPageNo ? 'page-item' : 'page-item disabled'}">
+                        <a class="page-link" th:href="@{'/users/page/' + ${currentPageNo + 1}}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li th:class="${currentPageNo < totalPageNo ? 'page-item' : 'page-item disabled'}">
+                        <a class="page-link" th:href="@{'/users/page/' + ${totalPageNo}}">Last</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="text-center m-1" th:unless="${total > 0}">
+            <h2>No users found</h2>
+        </div>
         <div class="modal fade text-center" tabindex="-1" id="confirmDeleteModal" aria-labelledby="confirmDeleteModalTitle" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
