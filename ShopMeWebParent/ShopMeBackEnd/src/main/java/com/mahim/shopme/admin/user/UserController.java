@@ -32,11 +32,13 @@ public class UserController {
     }
 
     @GetMapping("/page/{pageNo}")
-    public String listByPage(@PathVariable(name = "pageNo") int pageNo, @RequestParam(name = "sortField", defaultValue = "id") String sortField,
-                             @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir, Model model) {
-        System.out.println("sort field: " + sortField);
-        System.out.println("sort order: " + sortDir);
-        Page<User> userPage = userService.listByPage(pageNo, sortField, sortDir);
+    public String listByPage(@PathVariable(name = "pageNo") int pageNo,
+                             @RequestParam(name = "sortField", defaultValue = "id") String sortField,
+                             @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
+                             @RequestParam(name = "keyword", defaultValue = "") String keyword,
+                             Model model) {
+        Page<User> userPage = keyword.equals("") ? userService.listByPage(pageNo, sortField, sortDir) :
+                userService.listByKeyword(pageNo, sortField, sortDir, keyword);
         int totalPages = userPage.getTotalPages();
         long totalElements = userPage.getTotalElements();
         int currentPageSize = userPage.getNumberOfElements();
