@@ -37,8 +37,13 @@ public class UserController {
                              @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
                              @RequestParam(name = "keyword", defaultValue = "") String keyword,
                              Model model) {
-        Page<User> userPage = keyword.equals("") ? userService.listByPage(pageNo, sortField, sortDir) :
+        keyword = org.apache.commons.lang3.StringUtils.trim(keyword);
+        if (org.apache.commons.lang3.StringUtils.isEmpty(keyword) || org.apache.commons.lang3.StringUtils.isBlank(keyword)) {
+            keyword = null;
+        }
+        Page<User> userPage = keyword == null ? userService.listByPage(pageNo, sortField, sortDir) :
                 userService.listByKeyword(pageNo, sortField, sortDir, keyword);
+
         int totalPages = userPage.getTotalPages();
         long totalElements = userPage.getTotalElements();
         int currentPageSize = userPage.getNumberOfElements();
@@ -57,6 +62,7 @@ public class UserController {
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", reverseSortDir);
+        model.addAttribute("keyword", keyword);
         return "users";
     }
 

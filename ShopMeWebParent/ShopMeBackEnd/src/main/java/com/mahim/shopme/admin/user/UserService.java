@@ -45,7 +45,7 @@ public class UserService {
         Sort sort = Sort.by(sortField);
         sort = StringUtils.equals(sortDir, "asc") ? sort.ascending() : sort.descending();
         Pageable pageable = PageRequest.of(pageNum -1, USERS_PER_PAGE, sort);
-        return userRepository.findAllByFirstNameIsLikeOrLastNameIsLikeOrEmailIsLike(keyword, keyword, keyword, pageable);
+        return userRepository.findAllByKeyword(keyword, pageable);
     }
 
     public List<Role> listRoles() {
