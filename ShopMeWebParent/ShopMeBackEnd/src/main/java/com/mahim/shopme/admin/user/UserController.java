@@ -80,18 +80,24 @@ public class UserController {
     @PostMapping("/save")
     public String saveUser(User user, RedirectAttributes redirectAttributes, @RequestParam("image")MultipartFile multipartFile) throws IOException {
 
+        User savedUser;
         if (!multipartFile.isEmpty() && multipartFile.getOriginalFilename() != null) {
             String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
             user.setPhotos(fileName);
-            User savedUser = userService.save(user);
+            savedUser = userService.save(user);
             FileUploadUtil.cleanDir(UPLOAD_DIR + "/" + savedUser.getId());
             FileUploadUtil.saveFile(UPLOAD_DIR + "/" + savedUser.getId(), fileName, multipartFile);
         } else {
-            userService.save(user);
+            savedUser = userService.save(user);
         }
 
         redirectAttributes.addFlashAttribute("message", "The user has been saved successfully.");
-        return "redirect:/users";
+        return getRedirectUrlForAffectedUser(savedUser);
+    }
+
+    private String getRedirectUrlForAffectedUser(User savedUser) {
+        String firstPartOfEmail = savedUser.getEmail().split("@")[0];
+        return "redirect:/users/page/1?sortField=id&sortDir=asc&keyword=" + firstPartOfEmail;
     }
 
     @GetMapping("/edit/{id}")
