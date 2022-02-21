@@ -3,6 +3,8 @@ package com.mahim.shopme.admin.user;
 import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.common.entity.Role;
 import com.mahim.shopme.common.entity.User;
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,9 +24,11 @@ import static com.mahim.shopme.admin.utils.StaticPathUtils.UPLOAD_DIR;
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
+    private final UserCsvExporter csvExporter;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserCsvExporter csvExporter) {
         this.userService = userService;
+        this.csvExporter = csvExporter;
     }
 
     @GetMapping("")
@@ -138,5 +143,11 @@ public class UserController {
             redirectAttributes.addFlashAttribute("exceptionMessage", "User not found (ID: " + id + ")");
             return "redirect:/users";
         }
+    }
+
+    @GetMapping("/export/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException, CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
+        List<User> users = userService.listAll();
+        csvExporter.export(users, response);
     }
 }
