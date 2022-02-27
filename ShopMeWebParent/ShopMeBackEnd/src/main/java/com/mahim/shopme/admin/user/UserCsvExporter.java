@@ -16,22 +16,13 @@ import org.supercsv.prefs.CsvPreference;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @Service
-public class UserCsvExporter {
+public class UserCsvExporter extends AbstractExporter {
 
     public void export(List<User> users, HttpServletResponse response) throws IOException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-        String timestamp = dateFormat.format(new Date());
-        String fileName = "users_" + timestamp + ".csv";
-
-        response.setContentType("text/csv");
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=" + fileName;
-        response.setHeader(headerKey, headerValue);
+        super.setResponseHeader(response, "text/csv", ".csv");
 
         String[] header = { "User ID", "Email", "First Name", "Last Name", "Roles", "Enabled" };
         String[] fieldMapping = { "id", "email", "firstName", "lastName", "roles", "enabled" };
@@ -46,14 +37,7 @@ public class UserCsvExporter {
     }
 
     public void exportCommonsCsv(List<User> users, HttpServletResponse response) throws IOException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-        String timestamp = dateFormat.format(new Date());
-        String fileName = "users_" + timestamp + ".csv";
-
-        response.setContentType("text/csv");
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=" + fileName;
-        response.setHeader(headerKey, headerValue);
+        super.setResponseHeader(response, "text/csv", ".csv");
 
         String[] header = { "User ID", "Email", "First Name", "Last Name", "Roles", "Enabled" };
         CSVPrinter csvPrinter = new CSVPrinter(response.getWriter(), CSVFormat.DEFAULT.withHeader(header));
@@ -66,14 +50,7 @@ public class UserCsvExporter {
     }
 
     public void exportOpenCsv(List<User> users, HttpServletResponse response) throws IOException, CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-        String timestamp = dateFormat.format(new Date());
-        String fileName = "users_" + timestamp + ".csv";
-
-        response.setContentType("text/csv");
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=" + fileName;
-        response.setHeader(headerKey, headerValue);
+        super.setResponseHeader(response, "text/csv", ".csv");
 
         String[] header = { "User ID", "Email", "First Name", "Last Name", "Roles", "Enabled" };
         String[] fieldMapping = { "id", "email", "firstName", "lastName", "roles", "enabled" };

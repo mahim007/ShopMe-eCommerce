@@ -25,10 +25,12 @@ import static com.mahim.shopme.admin.utils.StaticPathUtils.UPLOAD_DIR;
 public class UserController {
     private final UserService userService;
     private final UserCsvExporter csvExporter;
+    private final UserExcelExporter excelExporter;
 
-    public UserController(UserService userService, UserCsvExporter csvExporter) {
+    public UserController(UserService userService, UserCsvExporter csvExporter, UserExcelExporter excelExporter) {
         this.userService = userService;
         this.csvExporter = csvExporter;
+        this.excelExporter = excelExporter;
     }
 
     @GetMapping("")
@@ -149,5 +151,11 @@ public class UserController {
     public void exportToCSV(HttpServletResponse response) throws IOException, CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
         List<User> users = userService.listAll();
         csvExporter.export(users, response);
+    }
+
+    @GetMapping("/export/excel")
+    public void exportToExcel(HttpServletResponse response) {
+        List<User> users = userService.listAll();
+        excelExporter.export(response, users);
     }
 }
