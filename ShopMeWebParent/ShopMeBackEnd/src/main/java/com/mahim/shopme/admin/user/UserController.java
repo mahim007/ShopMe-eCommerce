@@ -26,11 +26,14 @@ public class UserController {
     private final UserService userService;
     private final UserCsvExporter csvExporter;
     private final UserExcelExporter excelExporter;
+    private final UserPdfExporter pdfExporter;
 
-    public UserController(UserService userService, UserCsvExporter csvExporter, UserExcelExporter excelExporter) {
+    public UserController(UserService userService, UserCsvExporter csvExporter,
+                          UserExcelExporter excelExporter, UserPdfExporter pdfExporter) {
         this.userService = userService;
         this.csvExporter = csvExporter;
         this.excelExporter = excelExporter;
+        this.pdfExporter = pdfExporter;
     }
 
     @GetMapping("")
@@ -157,5 +160,11 @@ public class UserController {
     public void exportToExcel(HttpServletResponse response) {
         List<User> users = userService.listAll();
         excelExporter.export(response, users);
+    }
+
+    @GetMapping("/export/pdf")
+    public void exportToPdf(HttpServletResponse response) {
+        List<User> users = userService.listAll();
+        pdfExporter.export(response, users);
     }
 }
