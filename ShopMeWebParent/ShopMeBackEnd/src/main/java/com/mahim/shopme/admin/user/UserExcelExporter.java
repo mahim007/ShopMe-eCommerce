@@ -2,12 +2,14 @@ package com.mahim.shopme.admin.user;
 
 import com.mahim.shopme.common.entity.User;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -20,7 +22,10 @@ public class UserExcelExporter extends AbstractExporter {
     }
 
     private void writeHeaderLine() {
-        sheet = workbook.createSheet("Users");
+        if (workbook.getSheetIndex("Users") > -1) {
+            workbook.removeSheetAt(workbook.getSheetIndex("Users"));
+        }
+        sheet = workbook.createSheet(WorkbookUtil.createSafeSheetName("Users"));
         XSSFRow row = sheet.createRow(0);
 
         XSSFCellStyle cellStyle = workbook.createCellStyle();
@@ -60,7 +65,6 @@ public class UserExcelExporter extends AbstractExporter {
 
         try (ServletOutputStream outputStream = response.getOutputStream()) {
             workbook.write(outputStream);
-            workbook.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
