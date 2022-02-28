@@ -122,7 +122,7 @@ public class UserController {
             return "user_form";
         } catch (UserNotFoundException e) {
             redirectAttributes.addFlashAttribute("exceptionMessage", e.getMessage());
-            return "redirect:/users";
+            return listAll();
         }
     }
 
@@ -135,7 +135,7 @@ public class UserController {
             redirectAttributes.addFlashAttribute("exceptionMessage", "User with id: " + id + " not found.");
         }
 
-        return "redirect:/users";
+        return listAll();
     }
 
     @GetMapping("/{id}/enabled/{enabled}")
@@ -143,10 +143,10 @@ public class UserController {
         try {
             userService.updateEnabledStatus(id, enabled);
             redirectAttributes.addFlashAttribute("message", "Enabled status updated for user (ID: "+ id + ")");
-            return "redirect:/users";
+            return listAll();
         } catch (UserNotFoundException ex) {
             redirectAttributes.addFlashAttribute("exceptionMessage", "User not found (ID: " + id + ")");
-            return "redirect:/users";
+            return listAll();
         }
     }
 
