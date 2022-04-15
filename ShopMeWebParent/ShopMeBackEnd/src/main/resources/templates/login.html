@@ -29,16 +29,10 @@
                 <div class="mb-3">
                     <input type="password" name="password" placeholder="Password" class="form-control" required />
                 </div>
-<!--                <div class="mb-3 form-check">-->
-<!--                    <input type="checkbox" class="form-check-input" id="exampleCheck1">-->
-<!--                    <label class="form-check-label" for="exampleCheck1">Check me out</label>-->
-<!--                </div>-->
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <input type="submit" class="btn btn-primary" value="Login" />
             </div>
         </form>
-        <div>
-            <p>Shopme Control Panel - Copyright &copy; Shopme</p>
-        </div>
+        <div th:replace="page_structure :: page_footer"></div>
     </div>
 </body>
 </html>

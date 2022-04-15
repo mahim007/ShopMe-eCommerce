@@ -1,227 +1,167 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8" http-equiv="Content-Type" content="text/html">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-
-    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
-
-    <title>[[${pageTitle}]]</title>
-</head>
+<head th:replace="page_structure :: page_header(${pageTitle})"></head>
 <body>
-    <div class="container-fluid">
-        <div>
-            <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
-                <div class="container-fluid">
-                    <a class="navbar-brand" th:href="@{/}">
-                        <img th:src="@{/images/ShopmeAdminSmall.png}" />
-                    </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavbar"
-                            aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="topNavbar">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <a class="nav-link " th:href="@{/users}">Users</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" th:href="@{/categories}">Categories</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" th:href="@{/brands}">Brands</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" th:href="@{/products}">Products</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" th:href="@{/customers}">Customers</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" th:href="@{/shipping}">Shipping</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" th:href="@{/orders}">Orders</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" th:href="@{/report}">Sales Report</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" th:href="@{/articles}">Articles</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" th:href="@{/menus}">Menus</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" th:href="@{/settings}">Settings</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+<div class="container-fluid">
+    <div th:replace="navigation :: page_nav"></div>
+    <h2>Manage Users | [[${pageTitle}]]</h2>
+</div>
+<div class="border border-secondary rounded p-3">
+    <form th:action="@{/users/save}" method="post" th:object="${user}"
+          enctype="multipart/form-data"
+          class="needs-validation"
+          onsubmit="return checkEmailUnique(this)"
+          style="max-width: 700px; margin: 0 auto">
+        <input type="hidden" th:field="*{id}"/>
+        <div class="row mb-3">
+            <label class="col-form-label col-sm-4">Email</label>
+            <div class="col-sm-8">
+                <input type="email" class="form-control" th:field="*{email}"
+                       required minlength="8" maxlength="128"/>
+            </div>
         </div>
-        <div>
-            <h2>Manage Users | [[${pageTitle}]]</h2>
+        <div class="row mb-3">
+            <label class="col-form-label col-sm-4">First Name</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" th:field="*{firstName}"
+                       required minlength="2" maxlength="128"/>
+            </div>
         </div>
-        <div class="border border-secondary rounded p-3">
-            <form th:action="@{/users/save}" method="post" th:object="${user}"
-                  enctype="multipart/form-data"
-                  class="needs-validation"
-                  onsubmit="return checkEmailUnique(this)"
-                  style="max-width: 700px; margin: 0 auto">
-                <input type="hidden" th:field="*{id}" />
-                <div class="row mb-3">
-                    <label class="col-form-label col-sm-4">Email</label>
-                    <div class="col-sm-8">
-                        <input type="email" class="form-control" th:field="*{email}"
-                               required minlength="8" maxlength="128" />
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-form-label col-sm-4">First Name</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control" th:field="*{firstName}"
-                               required minlength="2" maxlength="128" />
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-form-label col-sm-4">Last Name</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control" th:field="*{lastName}"
-                               required minlength="2" maxlength="128" />
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-form-label col-sm-4">Password</label>
-                    <div class="col-sm-8">
-                        <input type="password" class="form-control" th:field="*{password}" th:if="${user.id == null}"
-                               required minlength="8" maxlength="20" />
-                        <input type="password" class="form-control" th:field="*{password}" th:if="${user.id != null}"
-                               minlength="8" maxlength="20" />
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-form-label col-sm-4">Roles</label>
-                    <div class="col-sm-8">
-                        <th:block th:each="role : ${listRoles}">
-                            <input type="checkbox" class="form-check-inline"
-                                   th:field="*{roles}" th:text="${role.name}" th:value="${role.id}"/>
-                            &nbsp; - &nbsp;
-                            <small th:text="${role.description}">description</small>
-                            <br />
-                        </th:block>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-form-label col-sm-4">Enabled</label>
-                    <div class="col-sm-8">
-                        <input type="checkbox" class="form-check-inline"
-                               th:field="*{enabled}" />
-                        <small th:text="'enable or disable the user'"></small>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-form-label col-sm-4">Photos</label>
-                    <div class="col-sm-8">
-                        <input type="hidden" th:field="*{photos}" />
-                        <input type="file" class="mb-2 form-check-inline" id="fileImage" name="image"
-                               accept="image/png, image/jpeg"/>
-                        <img id="thumbnail" alt="Photos preview"  class="img-fluid" style="width: 120px"
-                             th:src="@{${user.imagePath}}" />
-                    </div>
-                </div>
-                <div class="text-center">
-                    <input type="submit" value="Save" class="btn btn-primary m-3" />
-                    <input type="button" value="Cancel" class="btn btn-secondary" id="cancelUserCreate" />
-                </div>
-            </form>
+        <div class="row mb-3">
+            <label class="col-form-label col-sm-4">Last Name</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" th:field="*{lastName}"
+                       required minlength="2" maxlength="128"/>
+            </div>
         </div>
-        <div class="modal fade text-center" tabindex="-1" id="emailCheckModal" aria-labelledby="emailCheckModalTitle" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="emailCheckModalTitle">Warning</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <span id="emailCheckModalBody"></span>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
+        <div class="row mb-3">
+            <label class="col-form-label col-sm-4">Password</label>
+            <div class="col-sm-8">
+                <input type="password" class="form-control" th:field="*{password}" th:if="${user.id == null}"
+                       required minlength="8" maxlength="20"/>
+                <input type="password" class="form-control" th:field="*{password}" th:if="${user.id != null}"
+                       minlength="8" maxlength="20"/>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-form-label col-sm-4">Roles</label>
+            <div class="col-sm-8">
+                <th:block th:each="role : ${listRoles}">
+                    <input type="checkbox" class="form-check-inline"
+                           th:field="*{roles}" th:text="${role.name}" th:value="${role.id}"/>
+                    &nbsp; - &nbsp;
+                    <small th:text="${role.description}">description</small>
+                    <br/>
+                </th:block>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-form-label col-sm-4">Enabled</label>
+            <div class="col-sm-8">
+                <input type="checkbox" class="form-check-inline"
+                       th:field="*{enabled}"/>
+                <small th:text="'enable or disable the user'"></small>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-form-label col-sm-4">Photos</label>
+            <div class="col-sm-8">
+                <input type="hidden" th:field="*{photos}"/>
+                <input type="file" class="mb-2 form-check-inline" id="fileImage" name="image"
+                       accept="image/png, image/jpeg"/>
+                <img id="thumbnail" alt="Photos preview" class="img-fluid" style="width: 120px"
+                     th:src="@{${user.imagePath}}"/>
             </div>
         </div>
         <div class="text-center">
-            <p>Shopme Control Panel - Copyright &copy; Shopme</p>
+            <input type="submit" value="Save" class="btn btn-primary m-3"/>
+            <input type="button" value="Cancel" class="btn btn-secondary" id="cancelUserCreate"/>
+        </div>
+    </form>
+</div>
+<div class="modal fade text-center" tabindex="-1" id="emailCheckModal" aria-labelledby="emailCheckModalTitle"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="emailCheckModalTitle">Warning</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <span id="emailCheckModalBody"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            let userDefaultImage = $("#thumbnail").attr("src");
+</div>
+<div th:replace="page_structure :: page_footer"></div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        let userDefaultImage = $("#thumbnail").attr("src");
 
-            $("#cancelUserCreate").on("click", function () {
-                window.location = "[[@{/users}]]";
-            });
-
-            $("#fileImage").change(function (e){
-                showImageThumbnail(this, userDefaultImage);
-            });
+        $("#cancelUserCreate").on("click", function () {
+            window.location = "[[@{/users}]]";
         });
 
-        function showImageThumbnail(fileInput, userDefaultImage) {
-            let file = fileInput.files[0];
-            let fileReader = new FileReader();
+        $("#fileImage").change(function (e) {
+            showImageThumbnail(this, userDefaultImage);
+        });
+    });
 
-            fileReader.onload = function (e){
-                $("#thumbnail").attr("src", e.target.result);
-            };
+    function showImageThumbnail(fileInput, userDefaultImage) {
+        let file = fileInput.files[0];
+        let fileReader = new FileReader();
 
-            try {
-                let fileSize = fileInput.files[0].size;
-                if (fileSize > (1024*1024)) {
-                    fileInput.setCustomValidity("Image must be less than 1 MB");
-                    fileInput.reportValidity();
-                } else {
-                    fileReader.readAsDataURL(file);
-                }
-            } catch (err) {
-                $("#thumbnail").attr("src", userDefaultImage);
+        fileReader.onload = function (e) {
+            $("#thumbnail").attr("src", e.target.result);
+        };
+
+        try {
+            let fileSize = fileInput.files[0].size;
+            if (fileSize > (1024 * 1024)) {
+                fileInput.setCustomValidity("Image must be less than 1 MB");
+                fileInput.reportValidity();
+            } else {
+                fileReader.readAsDataURL(file);
             }
+        } catch (err) {
+            $("#thumbnail").attr("src", userDefaultImage);
         }
+    }
 
-        function checkEmailUnique(form) {
-            let url = "[[@{/users/check_email}]]";
-            let userEmail = $("#email").val();
-            let csrf = $("input[name='_csrf']").val();
-            let userId = $("#id").val();
+    function checkEmailUnique(form) {
+        let url = "[[@{/users/check_email}]]";
+        let userEmail = $("#email").val();
+        let csrf = $("input[name='_csrf']").val();
+        let userId = $("#id").val();
 
-            let params = {id: userId, email: userEmail, _csrf: csrf};
+        let params = {id: userId, email: userEmail, _csrf: csrf};
 
-            $.post(url, params, function (response) {
-                if (response === "OK") {
-                    form.submit();
-                } else if (response === "Duplicated") {
-                    showModalDialog("Warning", "The email: " + userEmail + " has been registered already.");
-                } else {
-                    show("Error", "An Error occurred.");
-                }
-            }).fail(function () {
-                showModalDialog("Error", "Could not connect to server.")
-            });
-            return false;
-        }
+        $.post(url, params, function (response) {
+            if (response === "OK") {
+                form.submit();
+            } else if (response === "Duplicated") {
+                showModalDialog("Warning", "The email: " + userEmail + " has been registered already.");
+            } else {
+                show("Error", "An Error occurred.");
+            }
+        }).fail(function () {
+            showModalDialog("Error", "Could not connect to server.")
+        });
+        return false;
+    }
 
-        function showModalDialog(title, message) {
-            $("#emailCheckModalTitle").text(title);
-            $("#emailCheckModalBody").text(message);
-            let myModal = new bootstrap.Modal($("#emailCheckModal"), {
-                keyboard: false
-            });
-            myModal.show();
-        }
-    </script>
+    function showModalDialog(title, message) {
+        $("#emailCheckModalTitle").text(title);
+        $("#emailCheckModalBody").text(message);
+        let myModal = new bootstrap.Modal($("#emailCheckModal"), {
+            keyboard: false
+        });
+        myModal.show();
+    }
+</script>
 </body>
 </html>
