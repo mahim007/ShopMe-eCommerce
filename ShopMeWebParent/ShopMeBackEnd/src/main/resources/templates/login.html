@@ -5,34 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
     <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
 
     <title>Login Shopme Admin</title>
 </head>
 <body>
-    <div class="container-fluid text-center">
-        <div>
-            <img th:src="@{/images/ShopmeAdminBig.png}" />
-        </div>
-        <form th:action="@{/login}" method="post" style="max-width: 350px; margin: 0 auto">
-            <div th:if="${param.error}">
-                <p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
-            </div>
-            <div th:if="${param.logout}">
-                <h3 class="text-warning">You have been logged out.</h3>
-            </div>
-            <div class="border border-secondary rounded p-3">
-                <p>Access to shopme control panel</p>
-                <div class="mb-3">
-                    <input type="email" name="email" placeholder="Email" class="form-control" required />
-                </div>
-                <div class="mb-3">
-                    <input type="password" name="password" placeholder="Password" class="form-control" required />
-                </div>
-                <input type="submit" class="btn btn-primary" value="Login" />
-            </div>
-        </form>
-        <div th:replace="page_structure :: page_footer"></div>
+<div class="container-fluid text-center">
+    <div>
+        <img th:src="@{/images/ShopmeAdminBig.png}"/>
     </div>
+    <form th:action="@{/login}" method="post" style="max-width: 350px; margin: 0 auto">
+        <div th:if="${param.error}">
+            <p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+        </div>
+        <div th:if="${param.logout}">
+            <h3 class="text-warning">You have been logged out.</h3>
+        </div>
+        <div class="border border-secondary rounded p-3">
+            <p>Access to shopme control panel</p>
+            <div class="mb-3">
+                <input type="email" name="email" placeholder="Email" class="form-control" required/>
+            </div>
+            <div class="mb-3">
+                <input type="password" name="password" placeholder="Password" class="form-control" required/>
+            </div>
+            <div class="mb-3">
+                <input type="checkbox" name="remember-me"/> &nbsp; Remember me
+            </div>
+            <input type="submit" class="btn btn-primary" value="Login"/>
+        </div>
+    </form>
+    <div th:replace="page_structure :: page_footer"></div>
+</div>
 </body>
 </html>
