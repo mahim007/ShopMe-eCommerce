@@ -43,6 +43,7 @@ public class AccountController {
 
     @PostMapping("/update")
     public String updateUser(User user, RedirectAttributes redirectAttributes,
+                             @AuthenticationPrincipal ShopmeUserDetails loggedInUser,
                              @RequestParam("image") MultipartFile multipartFile) throws IOException {
 
         User savedUser;
@@ -57,12 +58,16 @@ public class AccountController {
             } else {
                 savedUser = userService.updateAccount(user);
             }
+
+            loggedInUser.setFirstName(savedUser.getFirstName());
+            loggedInUser.setLastName(savedUser.getLastName());
+
+            redirectAttributes.addFlashAttribute("message",
+                    "Your account details have been updated successfully.");
         } catch (UserNotFoundException e) {
             redirectAttributes.addFlashAttribute("exceptionMessage", e.getMessage());
             e.printStackTrace();
         } finally {
-            redirectAttributes.addFlashAttribute("message",
-                    "Your account details have been updated successfully.");
             return "redirect:/account";
         }
 
