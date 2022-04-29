@@ -1,25 +1,29 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="page_structure :: page_header(${pageTitle})"></head>
+<head th:replace="page_structure :: page_header('Account Details')"></head>
 <body>
 <div class="container-fluid">
     <div th:replace="navigation :: page_nav"></div>
     <div class="text-center">
-        <h2>Manage Users | [[${pageTitle}]]</h2>
+        <h2>Your Account details</h2>
     </div>
     <div class="container">
+        <div th:if="${message != null}" class="alert alert-success text-center">
+            [[${message}]]
+        </div>
+        <div th:if="${exceptionMessage != null}" class="alert alert-danger text-center">
+            [[${exceptionMessage}]]
+        </div>
         <div class="border border-secondary rounded p-3">
-            <form th:action="@{/users/save}" method="post" th:object="${user}"
+            <form th:action="@{/account/update}" method="post" th:object="${user}"
                   enctype="multipart/form-data"
                   class="needs-validation"
-                  onsubmit="return checkEmailUnique(this)"
                   style="max-width: 700px; margin: 0 auto">
                 <input type="hidden" th:field="*{id}"/>
                 <div class="row mb-3">
                     <label class="col-form-label col-sm-4">Email</label>
                     <div class="col-sm-8">
-                        <input type="email" class="form-control" th:field="*{email}"
-                               required minlength="8" maxlength="128"/>
+                        <input type="email" class="form-control" th:field="*{email}" readonly/>
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -39,30 +43,23 @@
                 <div class="row mb-3">
                     <label class="col-form-label col-sm-4">Password</label>
                     <div class="col-sm-8">
-                        <input type="password" class="form-control" th:field="*{password}" th:if="${user.id == null}"
-                               required minlength="8" maxlength="20"/>
-                        <input type="password" class="form-control" th:field="*{password}" th:if="${user.id != null}"
-                               minlength="8" maxlength="20"/>
+                        <input type="password" class="form-control" th:field="*{password}" minlength="8" maxlength="20"
+                               placeholder="Leave blank if you don't want to change password"
+                               oninput="checkPasswordMatch(document.getElementById('confirmPassword'))"
+                        />
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <label class="col-form-label col-sm-4">Roles</label>
+                    <label class="col-form-label col-sm-4">Confirm Password</label>
                     <div class="col-sm-8">
-                        <th:block th:each="role : ${listRoles}">
-                            <input type="checkbox" class="form-check-inline"
-                                   th:field="*{roles}" th:text="${role.name}" th:value="${role.id}"/>
-                            &nbsp; - &nbsp;
-                            <small th:text="${role.description}">description</small>
-                            <br/>
-                        </th:block>
+                        <input id="confirmPassword" type="password" class="form-control"
+                               minlength="8" maxlength="20" oninput="checkPasswordMatch(this)" />
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <label class="col-form-label col-sm-4">Enabled</label>
+                    <label class="col-form-label col-sm-4">Assigned Roles</label>
                     <div class="col-sm-8">
-                        <input type="checkbox" class="form-check-inline"
-                               th:field="*{enabled}"/>
-                        <small th:text="'enable or disable the user'"></small>
+                        <span><b>[[${user.roles}]]</b></span>
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -135,35 +132,12 @@
         }
     }
 
-    function checkEmailUnique(form) {
-        let url = "[[@{/users/check_email}]]";
-        let userEmail = $("#email").val();
-        let csrf = $("input[name='_csrf']").val();
-        let userId = $("#id").val();
-
-        let params = {id: userId, email: userEmail, _csrf: csrf};
-
-        $.post(url, params, function (response) {
-            if (response === "OK") {
-                form.submit();
-            } else if (response === "Duplicated") {
-                showModalDialog("Warning", "The email: " + userEmail + " has been registered already.");
-            } else {
-                show("Error", "An Error occurred.");
-            }
-        }).fail(function () {
-            showModalDialog("Error", "Could not connect to server.")
-        });
-        return false;
-    }
-
-    function showModalDialog(title, message) {
-        $("#emailCheckModalTitle").text(title);
-        $("#emailCheckModalBody").text(message);
-        let myModal = new bootstrap.Modal($("#emailCheckModal"), {
-            keyboard: false
-        });
-        myModal.show();
+    function checkPasswordMatch(confirmPassword) {
+        if (confirmPassword.value !== $('#password').val()) {
+            confirmPassword.setCustomValidity('Password do not match');
+        } else {
+            confirmPassword.setCustomValidity('');
+        }
     }
 </script>
 </body>

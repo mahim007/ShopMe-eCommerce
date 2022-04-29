@@ -68,6 +68,28 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User updateAccount(User userInForm) throws UserNotFoundException {
+        Optional<User> userOptional = userRepository.findById(userInForm.getId());
+        if (userOptional.isPresent()) {
+            User userInDB = userOptional.get();
+            if (!userInForm.getPassword().isEmpty()) {
+                userInDB.setPassword(userInForm.getPassword());
+                encodePassword(userInDB);
+            }
+
+            if (userInForm.getPhotos() != null) {
+                userInDB.setPhotos(userInForm.getPhotos());
+            }
+
+            userInDB.setFirstName(userInForm.getFirstName());
+            userInDB.setLastName(userInForm.getLastName());
+
+            return userRepository.save(userInDB);
+        } else {
+            throw new UserNotFoundException("No user found with id: " + userInForm.getId());
+        }
+    }
+
     public User findUserById(Integer id) throws UserNotFoundException {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
@@ -75,6 +97,15 @@ public class UserService {
         } else {
             throw new UserNotFoundException("No user found with id: " + id);
         }
+    }
+
+    public User findUserByEmail(String email) throws UserNotFoundException {
+        User user = userRepository.getUserByEmail(email);
+        if (user != null) {
+            return user;
+        }
+
+        throw new UserNotFoundException("User not found (EMAIL: " + email + ")");
     }
 
     public void delete(Integer id) throws UserNotFoundException {
