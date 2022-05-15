@@ -5,7 +5,6 @@ import com.lowagie.text.Font;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
-import com.mahim.shopme.admin.user.AbstractExporter;
 import com.mahim.shopme.common.entity.User;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,5 @@
 package com.mahim.shopme.admin.user.exporter;
 
-import com.mahim.shopme.admin.user.AbstractExporter;
 import com.mahim.shopme.common.entity.User;
 import com.opencsv.CSVWriter;
 import com.opencsv.bean.ColumnPositionMappingStrategy;

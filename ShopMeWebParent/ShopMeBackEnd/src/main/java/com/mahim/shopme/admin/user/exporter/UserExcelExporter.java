@@ -1,6 +1,5 @@
 package com.mahim.shopme.admin.user.exporter;
 
-import com.mahim.shopme.admin.user.AbstractExporter;
 import com.mahim.shopme.common.entity.User;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.util.WorkbookUtil;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 @Service

@@ -1,7 +1,9 @@
-package com.mahim.shopme.admin.user;
+package com.mahim.shopme.admin.user.controller;
 
 import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.admin.security.ShopmeUserDetails;
+import com.mahim.shopme.admin.user.UserNotFoundException;
+import com.mahim.shopme.admin.user.UserService;
 import com.mahim.shopme.common.entity.User;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -37,7 +39,7 @@ public class AccountController {
             e.printStackTrace();
             model.addAttribute("user", null);
         } finally {
-            return "account_form";
+            return "users/account_form";
         }
     }
 

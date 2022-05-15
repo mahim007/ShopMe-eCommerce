@@ -1,6 +1,8 @@
-package com.mahim.shopme.admin.user;
+package com.mahim.shopme.admin.user.controller;
 
 import com.mahim.shopme.admin.FileUploadUtil;
+import com.mahim.shopme.admin.user.UserNotFoundException;
+import com.mahim.shopme.admin.user.UserService;
 import com.mahim.shopme.admin.user.exporter.UserCsvExporter;
 import com.mahim.shopme.admin.user.exporter.UserExcelExporter;
 import com.mahim.shopme.admin.user.exporter.UserPdfExporter;
@@ -76,7 +78,7 @@ public class UserController {
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", reverseSortDir);
         model.addAttribute("keyword", keyword);
-        return "users";
+        return "users/users";
     }
 
     @GetMapping("/new")
@@ -87,7 +89,7 @@ public class UserController {
         model.addAttribute("user", user);
         model.addAttribute("listRoles", roles);
         model.addAttribute("pageTitle", "Create New User");
-        return "user_form";
+        return "users/user_form";
     }
 
     @PostMapping("/save")
@@ -122,7 +124,7 @@ public class UserController {
             model.addAttribute("user", user);
             model.addAttribute("listRoles", roles);
             model.addAttribute("pageTitle", "Edit User (ID: " + id + ")");
-            return "user_form";
+            return "users/user_form";
         } catch (UserNotFoundException e) {
             redirectAttributes.addFlashAttribute("exceptionMessage", e.getMessage());
             return listAll();

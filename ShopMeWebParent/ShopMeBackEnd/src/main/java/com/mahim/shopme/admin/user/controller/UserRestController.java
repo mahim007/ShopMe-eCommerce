@@ -1,5 +1,6 @@
-package com.mahim.shopme.admin.user;
+package com.mahim.shopme.admin.user.controller;
 
+import com.mahim.shopme.admin.user.UserService;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
