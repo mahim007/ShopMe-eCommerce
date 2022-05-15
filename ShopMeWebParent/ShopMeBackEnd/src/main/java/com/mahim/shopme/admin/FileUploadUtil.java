@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 public class FileUploadUtil {
-    private static final Logger logger = LoggerFactory.getLogger(FileUploadUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileUploadUtil.class);
 
     public static void saveFile(String uploadDir, String fileName, MultipartFile file) throws IOException {
         Path uploadPath = Paths.get(uploadDir);
@@ -25,6 +25,7 @@ public class FileUploadUtil {
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
+            LOGGER.error("Could not save file: " + fileName);
             throw new IOException("Could not save file: " + fileName, ex);
         }
     }
@@ -38,12 +39,12 @@ public class FileUploadUtil {
                     try {
                         Files.delete(file);
                     } catch (IOException e) {
-                        System.out.println("exception happened: {}" + e.getMessage());
+                        LOGGER.error("exception happened: {}", e.getMessage());
                     }
                 }
             });
         } catch (IOException ex) {
-            logger.error("Could not list directories: {}", dir);
+            LOGGER.error("Could not list directories: {}", dir);
         }
     }
 }
