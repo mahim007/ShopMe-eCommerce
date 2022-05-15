@@ -79,66 +79,12 @@
             </form>
         </div>
     </div>
-    <div class="modal fade text-center" tabindex="-1" id="emailCheckModal" aria-labelledby="emailCheckModalTitle"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="emailCheckModalTitle">Warning</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <span id="emailCheckModalBody"></span>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <div th:replace="page_structure :: page_footer"></div>
 </div>
+<script th:src="@{/js/common_form.js}"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
-        let userDefaultImage = $("#thumbnail").attr("src");
-
-        $("#cancelUserCreate").on("click", function () {
-            window.location = "[[@{/users}]]";
-        });
-
-        $("#fileImage").change(function (e) {
-            showImageThumbnail(this, userDefaultImage);
-        });
-    });
-
-    function showImageThumbnail(fileInput, userDefaultImage) {
-        let file = fileInput.files[0];
-        let fileReader = new FileReader();
-
-        fileReader.onload = function (e) {
-            $("#thumbnail").attr("src", e.target.result);
-        };
-
-        try {
-            let fileSize = fileInput.files[0].size;
-            if (fileSize > (1024 * 1024)) {
-                fileInput.setCustomValidity("Image must be less than 1 MB");
-                fileInput.reportValidity();
-            } else {
-                fileReader.readAsDataURL(file);
-            }
-        } catch (err) {
-            $("#thumbnail").attr("src", userDefaultImage);
-        }
-    }
-
-    function checkPasswordMatch(confirmPassword) {
-        if (confirmPassword.value !== $('#password').val()) {
-            confirmPassword.setCustomValidity('Password do not match');
-        } else {
-            confirmPassword.setCustomValidity('');
-        }
-    }
+    moduleURL = "[[@{/users}]]";
 </script>
 </body>
 </html>

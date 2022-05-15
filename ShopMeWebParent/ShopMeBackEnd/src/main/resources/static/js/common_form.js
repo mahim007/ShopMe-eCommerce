@@ -2,7 +2,7 @@ $(document).ready(function () {
     let userDefaultImage = $("#thumbnail").attr("src");
 
     $("#cancelUserCreate").on("click", function () {
-        window.location = "[[@{/users}]]";
+        window.location = moduleURL;
     });
 
     $("#fileImage").change(function (e) {
