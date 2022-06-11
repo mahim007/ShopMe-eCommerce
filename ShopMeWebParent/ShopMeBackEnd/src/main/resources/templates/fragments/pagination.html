@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav
+        th:fragment="pagination_fragment(moduleName)"
+        th:if="${totalPageNo > 1}" aria-label="Page navigation example">
+    <ul class="pagination justify-content-center d-flex flex-wrap">
+        <li th:class="${currentPageNo > 1 ? 'page-item' : 'page-item disabled'}">
+            <a th:replace="fragments/pagination_element::page_link(1, 'First')"/>
+        </li>
+        <li th:class="${currentPageNo > 1 ? 'page-item' : 'page-item disabled'}">
+            <a th:replace="fragments/pagination_element::page_link(${currentPageNo - 1}, '&laquo;')"/>
+        </li>
+        <th:block th:each="i, stat : ${#numbers.sequence(1, totalPageNo ,1)}">
+            <li th:class="${currentPageNo == stat.current ? 'page-item active' : 'page-item'}">
+                <a th:replace="fragments/pagination_element::page_link(${stat.current}, ${stat.current})"/>
+            </li>
+        </th:block>
+        <li th:class="${currentPageNo < totalPageNo ? 'page-item' : 'page-item disabled'}">
+            <a th:replace="fragments/pagination_element::page_link(${currentPageNo + 1}, '&raquo;')"/>
+        </li>
+        <li th:class="${currentPageNo < totalPageNo ? 'page-item' : 'page-item disabled'}">
+            <a th:replace="fragments/pagination_element::page_link(${totalPageNo}, 'Last')"/>
+        </li>
+    </ul>
+</nav>
+</body>
+</html>

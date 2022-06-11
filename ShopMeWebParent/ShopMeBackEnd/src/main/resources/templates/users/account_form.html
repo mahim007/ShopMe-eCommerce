@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="page_structure :: page_header('Account Details')"></head>
+<head th:replace="fragments/page_structure :: page_header('Account Details')"></head>
 <body>
 <div class="container-fluid">
-    <div th:replace="navigation :: page_nav"></div>
+    <div th:replace="fragments/navigation :: page_nav"></div>
     <div class="text-center">
         <h2>Your Account details</h2>
     </div>
@@ -80,7 +80,7 @@
         </div>
     </div>
 
-    <div th:replace="page_structure :: page_footer"></div>
+    <div th:replace="fragments/page_structure :: page_footer"></div>
 </div>
 <script th:src="@{/js/common_form.js}"></script>
 <script type="text/javascript">

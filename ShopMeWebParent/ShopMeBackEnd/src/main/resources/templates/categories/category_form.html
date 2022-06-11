@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="page_structure :: page_header(${pageTitle})"></head>
+<head th:replace="fragments/page_structure :: page_header(${pageTitle})"></head>
 <body>
 <div class="container-fluid">
-    <div th:replace="navigation :: page_nav"></div>
+    <div th:replace="fragments/navigation :: page_nav"></div>
     <div class="text-center">
         <h2>Manage Category | [[${pageTitle}]]</h2>
     </div>
@@ -44,7 +44,7 @@
                     <div class="col-sm-8">
                         <input type="checkbox" class="form-check-inline"
                                th:field="*{enabled}"/>
-                        <small th:text="'enable or disable the user'"></small>
+                        <small th:text="'enable or disable the category'"></small>
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -81,7 +81,7 @@
             </div>
         </div>
     </div>
-    <div th:replace="page_structure :: page_footer"></div>
+    <div th:replace="fragments/page_structure :: page_footer"></div>
 </div>
 <script th:src="@{/js/common_form.js}"></script>
 </body>

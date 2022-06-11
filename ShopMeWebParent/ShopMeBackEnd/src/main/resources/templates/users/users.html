@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="page_structure :: page_header('Users - Shopme Admin')"></head>
+<head th:replace="fragments/page_structure :: page_header('Users - Shopme Admin')"></head>
 <body>
 <div class="container-fluid">
-    <div th:replace="navigation :: page_nav"></div>
+    <div th:replace="fragments/navigation :: page_nav"></div>
     <div>
         <h2>Manage users</h2>
         <a th:href="@{/users/new}" class="fas fa-user-plus fa-2x icon-dark mr-2"></a>
@@ -48,17 +48,17 @@
             <thead class="table-dark">
             <tr>
                 <th class="hideable-column">
-                <th th:replace="fragmetns :: column_link('id', 'User ID', 'tag')"/>
+                <th th:replace="fragments/column_element::column_link('users', 'id', 'User ID', 'tag')"/>
                 </th>
                 <th>Photos</th>
                 <th class="hideable-column">
-                <th th:replace="fragmetns::column_link('email', 'Email', 'tag')"/>
+                <th th:replace="fragments/column_element::column_link('users', 'email', 'Email', 'tag')"/>
                 </th>
 
-                <th th:replace="fragmetns::column_link('firstName', 'First Name', 'none')"/>
-                <th th:replace="fragmetns::column_link('lastName', 'Last Name', 'none')"/>
+                <th th:replace="fragments/column_element::column_link('users', 'firstName', 'First Name', 'none')"/>
+                <th th:replace="fragments/column_element::column_link('users', 'lastName', 'Last Name', 'none')"/>
                 <th>Roles</th>
-                <th th:replace="fragmetns::column_link('enabled', 'Enabled', 'none')"/>
+                <th th:replace="fragments/column_element::column_link('users', 'enabled', 'Enabled', 'none')"/>
                 <th>Action</th>
             </tr>
             </thead>
@@ -138,27 +138,7 @@
     </div>
     <div class="text-center m-1" th:if="${total > 0}">
         <span>Showing users # [[${startNo}]] to [[${endNo}]] of [[${total}]]</span>
-        <nav th:if="${totalPageNo > 1}" aria-label="Page navigation example">
-            <ul class="pagination justify-content-center d-flex flex-wrap">
-                <li th:class="${currentPageNo > 1 ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragmetns::page_link(1, 'First')"/>
-                </li>
-                <li th:class="${currentPageNo > 1 ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragmetns::page_link(${currentPageNo - 1}, '&laquo;')"/>
-                </li>
-                <th:block th:each="i, stat : ${#numbers.sequence(1, totalPageNo ,1)}">
-                    <li th:class="${currentPageNo == stat.current ? 'page-item active' : 'page-item'}">
-                        <a th:replace="fragmetns::page_link(${stat.current}, ${stat.current})"/>
-                    </li>
-                </th:block>
-                <li th:class="${currentPageNo < totalPageNo ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragmetns::page_link(${currentPageNo + 1}, '&raquo;')"/>
-                </li>
-                <li th:class="${currentPageNo < totalPageNo ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragmetns::page_link(${totalPageNo}, 'Last')"/>
-                </li>
-            </ul>
-        </nav>
+        <nav th:replace="fragments/pagination::pagination_fragment('users')" />
     </div>
     <div class="text-center m-1" th:unless="${total > 0}">
         <h2>No users found</h2>
@@ -181,7 +161,7 @@
             </div>
         </div>
     </div>
-    <div th:replace="page_structure :: page_footer"></div>
+    <div th:replace="fragments/page_structure :: page_footer"></div>
 </div>
 <script type="text/javascript">
     $(document).ready(function () {

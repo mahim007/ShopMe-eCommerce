@@ -2,15 +2,15 @@
 <html lang="en"
 	  xmlns:th="http://www.thymeleaf.org"
 >
-<head th:replace="page_structure :: page_header('Home - Shopme Admin')"></head>
+<head th:replace="fragments/page_structure :: page_header('Home - Shopme Admin')"></head>
 <body>
 <div class="container-fluid">
-	<div th:replace="navigation :: page_nav"></div>
+	<div th:replace="fragments/navigation :: page_nav"></div>
 	<div class="m-3">
 		<h2>Sorry, the requested page could not be found.</h2>
 	</div>
 
-	<div th:replace="page_structure :: page_footer"></div>
+	<div th:replace="fragments/page_structure :: page_footer"></div>
 </div>
 </body>
 </html>

@@ -114,11 +114,12 @@ public class CategoryController {
             Category categoryById = categoryService.findCategoryById(id);
             model.addAttribute("category", categoryById);
             model.addAttribute("pateTitle", "Edit category (Id: " + id + " )");
+            return "categories/category_form";
         } catch (CategoryNotFoundException e) {
             redirectAttributes.addFlashAttribute("exceptionMessage", e.getMessage());
+            return listAll();
         }
 
-        return listAll();
     }
 
     @GetMapping("/delete/{id}")
