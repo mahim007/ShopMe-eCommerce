@@ -1,5 +1,6 @@
 package com.mahim.shopme.admin.user;
 
+import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.common.entity.Role;
 import com.mahim.shopme.common.entity.User;
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+
+import static com.mahim.shopme.admin.utils.StaticPathUtils.UPLOAD_DIR;
 
 @Service
 @Transactional
@@ -115,6 +118,7 @@ public class UserService {
         }
 
         userRepository.deleteById(id);
+        FileUploadUtil.removeDir(UPLOAD_DIR + "/" + id);
     }
 
     public void updateEnabledStatus(Integer id, boolean enabled) throws UserNotFoundException {

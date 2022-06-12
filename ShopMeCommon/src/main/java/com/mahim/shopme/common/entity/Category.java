@@ -55,6 +55,11 @@ public class Category {
         return "/category-photos/" + this.id + "/" + this.photos;
     }
 
+    @Transient
+    public boolean hasChildren() {
+        return !this.getChildren().isEmpty();
+    }
+
     public Integer getId() {
         return id;
     }

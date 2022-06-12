@@ -143,24 +143,7 @@
     <div class="text-center m-1" th:unless="${total > 0}">
         <h2>No users found</h2>
     </div>
-    <div class="modal fade text-center" tabindex="-1" id="confirmDeleteModal" aria-labelledby="confirmDeleteModalTitle"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="confirmDeleteModalTitle">Warning</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <span id="confirmDeleteModalBody"></span>
-                </div>
-                <div class="modal-footer">
-                    <a id="modalYesBtn" class="btn btn-success" th:href="@{'/users/delete'}">Yes</a>
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div th:replace="fragments/modal::confirmDeleteModal"></div>
     <div th:replace="fragments/page_structure :: page_footer"></div>
 </div>
 <script type="text/javascript">
@@ -178,20 +161,12 @@
             $("#modalYesBtn").attr("href", deleteUrl);
             showModalDialog("Delete Confirmation", "Are you sure to delete user <br> (ID: " + userId + ", Email: " + userEmail + ", Name: " + userFname + " " + userLname + ")?");
         });
-
-        function showModalDialog(title, message) {
-            $("#confirmDeleteModalTitle").text(title);
-            $("#confirmDeleteModalBody").html(message);
-            let myModal = new bootstrap.Modal($("#confirmDeleteModal"), {
-                keyboard: false
-            });
-            myModal.show();
-        }
     });
 
     function clearFilter() {
         window.location = "[[@{/users}]]";
     }
 </script>
+<script th:src="@{/js/common.js}"></script>
 </body>
 </html>

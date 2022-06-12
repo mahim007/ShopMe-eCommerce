@@ -1,5 +1,6 @@
 package com.mahim.shopme.admin.category.service;
 
+import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.admin.category.CategoryNotFoundException;
 import com.mahim.shopme.admin.category.CategoryRepository;
 import com.mahim.shopme.admin.user.UserNotFoundException;
@@ -7,12 +8,15 @@ import com.mahim.shopme.common.entity.Category;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.mahim.shopme.admin.utils.StaticPathUtils.CATEGORY_UPLOAD_DIR;
 
 @Service
 public class CategoryService {
@@ -26,14 +30,15 @@ public class CategoryService {
     }
 
     public List<Category> listAll() {
-        return (List<Category>) categoryRepository.findAll();
+        List<Category> categories = (List<Category>) categoryRepository.findAll();
+        return getHierarchicalCategories(categories);
     }
 
     public Page<Category> listByPage(int pageNum, String sortField, String sortDir) {
         Sort sort = Sort.by(sortField);
         sort = StringUtils.equals(sortDir, "asc") ? sort.ascending() : sort.descending();
-        PageRequest pageRequest = PageRequest.of(pageNum - 1, CATEGORIES_PER_PAGE, sort);
-        return categoryRepository.findAll(pageRequest);
+        Pageable pageable = PageRequest.of(pageNum - 1, CATEGORIES_PER_PAGE, sort);
+        return categoryRepository.findAll(pageable);
     }
 
     public Page<Category> listByKeyword(int pageNum, String sortField, String sortDir, String keyword) {
@@ -78,10 +83,11 @@ public class CategoryService {
     public void delete(Integer id) throws UserNotFoundException {
         Long countById = categoryRepository.countById(id);
         if (countById == null || countById == 0) {
-            throw new UserNotFoundException("No user found with id: " + id);
+            throw new UserNotFoundException("No Category found with id: " + id);
         }
 
         categoryRepository.deleteById(id);
+        FileUploadUtil.removeDir(CATEGORY_UPLOAD_DIR + "/" + id);
     }
 
     public void updateEnabledStatus(Integer id, boolean enabled) throws UserNotFoundException {
@@ -93,9 +99,8 @@ public class CategoryService {
         categoryRepository.updateEnabledStatus(id, !enabled);
     }
 
-    public List<Category> getHierarchicalCategories() {
+    public List<Category> getHierarchicalCategories(Iterable<Category> categoryIterable) {
         List<Category> hierarchicalCategories = new ArrayList<>();
-        Iterable<Category> categoryIterable = categoryRepository.findAll();
 
         int count = 1;
         for (Category category : categoryIterable) {
@@ -108,10 +113,14 @@ public class CategoryService {
     }
 
     private void listCategoryChildren(List<Category> hierarchicalCategories, Category parent, StringBuilder level) {
+
         StringBuilder name = new StringBuilder(level.toString());
         name.append(" ");
         name.append(parent.getName());
-        hierarchicalCategories.add(new Category(parent.getId(), name.toString()));
+        parent.setName(name.toString());
+
+        hierarchicalCategories.add(new Category(parent.getId(), parent.getName(), parent.getAlias(), parent.getPhotos(),
+                parent.isEnabled(), null, null));
 
         int count =1;
         for (Category child : parent.getChildren()) {

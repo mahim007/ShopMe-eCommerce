@@ -77,7 +77,7 @@ public class CategoryController {
         category.setEnabled(true);
 
         model.addAttribute("category", category);
-        model.addAttribute("categories", categoryService.getHierarchicalCategories());
+        model.addAttribute("categories", categoryService.listAll());
         model.addAttribute("pageTitle", "Create new category");
         return "categories/category_form";
     }
@@ -113,7 +113,7 @@ public class CategoryController {
         try {
             Category categoryById = categoryService.findCategoryById(id);
             model.addAttribute("category", categoryById);
-            model.addAttribute("categories", categoryService.getHierarchicalCategories());
+            model.addAttribute("categories", categoryService.listAll());
             model.addAttribute("pageTitle", "Edit category (Id: " + id + " )");
             return "categories/category_form";
         } catch (CategoryNotFoundException e) {
@@ -121,6 +121,24 @@ public class CategoryController {
             return listAll();
         }
 
+    }
+
+    @GetMapping("/{id}/enabled/{enabled}")
+    public String updateEnableStatus(@PathVariable(name = "id") Integer id,
+                                     @PathVariable(name = "enabled") boolean enabled,
+                                     RedirectAttributes redirectAttributes) {
+        try {
+            Category categoryById = categoryService.findCategoryById(id);
+            categoryById.setEnabled(!enabled);
+            Category savedCategory = categoryService.save(categoryById);
+            redirectAttributes.addFlashAttribute("message", "Enabled status updated for " +
+                    "category (ID:" + savedCategory.getId() + ")");
+        } catch (CategoryNotFoundException e) {
+            redirectAttributes.addFlashAttribute("exceptionMessage", "Category not found " +
+                    "(ID: " + id + ")");
+        }
+
+        return listAll();
     }
 
     @GetMapping("/delete/{id}")

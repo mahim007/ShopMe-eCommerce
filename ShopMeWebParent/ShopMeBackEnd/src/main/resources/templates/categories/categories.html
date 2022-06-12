@@ -48,7 +48,7 @@
                 </th>
                 <th>Category Image</th>
                 <th class="hideable-column">
-                    <th th:replace="fragments/column_element::column_link('categories', 'category_name', 'Category Name', 'tag')"/>
+                    <th th:replace="fragments/column_element::column_link('categories', 'name', 'Category Name', 'tag')"/>
                 </th>
 
                 <th th:replace="fragments/column_element::column_link('categories', 'alias', 'Alias', 'none')"/>
@@ -63,7 +63,7 @@
                     <i th:if="${category.photos == null}" class="fas fa-portrait fa-3x icon-silver"></i>
                     <img th:if="${category.photos != null}" th:src="@{${category.imagePath}}" style="height: 100px"/>
                 </td>
-                <td th:id="@{'category-' + ${category.id} + '-name'}" th:text="${category.name}">Ashraful</td>
+                <td class="text-start" th:id="@{'category-' + ${category.id} + '-name'}" th:text="${category.name}">Ashraful</td>
                 <td th:text="${category.alias}">Role</td>
                 <td>
                     <a th:if="${category.enabled == true}" th:href="@{'/categories/' + ${category.id} + '/enabled/' + ${true}}"><i
@@ -78,7 +78,7 @@
                         <i class="fas fa-edit fa-2x icon-lightblue"></i>
                     </a>
                     &nbsp;
-                    <a th:href="@{'/categories/delete/' + ${category.id}}"
+                    <a th:if="${!category.hasChildren()}" th:href="@{'/categories/delete/' + ${category.id}}"
                        class="category-delete"
                        title="Delete this user"
                     >
@@ -134,24 +134,7 @@
     <div class="text-center m-1" th:unless="${total > 0}">
         <h2>No categories found</h2>
     </div>
-    <div class="modal fade text-center" tabindex="-1" id="confirmDeleteModal" aria-labelledby="confirmDeleteModalTitle"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="confirmDeleteModalTitle">Warning</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <span id="confirmDeleteModalBody"></span>
-                </div>
-                <div class="modal-footer">
-                    <a id="modalYesBtn" class="btn btn-success" th:href="@{'/categories/delete'}">Yes</a>
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div th:replace="fragments/modal::confirmDeleteModal"></div>
     <div th:replace="fragments/page_structure :: page_footer"></div>
 </div>
 <script type="text/javascript">
@@ -166,22 +149,14 @@
             console.log(categoryId, categoryName, categoryAlias);
 
             $("#modalYesBtn").attr("href", deleteUrl);
-            showModalDialog("Delete Confirmation", "Are you sure to delete category <br> (ID: " + categoryId + ", Name: " + categoryName + ")?");
+            showModalDialog("Delete Confirmation", "Are you sure to delete category <br> (ID: <b>" + categoryId + "</b>, Name: <b>" + categoryName + "</b>)?");
         });
-
-        function showModalDialog(title, message) {
-            $("#confirmDeleteModalTitle").text(title);
-            $("#confirmDeleteModalBody").html(message);
-            let myModal = new bootstrap.Modal($("#confirmDeleteModal"), {
-                keyboard: false
-            });
-            myModal.show();
-        }
     });
 
     function clearFilter() {
-        window.location = "[[@{/users}]]";
+        window.location = "[[@{/categories}]]";
     }
 </script>
+<script th:src="@{/js/common.js}"></script>
 </body>
 </html>
