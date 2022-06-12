@@ -12,6 +12,7 @@
             <form th:action="@{/categories/save}" method="post" th:object="${category}"
                   enctype="multipart/form-data"
                   class="needs-validation"
+                  onsubmit="return checkUnique(this)"
                   style="max-width: 700px; margin: 0 auto">
                 <input type="hidden" th:field="*{id}"/>
                 <div class="row mb-3">
@@ -64,25 +65,34 @@
             </form>
         </div>
     </div>
-    <div class="modal fade text-center" tabindex="-1" id="emailCheckModal" aria-labelledby="emailCheckModalTitle"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="emailCheckModalTitle">Warning</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <span id="emailCheckModalBody"></span>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div th:replace="fragments/modal::shopmeModal"></div>
     <div th:replace="fragments/page_structure :: page_footer"></div>
 </div>
+<script type="text/javascript">
+    moduleURL = "[[@{/categories}]]";
+    function checkUnique(form) {
+        let url = "[[@{/categories/check_unique}]]";
+        let categoryId = $("#id").val();
+        let categoryName = $("#name").val();
+        let categoryAlias = $("#alias").val();
+        let csrf = $("input[name='_csrf']").val();
+
+        let params = {id: categoryId, name: categoryName, alias: categoryAlias, _csrf: csrf};
+
+        $.post(url, params, function (response) {
+            if (response === "OK") {
+                form.submit();
+            } else if (response === "DuplicatedName") {
+                showModalDialog("Warning", "Category with name: <b>" + categoryName + "</b> has been registered already.");
+            } else {
+                showModalDialog("Warning", "Category with alias: <b>" + categoryAlias + "</b> has been registered already.");
+            }
+        }).fail(function () {
+            showModalDialog("Error", "Could not connect to server.")
+        });
+        return false;
+    }
+</script>
 <script th:src="@{/js/common_form.js}"></script>
 </body>
 </html>

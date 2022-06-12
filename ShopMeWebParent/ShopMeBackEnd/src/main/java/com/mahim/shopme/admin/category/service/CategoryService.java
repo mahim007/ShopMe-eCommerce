@@ -54,6 +54,7 @@ public class CategoryService {
                 existingCategory.setName(category.getName());
                 existingCategory.setAlias(category.getAlias());
                 existingCategory.setPhotos(category.getPhotos());
+                existingCategory.setParent(category.getParent());
                 categoryToSave = existingCategory;
             } else {
                 categoryToSave = category;
@@ -117,5 +118,32 @@ public class CategoryService {
             listCategoryChildren(hierarchicalCategories, child, new StringBuilder(level.toString() + count++ + "."));
         }
 
+    }
+
+    public String checkUnique(Integer id, String name, String alias) {
+        boolean isCreatingNew = (id == null || id == 0);
+
+        Category categoryByName = categoryRepository.findByName(name);
+        Category categoryByAlias = categoryRepository.findByAlias(alias);
+
+        if (isCreatingNew) {
+            if (categoryByName != null) {
+                return "DuplicatedName";
+            } else {
+                if (categoryByAlias != null) {
+                    return "DuplicatedAlias";
+                }
+            }
+        } else {
+            if (categoryByName != null && categoryByName.getId() != id) {
+                return "DuplicatedName";
+            }
+
+            if (categoryByAlias != null && categoryByAlias.getId() != id) {
+                return "DuplicatedAlias";
+            }
+        }
+
+        return "OK";
     }
 }

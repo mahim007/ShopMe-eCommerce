@@ -113,7 +113,8 @@ public class CategoryController {
         try {
             Category categoryById = categoryService.findCategoryById(id);
             model.addAttribute("category", categoryById);
-            model.addAttribute("pateTitle", "Edit category (Id: " + id + " )");
+            model.addAttribute("categories", categoryService.getHierarchicalCategories());
+            model.addAttribute("pageTitle", "Edit category (Id: " + id + " )");
             return "categories/category_form";
         } catch (CategoryNotFoundException e) {
             redirectAttributes.addFlashAttribute("exceptionMessage", e.getMessage());

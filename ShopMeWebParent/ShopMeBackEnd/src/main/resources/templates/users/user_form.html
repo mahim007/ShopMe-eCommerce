@@ -82,23 +82,7 @@
             </form>
         </div>
     </div>
-    <div class="modal fade text-center" tabindex="-1" id="emailCheckModal" aria-labelledby="emailCheckModalTitle"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="emailCheckModalTitle">Warning</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <span id="emailCheckModalBody"></span>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div th:replace="fragments/modal::shopmeModal"></div>
     <div th:replace="fragments/page_structure :: page_footer"></div>
 </div>
 <script type="text/javascript">
@@ -115,7 +99,7 @@
             if (response === "OK") {
                 form.submit();
             } else if (response === "Duplicated") {
-                showModalDialog("Warning", "The email: " + userEmail + " has been registered already.");
+                showModalDialog("Warning", "The email: <b>" + userEmail + "</b> has been registered already.");
             } else {
                 show("Error", "An Error occurred.");
             }
@@ -123,15 +107,6 @@
             showModalDialog("Error", "Could not connect to server.")
         });
         return false;
-    }
-
-    function showModalDialog(title, message) {
-        $("#emailCheckModalTitle").text(title);
-        $("#emailCheckModalBody").text(message);
-        let myModal = new bootstrap.Modal($("#emailCheckModal"), {
-            keyboard: false
-        });
-        myModal.show();
     }
 </script>
 <script th:src="@{/js/common_form.js}"></script>
