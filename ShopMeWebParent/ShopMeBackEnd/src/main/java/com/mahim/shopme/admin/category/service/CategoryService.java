@@ -60,6 +60,7 @@ public class CategoryService {
                 existingCategory.setAlias(category.getAlias());
                 existingCategory.setPhotos(category.getPhotos());
                 existingCategory.setParent(category.getParent());
+                existingCategory.setEnabled(category.isEnabled());
                 categoryToSave = existingCategory;
             } else {
                 categoryToSave = category;
