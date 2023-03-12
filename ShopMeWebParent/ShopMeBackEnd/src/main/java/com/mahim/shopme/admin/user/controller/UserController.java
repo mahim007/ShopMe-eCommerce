@@ -8,8 +8,6 @@ import com.mahim.shopme.admin.user.exporter.UserExcelExporter;
 import com.mahim.shopme.admin.user.exporter.UserPdfExporter;
 import com.mahim.shopme.common.entity.Role;
 import com.mahim.shopme.common.entity.User;
-import com.opencsv.exceptions.CsvDataTypeMismatchException;
-import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -156,9 +154,9 @@ public class UserController {
     }
 
     @GetMapping("/export/csv")
-    public void exportToCSV(HttpServletResponse response) throws IOException, CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
+    public void exportToCSV(HttpServletResponse response) throws IOException {
         List<User> users = userService.listAll();
-        csvExporter.export(users, response);
+        csvExporter.export(response, users);
     }
 
     @GetMapping("/export/excel")

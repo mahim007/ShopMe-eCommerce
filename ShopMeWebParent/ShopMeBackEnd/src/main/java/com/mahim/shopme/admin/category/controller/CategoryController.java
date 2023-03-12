@@ -2,6 +2,9 @@ package com.mahim.shopme.admin.category.controller;
 
 import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.admin.category.CategoryNotFoundException;
+import com.mahim.shopme.admin.category.exporter.CategoryCsvExporter;
+import com.mahim.shopme.admin.category.exporter.CategoryExcelExporter;
+import com.mahim.shopme.admin.category.exporter.CategoryPdfExporter;
 import com.mahim.shopme.admin.category.service.CategoryService;
 import com.mahim.shopme.admin.user.UserNotFoundException;
 import com.mahim.shopme.common.entity.Category;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -24,9 +28,18 @@ import static com.mahim.shopme.admin.utils.StaticPathUtils.CATEGORY_UPLOAD_DIR;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final CategoryCsvExporter categoryCsvExporter;
+    private final CategoryExcelExporter categoryExcelExporter;
+    private final CategoryPdfExporter categoryPdfExporter;
 
-    public CategoryController(CategoryService categoryService) {
+    public CategoryController(CategoryService categoryService,
+                              CategoryCsvExporter categoryCsvExporter,
+                              CategoryExcelExporter categoryExcelExporter,
+                              CategoryPdfExporter categoryPdfExporter) {
         this.categoryService = categoryService;
+        this.categoryCsvExporter = categoryCsvExporter;
+        this.categoryExcelExporter = categoryExcelExporter;
+        this.categoryPdfExporter = categoryPdfExporter;
     }
 
     @GetMapping("")
@@ -153,5 +166,23 @@ public class CategoryController {
         }
 
         return listAll();
+    }
+
+    @GetMapping("/export/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+        List<Category> categories = categoryService.listAll();
+        categoryCsvExporter.export(response, categories);
+    }
+
+    @GetMapping("/export/excel")
+    public void exportToExcel(HttpServletResponse response) {
+        List<Category> categories = categoryService.listAll();
+        categoryExcelExporter.export(response, categories);
+    }
+
+    @GetMapping("/export/pdf")
+    public void exportToPdf(HttpServletResponse response) {
+        List<Category> categories = categoryService.listAll();
+        categoryPdfExporter.export(response, categories);
     }
 }
