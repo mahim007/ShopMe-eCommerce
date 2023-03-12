@@ -117,10 +117,8 @@ public class CategoryService {
 
         StringBuilder name = new StringBuilder(level.toString());
         name.append(" ");
-        name.append(parent.getName());
-        parent.setName(name.toString());
 
-        hierarchicalCategories.add(new Category(parent.getId(), parent.getName(), parent.getAlias(), parent.getPhotos(),
+        hierarchicalCategories.add(new Category(parent.getId(), name.append(parent.getName()).toString(), parent.getAlias(), parent.getPhotos(),
                 parent.isEnabled(), null, null));
 
         int count =1;
