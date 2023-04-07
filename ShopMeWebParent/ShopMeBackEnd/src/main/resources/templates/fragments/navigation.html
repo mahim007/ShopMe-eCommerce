@@ -28,18 +28,21 @@
 						</li>
 					</th:block>
 					<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
-							   aria-expanded="false" th:href="@{/brands}">Brands</a>
-							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<li><a class="dropdown-item" href="#">Action</a></li>
-								<li><a class="dropdown-item" href="#">Another action</a></li>
-								<li>
-									<hr class="dropdown-divider">
-								</li>
-								<li><a class="dropdown-item" href="#">Something else here</a></li>
-							</ul>
+						<li class="nav-item">
+							<a class="nav-link" th:href="@{/brands}">Brands</a>
 						</li>
+<!--						<li class="nav-item dropdown">-->
+<!--							<a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"-->
+<!--							   aria-expanded="false" th:href="@{/brands}">Brands</a>-->
+<!--							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+<!--								<li><a class="dropdown-item" href="#">Action</a></li>-->
+<!--								<li><a class="dropdown-item" href="#">Another action</a></li>-->
+<!--								<li>-->
+<!--									<hr class="dropdown-divider">-->
+<!--								</li>-->
+<!--								<li><a class="dropdown-item" href="#">Something else here</a></li>-->
+<!--							</ul>-->
+<!--						</li>-->
 					</th:block>
 					<th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson', 'Editor', 'Shipper')">
 						<li class="nav-item dropdown">

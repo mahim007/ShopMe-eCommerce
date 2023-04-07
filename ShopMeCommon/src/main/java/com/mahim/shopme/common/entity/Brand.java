@@ -17,6 +17,8 @@ public class Brand {
     @Column(nullable = false, length = 128)
     private String logo;
 
+    private boolean enabled;
+
     @ManyToMany
     @JoinTable(
             name = "brands_categories",
@@ -55,5 +57,13 @@ public class Brand {
 
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }
