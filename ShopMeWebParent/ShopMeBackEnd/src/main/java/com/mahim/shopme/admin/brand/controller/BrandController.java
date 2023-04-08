@@ -1,28 +1,34 @@
 package com.mahim.shopme.admin.brand.controller;
 
+import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.admin.brand.service.BrandService;
+import com.mahim.shopme.admin.category.service.CategoryService;
 import com.mahim.shopme.common.entity.Brand;
+import com.mahim.shopme.common.entity.Category;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.mahim.shopme.admin.brand.service.BrandService.BRANDS_PER_PAGE;
+import static com.mahim.shopme.admin.utils.StaticPathUtils.BRAND_UPLOAD_DIR;
 
 @Controller
 @RequestMapping("/brands")
 public class BrandController {
 
     private final BrandService brandService;
+    private final CategoryService categoryService;
 
-    public BrandController(BrandService brandService) {
+    public BrandController(BrandService brandService, CategoryService categoryService) {
         this.brandService = brandService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("")
@@ -66,5 +72,39 @@ public class BrandController {
         model.addAttribute("reverseSortDir", reverseSortDir);
         model.addAttribute("keyword", keyword);
         return "brands/brands";
+    }
+
+    @GetMapping("/new")
+    public String newBrand(Model model) {
+        Brand brand = new Brand();
+        brand.setEnabled(true);
+
+        model.addAttribute("brand", brand);
+        model.addAttribute("nestedCategories", categoryService.listAll());
+        model.addAttribute("pageTitle", "Create new brand");
+        return "brands/brand_form";
+    }
+
+    @PostMapping("/save")
+    public String saveCategory(Brand brand, @RequestParam(name = "logo") MultipartFile multipartFile,
+                               RedirectAttributes redirectAttributes) throws IOException {
+        Brand brandToBeSaved = null;
+        if (!multipartFile.isEmpty() && multipartFile.getOriginalFilename() != null) {
+            String fileName = org.springframework.util.StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            brand.setLogo(fileName);
+
+            brandToBeSaved = brandService.save(brandToBeSaved);
+            FileUploadUtil.cleanDir(BRAND_UPLOAD_DIR + "/" + brandToBeSaved.getId());
+            FileUploadUtil.saveFile(BRAND_UPLOAD_DIR + "/" + brandToBeSaved.getId(), fileName, multipartFile);
+        } else {
+            brandToBeSaved = brandService.save(brand);
+        }
+
+        redirectAttributes.addFlashAttribute("message", "New brand has been added successfully");
+        return getRedirectUrlForAffectedBrand(brandToBeSaved);
+    }
+
+    private String getRedirectUrlForAffectedBrand(Brand brand) {
+        return "redirect:/brands/page/1?sortField=id&sortDir=asc&keyword=" + brand.getName();
     }
 }

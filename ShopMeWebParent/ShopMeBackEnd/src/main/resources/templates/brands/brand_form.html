@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/page_structure :: page_header(${pageTitle})"></head>
+<body>
+<div class="container-fluid">
+    <div th:replace="fragments/navigation :: page_nav"></div>
+    <div class="text-center">
+        <h2>Manage Brand | [[${pageTitle}]]</h2>
+    </div>
+    <div class="container">
+        <div class="border border-secondary rounded p-3">
+            <form th:action="@{/brands/save}" method="post" th:object="${brand}"
+                  enctype="multipart/form-data"
+                  class="needs-validation"
+                  onsubmit="return checkUnique(this)"
+                  style="max-width: 700px; margin: 0 auto">
+                <input type="hidden" th:field="*{id}"/>
+                <div class="row mb-3">
+                    <label class="col-form-label col-sm-4">Brand Name</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" th:field="*{name}"
+                               required minlength="3" maxlength="128"/>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-form-label col-sm-4">Select one or more Categories</label>
+                    <div class="col-sm-8">
+                        <select class="form-select" th:field="*{categories}" multiple>
+                            <option value="">[No Category]</option>
+                            <th:block th:each="cat : ${nestedCategories}">
+                                <option th:value="${cat.id}">[[${cat.name}]]</option>
+                            </th:block>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-form-label col-sm-4">Chosen categories</label>
+                    <div class="col-sm-8">
+                        <th:block th:each="category : ${categories}">
+                            <span class="badge bg-info" th:text="${category.name}"></span>
+                        </th:block>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-form-label col-sm-4">Enabled</label>
+                    <div class="col-sm-8">
+                        <input type="checkbox" class="form-check-inline"
+                               th:field="*{enabled}"/>
+                        <small th:text="'enable or disable the category'"></small>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-form-label col-sm-4">Logo</label>
+                    <div class="col-sm-8">
+                        <input type="hidden" th:field="*{logo}"/>
+                        <input type="file" class="mb-2 form-check-inline" id="fileImage" name="image"
+                               accept="image/png, image/jpeg"/>
+                        <img id="thumbnail" alt="Photos preview" class="img-fluid" style="width: 120px"
+                             th:src="@{${brand.imagePath}}"/>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <input type="submit" value="Save" class="btn btn-primary m-3"/>
+                    <input type="button" value="Cancel" class="btn btn-secondary" id="cancelUserCreate"/>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div th:replace="fragments/modal::shopmeModal"></div>
+    <div th:replace="fragments/page_structure :: page_footer"></div>
+</div>
+<script type="text/javascript">
+    moduleURL = "[[@{/brands}]]";
+    function checkUnique(form) {
+        let url = "[[@{/brands/check_unique}]]";
+        let brandId = $("#id").val();
+        let brandName = $("#name").val();
+        let categoryAlias = $("#alias").val();
+        let csrf = $("input[name='_csrf']").val();
+
+        let params = {id: brandId, name: brandName, alias: categoryAlias, _csrf: csrf};
+
+        $.post(url, params, function (response) {
+            if (response === "OK") {
+                form.submit();
+            } else if (response === "DuplicatedName") {
+                showModalDialog("Warning", "Brand with name: <b>" + brandId + "</b> has been registered already.");
+            } else {
+                showModalDialog("Warning", "Category with alias: <b>" + categoryAlias + "</b> has been registered already.");
+            }
+        }).fail(function () {
+            showModalDialog("Error", "Could not connect to server.")
+        });
+        return false;
+    }
+</script>
+<script th:src="@{/js/common_form.js}"></script>
+</body>
+</html>

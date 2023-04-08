@@ -27,6 +27,12 @@ public class Brand {
     )
     private Set<Category> categories = new HashSet<>();
 
+    @Transient
+    public String getImagePath() {
+        if (this.id == null || this.logo == null) return "/images/default-category.png";
+        return "/brand-photos/" + this.id + "/" + this.logo;
+    }
+
     public Integer getId() {
         return id;
     }

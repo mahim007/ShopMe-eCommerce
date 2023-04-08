@@ -46,7 +46,11 @@
 <!--                    <img th:if="${brand.photos != null}" th:src="@{${brand.imagePath}}" style="height: 100px"/>-->
                 </td>
                 <td class="text-start" th:id="@{'brand-' + ${brand.id} + '-name'}" th:text="${brand.name}">Ashraful</td>
-                <td th:text="${brand.categories}"></td>
+                <td>
+                    <th:block th:each="cat : ${brand.categories}">
+                        <span class="badge bg-info text-dark" th:text="${cat.name}"></span>
+                    </th:block>
+                </td>
                 <td>
                     <a th:if="${brand.enabled == true}" th:href="@{'/brands/' + ${brand.id} + '/enabled/' + ${true}}"><i
                             class="fas fa-check-circle fa-2x icon-green"></i></a>
@@ -79,7 +83,11 @@
             </div>
             <div class="col-8">
                 <div>[[${brand.name}]]</div>
-                <div>[[${brand.categories}]]</div>
+                <div>
+                    <th:block th:each="cat : ${brand.categories}">
+                        <span class="badge bg-info text-dark" th:text="${cat.name}"></span>
+                    </th:block>
+                </div>
                 <div class="mt-2">
                     <th:block>
                         <a th:if="${brand.enabled == true}"

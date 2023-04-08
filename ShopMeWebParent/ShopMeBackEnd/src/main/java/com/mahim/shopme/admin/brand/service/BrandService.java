@@ -2,6 +2,7 @@ package com.mahim.shopme.admin.brand.service;
 
 import com.mahim.shopme.admin.brand.repository.BrandRepository;
 import com.mahim.shopme.common.entity.Brand;
+import com.mahim.shopme.common.entity.Category;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -53,7 +54,21 @@ public class BrandService {
 
     }
 
-    public String checkUnique(Integer id, String name, String alias) {
-        return null;
+    public String checkUnique(Integer id, String name) {
+        boolean isCreatingNew = (id == null || id == 0);
+
+        Brand brandByName = brandRepository.findByName(name);
+
+        if (isCreatingNew) {
+            if (brandByName != null) {
+                return "DuplicatedName";
+            }
+        } else {
+            if (brandByName != null && brandByName.getId() != id) {
+                return "DuplicatedName";
+            }
+        }
+
+        return "OK";
     }
 }
