@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BrandService {
@@ -35,7 +36,26 @@ public class BrandService {
     }
 
     public Brand save(Brand brand) {
-        return null;
+        boolean isUpdating = brand.getId() != null;
+        Brand brandToBeSaved;
+
+        if (isUpdating) {
+            Optional<Brand> optionalBrand = brandRepository.findById(brand.getId());
+            if (optionalBrand.isPresent()) {
+                Brand existingBrand = optionalBrand.get();
+                existingBrand.setName(brand.getName());
+                existingBrand.setLogo(brand.getLogo());
+                existingBrand.setEnabled(brand.isEnabled());
+                existingBrand.setCategories(brand.getCategories());
+                brandToBeSaved = existingBrand;
+            } else {
+                brandToBeSaved = brand;
+            }
+        } else {
+            brandToBeSaved = brand;
+        }
+
+        return brandRepository.save(brand);
     }
 
     public Brand findBrandById(Integer id) {

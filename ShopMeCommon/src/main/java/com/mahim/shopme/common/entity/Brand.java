@@ -33,6 +33,17 @@ public class Brand {
         return "/brand-photos/" + this.id + "/" + this.logo;
     }
 
+    public Brand() {
+    }
+
+    public Brand(Integer id, String name, String logo, boolean enabled, Set<Category> categories) {
+        this.id = id;
+        this.name = name;
+        this.logo = logo;
+        this.enabled = enabled;
+        this.categories = categories;
+    }
+
     public Integer getId() {
         return id;
     }

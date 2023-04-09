@@ -86,14 +86,14 @@ public class BrandController {
     }
 
     @PostMapping("/save")
-    public String saveCategory(Brand brand, @RequestParam(name = "logo") MultipartFile multipartFile,
+    public String saveCategory(Brand brand, @RequestParam(name = "image") MultipartFile multipartFile,
                                RedirectAttributes redirectAttributes) throws IOException {
         Brand brandToBeSaved = null;
         if (!multipartFile.isEmpty() && multipartFile.getOriginalFilename() != null) {
             String fileName = org.springframework.util.StringUtils.cleanPath(multipartFile.getOriginalFilename());
             brand.setLogo(fileName);
 
-            brandToBeSaved = brandService.save(brandToBeSaved);
+            brandToBeSaved = brandService.save(brand);
             FileUploadUtil.cleanDir(BRAND_UPLOAD_DIR + "/" + brandToBeSaved.getId());
             FileUploadUtil.saveFile(BRAND_UPLOAD_DIR + "/" + brandToBeSaved.getId(), fileName, multipartFile);
         } else {

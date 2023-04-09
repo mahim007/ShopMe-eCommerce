@@ -75,7 +75,6 @@
         let url = "[[@{/brands/check_unique}]]";
         let brandId = $("#id").val();
         let brandName = $("#name").val();
-        let categoryAlias = $("#alias").val();
         let csrf = $("input[name='_csrf']").val();
 
         let params = {id: brandId, name: brandName, alias: categoryAlias, _csrf: csrf};
@@ -86,7 +85,7 @@
             } else if (response === "DuplicatedName") {
                 showModalDialog("Warning", "Brand with name: <b>" + brandId + "</b> has been registered already.");
             } else {
-                showModalDialog("Warning", "Category with alias: <b>" + categoryAlias + "</b> has been registered already.");
+                showModalDialog("Warning", "Category with alias: <b>" + "categoryAlias" + "</b> has been registered already.");
             }
         }).fail(function () {
             showModalDialog("Error", "Could not connect to server.")
