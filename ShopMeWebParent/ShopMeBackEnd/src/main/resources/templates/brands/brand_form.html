@@ -5,7 +5,7 @@
 <div class="container-fluid">
     <div th:replace="fragments/navigation :: page_nav"></div>
     <div class="text-center">
-        <h2>Manage Brand | [[${pageTitle}]]</h2>
+        <h2>Manage Brands | [[${pageTitle}]]</h2>
     </div>
     <div class="container">
         <div class="border border-secondary rounded p-3">
@@ -25,7 +25,8 @@
                 <div class="row mb-3">
                     <label class="col-form-label col-sm-4">Select one or more Categories</label>
                     <div class="col-sm-8">
-                        <select class="form-select" th:field="*{categories}" multiple>
+                        <select class="form-select" th:field="*{categories}" required multiple
+                                style="resize: vertical; height: 200px">
                             <option value="">[No Category]</option>
                             <th:block th:each="cat : ${nestedCategories}">
                                 <option th:value="${cat.id}">[[${cat.name}]]</option>
@@ -36,9 +37,7 @@
                 <div class="row mb-3">
                     <label class="col-form-label col-sm-4">Chosen categories</label>
                     <div class="col-sm-8">
-                        <th:block th:each="category : ${categories}">
-                            <span class="badge bg-info" th:text="${category.name}"></span>
-                        </th:block>
+                        <div id="chosenCategories"></div>
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -52,7 +51,7 @@
                 <div class="row mb-3">
                     <label class="col-form-label col-sm-4">Logo</label>
                     <div class="col-sm-8">
-                        <input type="hidden" th:field="*{logo}"/>
+                        <input type="hidden" th:field="*{logo}" required/>
                         <input type="file" class="mb-2 form-check-inline" id="fileImage" name="image"
                                accept="image/png, image/jpeg"/>
                         <img id="thumbnail" alt="Photos preview" class="img-fluid" style="width: 120px"
@@ -77,7 +76,7 @@
         let brandName = $("#name").val();
         let csrf = $("input[name='_csrf']").val();
 
-        let params = {id: brandId, name: brandName, alias: categoryAlias, _csrf: csrf};
+        let params = {id: brandId, name: brandName, _csrf: csrf};
 
         $.post(url, params, function (response) {
             if (response === "OK") {
@@ -88,10 +87,29 @@
                 showModalDialog("Warning", "Category with alias: <b>" + "categoryAlias" + "</b> has been registered already.");
             }
         }).fail(function () {
-            showModalDialog("Error", "Could not connect to server.")
+            showModalDialog("Error", "Could not connect to server.");
         });
         return false;
     }
+
+    $(document).ready(function () {
+        let dropdownCategories = $("#categories");
+        let chosenCategories = $("#chosenCategories");
+
+        dropdownCategories.on("change", function (e) {
+            chosenCategories.empty();
+            dropdownCategories.children("option:selected").each(function () {
+                let selectedCategory = $(this);
+                let catName = selectedCategory.text();
+                console.log("full category name=",catName);
+                let indexOf = catName.indexOf(". ");
+                catName = catName.slice(indexOf + 2);
+                console.log("modified category name=",catName);
+                chosenCategories.append(`<span class="badge bg-info text-dark m-1">${catName}</span>`);
+            });
+        });
+
+    });
 </script>
 <script th:src="@{/js/common_form.js}"></script>
 </body>

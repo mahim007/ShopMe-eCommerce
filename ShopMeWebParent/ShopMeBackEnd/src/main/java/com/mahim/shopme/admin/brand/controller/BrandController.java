@@ -1,10 +1,10 @@
 package com.mahim.shopme.admin.brand.controller;
 
 import com.mahim.shopme.admin.FileUploadUtil;
+import com.mahim.shopme.admin.brand.exception.BrandNotFoundException;
 import com.mahim.shopme.admin.brand.service.BrandService;
 import com.mahim.shopme.admin.category.service.CategoryService;
 import com.mahim.shopme.common.entity.Brand;
-import com.mahim.shopme.common.entity.Category;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -106,5 +106,41 @@ public class BrandController {
 
     private String getRedirectUrlForAffectedBrand(Brand brand) {
         return "redirect:/brands/page/1?sortField=id&sortDir=asc&keyword=" + brand.getName();
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteBrand(@PathVariable(name = "id") int id, RedirectAttributes attributes) {
+        try {
+            brandService.delete(id);
+            attributes.addFlashAttribute("message", "Brand with id: " + id +  " deleted.");
+        } catch (RuntimeException ex) {
+            attributes.addFlashAttribute("exceptionMessage", "Failed to delete brand with id: " + id + " .");
+        } catch (BrandNotFoundException e) {
+            attributes.addFlashAttribute("exceptionMessage", "Brand with id: " + id + " not found.");
+        }
+
+        return listAll();
+    }
+
+    @GetMapping("/{id}/enabled/{enabled}")
+    public String updateEnabledStatus(
+            @PathVariable(name = "id") Integer id,
+            @PathVariable(name = "enabled") boolean enabled,
+            RedirectAttributes attributes
+    ) {
+        try {
+            Brand brandById = brandService.findBrandById(id);
+            brandById.setEnabled(!enabled);
+            Brand savedBrand = brandService.save(brandById);
+            attributes.addFlashAttribute("message", "Enabled status updated for " +
+                    "Brand(ID: " + savedBrand.getId() + ")");
+        } catch (RuntimeException ex) {
+            attributes.addFlashAttribute("exceptionMessage", "Failed to activate/deactivate " +
+                    "brand with id: " + id);
+        } catch (BrandNotFoundException e) {
+            attributes.addFlashAttribute("exceptionMessage", e.getMessage());
+        }
+
+        return listAll();
     }
 }

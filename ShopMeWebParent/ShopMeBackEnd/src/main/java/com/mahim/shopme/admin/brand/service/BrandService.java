@@ -1,5 +1,7 @@
 package com.mahim.shopme.admin.brand.service;
 
+import com.mahim.shopme.admin.FileUploadUtil;
+import com.mahim.shopme.admin.brand.exception.BrandNotFoundException;
 import com.mahim.shopme.admin.brand.repository.BrandRepository;
 import com.mahim.shopme.common.entity.Brand;
 import com.mahim.shopme.common.entity.Category;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.mahim.shopme.admin.utils.StaticPathUtils.BRAND_UPLOAD_DIR;
 
 @Service
 public class BrandService {
@@ -58,12 +62,23 @@ public class BrandService {
         return brandRepository.save(brand);
     }
 
-    public Brand findBrandById(Integer id) {
-        return null;
+    public Brand findBrandById(Integer id) throws BrandNotFoundException {
+        Optional<Brand> optionalBrand = brandRepository.findById(id);
+        if (optionalBrand.isPresent()) {
+            return optionalBrand.get();
+        } else {
+            throw new BrandNotFoundException("Brand with id: " + id + " not found!");
+        }
     }
 
-    public void delete(Integer id) {
+    public void delete(Integer id) throws BrandNotFoundException {
+        int brandCount = brandRepository.countById(id);
+        if (brandCount == 0) {
+            throw new BrandNotFoundException("No Brand found with id: " + id);
+        }
 
+        brandRepository.deleteById(id);
+        FileUploadUtil.removeDir(BRAND_UPLOAD_DIR + "/" + id);
     }
 
     public List<Brand> getHierarchicalBrands(Iterable<Brand> brandIterable) {

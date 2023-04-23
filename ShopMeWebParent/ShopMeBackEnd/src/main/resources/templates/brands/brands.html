@@ -24,26 +24,26 @@
     <div class="full-details">
         <table class="table table-striped table-hover table-bordered text-center">
             <thead class="table-dark">
-            <tr>
-                <th class="hideable-column">
-                <th th:replace="fragments/column_element::column_link('brands', 'id', 'ID', 'tag')"/>
-                </th>
-                <th>Brand Image</th>
-                <th class="hideable-column">
-                <th th:replace="fragments/column_element::column_link('brands', 'name', 'Brand Name', 'tag')"/>
-                </th>
+                <tr>
+                    <th class="hideable-column">
+                    <th th:replace="fragments/column_element::column_link('brands', 'id', 'ID', 'tag')"/>
+                    </th>
+                    <th>Brand Image</th>
+                    <th class="hideable-column">
+                    <th th:replace="fragments/column_element::column_link('brands', 'name', 'Brand Name', 'tag')"/>
+                    </th>
 
-                <th th:replace="fragments/column_element::column_link('brands', 'alias', 'Categories', 'none')"/>
-                <th th:replace="fragments/column_element::column_link('brands', 'enabled', 'Enabled', 'none')"/>
-                <th>Action</th>
-            </tr>
+                    <th th:replace="fragments/column_element::column_link('brands', 'alias', 'Categories', 'none')"/>
+                    <th th:replace="fragments/column_element::column_link('brands', 'enabled', 'Enabled', 'none')"/>
+                    <th>Action</th>
+                </tr>
             </thead>
             <tbody>
             <tr th:each="brand : ${brands}">
                 <td class="hideable-column" th:text="${brand.id}"></td>
                 <td>
                     <i th:if="${brand.logo == null}" class="fas fa-portrait fa-3x icon-silver"></i>
-<!--                    <img th:if="${brand.photos != null}" th:src="@{${brand.imagePath}}" style="height: 100px"/>-->
+                    <img th:if="${brand.logo != null}" th:src="@{${brand.imagePath}}" style="height: 100px"/>
                 </td>
                 <td class="text-start" th:id="@{'brand-' + ${brand.id} + '-name'}" th:text="${brand.name}">Ashraful</td>
                 <td>
@@ -79,7 +79,7 @@
         <div class="row m-1" th:each="brand : ${brands}">
             <div class="col-4">
                 <i th:if="${brand.logo == null}" class="fas fa-portrait fa-3x icon-silver"></i>
-<!--                <img th:if="${brand.photos != null}" th:src="@{${brand.imagePath}}" style="width: 100px"/>-->
+                <img th:if="${brand.logo != null}" th:src="@{${brand.imagePath}}" style="width: 100px"/>
             </div>
             <div class="col-8">
                 <div>[[${brand.name}]]</div>
@@ -117,7 +117,34 @@
             <div>&nbsp;</div>
         </div>
     </div>
+    <div class="text-center m-1" th:if="${total > 0}">
+        <span>Showing categories # [[${startNo}]] to [[${endNo}]] of [[${total}]]</span>
+        <nav th:replace="fragments/pagination::pagination_fragment('brands')" />
+    </div>
+    <div class="text-center m-1" th:unless="${total > 0}">
+        <h2>No brand found</h2>
+    </div>
+    <div th:replace="fragments/modal::confirmDeleteModal"></div>
+    <div th:replace="fragments/page_structure :: page_footer"></div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".brand-delete").on("click", function (e) {
+            e.preventDefault();
+            let deleteUrl = $(e.currentTarget).attr("href");
+            let splitUrl = deleteUrl.split("/");
+            let brandId = splitUrl[splitUrl.length - 1];
+            let brandName = $(`#brand-${brandId}-name`).text();
 
+            $("#modalYesBtn").attr("href", deleteUrl);
+            showModalDialog("Delete Confirmation", "Are you sure to delete Brand <br> (ID: <b>" + brandId + "</b>, Name: <b>" + brandName + "</b>)?");
+        });
+    });
+
+    function clearFilter() {
+        window.location = "[[@{/brands}]]";
+    }
+</script>
+<script th:src="@{/js/common.js}"></script>
 </body>
 </html>

@@ -7,8 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static com.mahim.shopme.admin.utils.StaticPathUtils.CATEGORY_UPLOAD_DIR;
-import static com.mahim.shopme.admin.utils.StaticPathUtils.UPLOAD_DIR;
+import static com.mahim.shopme.admin.utils.StaticPathUtils.*;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
@@ -25,5 +24,11 @@ public class MvcConfig implements WebMvcConfigurer {
 
         registry.addResourceHandler("/" + CATEGORY_UPLOAD_DIR + "/**")
                 .addResourceLocations("file:///" + categoryPhotosPath + "/");
+
+        Path brandPhotosDir = Paths.get(BRAND_UPLOAD_DIR);
+        String brandPhotosPath = brandPhotosDir.toFile().getAbsolutePath();
+
+        registry.addResourceHandler("/" + BRAND_UPLOAD_DIR + "/**")
+                .addResourceLocations("file:///" + brandPhotosPath + "/");
     }
 }
