@@ -62,7 +62,7 @@ public class BrandController {
         String reverseSortDir = StringUtils.equals(sortDir, "asc") ? "desc" : "asc";
 
         model.addAttribute("startNo", startNo);
-        model.addAttribute("endNo", endNo);
+        model.addAttribute("endNo", endNo < totalElements ? endNo : totalElements);
         model.addAttribute("totalPageNo", totalPages);
         model.addAttribute("total", totalElements);
         model.addAttribute("currentPageNo", pageNo);
@@ -139,6 +139,24 @@ public class BrandController {
                     "brand with id: " + id);
         } catch (BrandNotFoundException e) {
             attributes.addFlashAttribute("exceptionMessage", e.getMessage());
+        }
+
+        return listAll();
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editBrand(@PathVariable(name = "id") Integer id, RedirectAttributes attributes, Model model) {
+        try {
+            Brand brandById = brandService.findBrandById(id);
+            model.addAttribute("brand", brandById);
+            model.addAttribute("nestedCategories", categoryService.listAll());
+            model.addAttribute("pageTitle", "Update brand: " + brandById.getId());
+            return "brands/brand_form";
+
+        } catch (RuntimeException ex) {
+            attributes.addFlashAttribute("exceptionMessage", "Error occurred due to " + ex.getMessage());
+        } catch (BrandNotFoundException e) {
+            attributes.addFlashAttribute("exceptionMessage", "Brand with id: " + id + " not found!");
         }
 
         return listAll();
