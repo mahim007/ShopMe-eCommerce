@@ -3,12 +3,9 @@ package com.mahim.shopme.admin.category.controller;
 import com.mahim.shopme.admin.category.service.CategoryService;
 import com.mahim.shopme.common.entity.Category;
 import org.springframework.data.repository.query.Param;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/categories")

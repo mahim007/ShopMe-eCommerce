@@ -115,4 +115,9 @@ public class Category {
     public void setChildren(Set<Category> children) {
         this.children = children;
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

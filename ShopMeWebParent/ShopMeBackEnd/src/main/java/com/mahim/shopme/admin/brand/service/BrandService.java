@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +24,7 @@ public class BrandService {
     }
 
     public List<Brand> listAll() {
-        return null;
+        return (List<Brand>) brandRepository.findAll();
     }
 
     public Page<Brand> listByPage(int pageNum, String sortField, String sortDir) {
@@ -62,7 +61,7 @@ public class BrandService {
             brandToBeSaved = brand;
         }
 
-        return brandRepository.save(brand);
+        return brandRepository.save(brandToBeSaved);
     }
 
     public Brand findBrandById(Integer id) throws BrandNotFoundException {
@@ -82,14 +81,6 @@ public class BrandService {
 
         brandRepository.deleteById(id);
         FileUploadUtil.removeDir(BRAND_UPLOAD_DIR + "/" + id);
-    }
-
-    public List<Brand> getHierarchicalBrands(Iterable<Brand> brandIterable) {
-        return null;
-    }
-
-    private void listBrandChildren(List<Brand> hierarchicalBrands, Brand brand, StringBuilder level) {
-
     }
 
     public String checkUnique(Integer id, String name) {

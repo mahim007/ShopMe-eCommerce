@@ -2,6 +2,9 @@ package com.mahim.shopme.admin.brand.controller;
 
 import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.admin.brand.exception.BrandNotFoundException;
+import com.mahim.shopme.admin.brand.exporter.BrandCsvExporter;
+import com.mahim.shopme.admin.brand.exporter.BrandExcelExporter;
+import com.mahim.shopme.admin.brand.exporter.BrandPdfExporter;
 import com.mahim.shopme.admin.brand.service.BrandService;
 import com.mahim.shopme.admin.category.service.CategoryService;
 import com.mahim.shopme.common.entity.Brand;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -25,10 +29,21 @@ public class BrandController {
 
     private final BrandService brandService;
     private final CategoryService categoryService;
+    private final BrandCsvExporter csvExporter;
+    private final BrandExcelExporter excelExporter;
+    private final BrandPdfExporter pdfExporter;
 
-    public BrandController(BrandService brandService, CategoryService categoryService) {
+    public BrandController(BrandService brandService,
+                           CategoryService categoryService,
+                           BrandCsvExporter csvExporter,
+                           BrandExcelExporter excelExporter,
+                           BrandPdfExporter pdfExporter) {
+
         this.brandService = brandService;
         this.categoryService = categoryService;
+        this.csvExporter = csvExporter;
+        this.excelExporter = excelExporter;
+        this.pdfExporter = pdfExporter;
     }
 
     @GetMapping("")
@@ -54,7 +69,6 @@ public class BrandController {
 
         int totalPages = brandPage.getTotalPages();
         long totalElements = brandPage.getTotalElements();
-        int currentPageSize = brandPage.getNumberOfElements();
         int startNo = ((pageNo - 1) * BRANDS_PER_PAGE) + 1;
         int endNo = pageNo * BRANDS_PER_PAGE;
 
@@ -160,5 +174,23 @@ public class BrandController {
         }
 
         return listAll();
+    }
+
+    @GetMapping("/export/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+        List<Brand> brands = brandService.listAll();
+        csvExporter.export(response, brands);
+    }
+
+    @GetMapping("/export/excel")
+    public void exportToExcel(HttpServletResponse response) {
+        List<Brand> brands = brandService.listAll();
+        excelExporter.export(response, brands);
+    }
+
+    @GetMapping("/export/pdf")
+    public void exportToPdf(HttpServletResponse response) {
+        List<Brand> brands = brandService.listAll();
+        pdfExporter.export(response, brands);
     }
 }
