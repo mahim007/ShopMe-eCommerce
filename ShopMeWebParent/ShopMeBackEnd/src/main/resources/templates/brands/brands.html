@@ -41,12 +41,12 @@
             <tbody>
             <tr th:each="brand : ${brands}">
                 <td class="hideable-column" th:text="${brand.id}"></td>
-                <td>
+                <td style="width: 200px">
                     <i th:if="${brand.logo == null}" class="fas fa-portrait fa-3x icon-silver"></i>
-                    <img th:if="${brand.logo != null}" th:src="@{${brand.imagePath}}" style="height: 100px"/>
+                    <img th:if="${brand.logo != null}" th:src="@{${brand.imagePath}}" style="height: 100px;width: 160px" />
                 </td>
                 <td class="text-start" th:id="@{'brand-' + ${brand.id} + '-name'}" th:text="${brand.name}">Ashraful</td>
-                <td>
+                <td style="max-width: 375px">
                     <th:block th:each="cat : ${brand.categories}">
                         <span class="badge bg-info text-dark" th:text="${cat.name}"></span>
                     </th:block>

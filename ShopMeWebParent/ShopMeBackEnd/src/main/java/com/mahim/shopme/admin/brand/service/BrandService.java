@@ -17,7 +17,7 @@ import static com.mahim.shopme.admin.utils.StaticPathUtils.BRAND_UPLOAD_DIR;
 
 @Service
 public class BrandService {
-    public static final int BRANDS_PER_PAGE = 5;
+    public static final int BRANDS_PER_PAGE = 10;
     private final BrandRepository brandRepository;
 
     public BrandService(BrandRepository brandRepository) {
@@ -36,7 +36,10 @@ public class BrandService {
     }
 
     public Page<Brand> listByKeyword(int pageNum, String sortField, String sortDir, String keyword) {
-        return new PageImpl<Brand>(new ArrayList<>());
+        Sort sort = Sort.by(sortField);
+        sort = StringUtils.equals(sortDir, "asc") ? sort.ascending() : sort.descending();
+        PageRequest pageRequest = PageRequest.of(pageNum - 1, BRANDS_PER_PAGE, sort);
+        return brandRepository.findAllByKeyword(keyword, pageRequest);
     }
 
     public Brand save(Brand brand) {
