@@ -21,7 +21,7 @@ import static com.mahim.shopme.admin.utils.StaticPathUtils.UPLOAD_DIR;
 @Transactional
 public class UserService {
 
-    public static final int USERS_PER_PAGE = 5;
+    public static final int USERS_PER_PAGE = 10;
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;

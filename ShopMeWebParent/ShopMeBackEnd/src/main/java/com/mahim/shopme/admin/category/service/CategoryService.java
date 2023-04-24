@@ -21,7 +21,7 @@ import static com.mahim.shopme.admin.utils.StaticPathUtils.CATEGORY_UPLOAD_DIR;
 @Service
 public class CategoryService {
 
-    public static final int CATEGORIES_PER_PAGE = 5;
+    public static final int CATEGORIES_PER_PAGE = 10;
 
     private final CategoryRepository categoryRepository;
 
