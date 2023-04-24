@@ -26,15 +26,15 @@
             <thead class="table-dark">
                 <tr>
                     <th class="hideable-column">
-                    <th th:replace="fragments/column_element::column_link('brands', 'id', 'ID', 'tag')"/>
+                        <th:block th:replace="fragments/column_element::column_link('brands', 'id', 'ID', 'tag')" />
                     </th>
                     <th>Brand Image</th>
-                    <th class="hideable-column">
-                    <th th:replace="fragments/column_element::column_link('brands', 'name', 'Brand Name', 'tag')"/>
+                    <th>
+                        <th:block th:replace="fragments/column_element::column_link('brands', 'name', 'Brand Name', 'tag')" />
                     </th>
 
-                    <th th:replace="fragments/column_element::column_link('brands', 'alias', 'Categories', 'none')"/>
-                    <th th:replace="fragments/column_element::column_link('brands', 'enabled', 'Enabled', 'none')"/>
+                    <th th:replace="fragments/column_element::column_link('brands', 'alias', 'Categories', 'none')"></th>
+                    <th th:replace="fragments/column_element::column_link('brands', 'enabled', 'Enabled', 'none')"></th>
                     <th>Action</th>
                 </tr>
             </thead>

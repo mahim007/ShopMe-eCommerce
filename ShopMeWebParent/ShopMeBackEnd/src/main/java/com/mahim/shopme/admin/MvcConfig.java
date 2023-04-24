@@ -13,22 +13,16 @@ import static com.mahim.shopme.admin.utils.StaticPathUtils.*;
 public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        Path userPhotosDir = Paths.get(UPLOAD_DIR);
-        String userPhotosPath = userPhotosDir.toFile().getAbsolutePath();
+        exposeDirectory(UPLOAD_DIR, registry);
+        exposeDirectory(CATEGORY_UPLOAD_DIR, registry);
+        exposeDirectory(BRAND_UPLOAD_DIR, registry);
+    }
 
-        registry.addResourceHandler("/" + UPLOAD_DIR + "/**")
-                .addResourceLocations("file:///" + userPhotosPath + "/");
+    private void exposeDirectory(String pathPattern, ResourceHandlerRegistry registry) {
+        Path path = Paths.get(pathPattern);
+        String absolutePath = path.toFile().getAbsolutePath();
 
-        Path categoryPhotosDir = Paths.get(CATEGORY_UPLOAD_DIR);
-        String categoryPhotosPath = categoryPhotosDir.toFile().getAbsolutePath();
-
-        registry.addResourceHandler("/" + CATEGORY_UPLOAD_DIR + "/**")
-                .addResourceLocations("file:///" + categoryPhotosPath + "/");
-
-        Path brandPhotosDir = Paths.get(BRAND_UPLOAD_DIR);
-        String brandPhotosPath = brandPhotosDir.toFile().getAbsolutePath();
-
-        registry.addResourceHandler("/" + BRAND_UPLOAD_DIR + "/**")
-                .addResourceLocations("file:///" + brandPhotosPath + "/");
+        registry.addResourceHandler("/" + pathPattern + "/**")
+                .addResourceLocations("file:///" + absolutePath + "/");
     }
 }
