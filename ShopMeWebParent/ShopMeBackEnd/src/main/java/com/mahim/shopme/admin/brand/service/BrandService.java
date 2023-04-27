@@ -27,6 +27,10 @@ public class BrandService {
         return (List<Brand>) brandRepository.findAll();
     }
 
+    public List<Brand> listAllSorted() {
+        return brandRepository.listAllBrandsSorted();
+    }
+
     public Page<Brand> listByPage(int pageNum, String sortField, String sortDir) {
         Sort sort = Sort.by(sortField);
         sort = StringUtils.equals(sortDir, "asc") ? sort.ascending() : sort.descending();

@@ -1,15 +1,14 @@
 package com.mahim.shopme.admin.product.controller;
 
+import com.mahim.shopme.admin.brand.service.BrandService;
 import com.mahim.shopme.admin.product.service.ProductService;
+import com.mahim.shopme.common.entity.Brand;
 import com.mahim.shopme.common.entity.Product;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,9 +18,11 @@ import static com.mahim.shopme.admin.product.service.ProductService.PRODUCTS_PER
 @RequestMapping("/products")
 public class ProductController {
     private final ProductService productService;
+    private final BrandService brandService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, BrandService brandService) {
         this.productService = productService;
+        this.brandService = brandService;
     }
 
     @GetMapping("")
@@ -64,5 +65,24 @@ public class ProductController {
         model.addAttribute("reverseSortDir", reverseSortDir);
         model.addAttribute("keyword", keyword);
         return "products/products";
+    }
+
+    @GetMapping("/new")
+    public String newProduct(Model model) {
+        List<Brand> brands = brandService.listAllSorted();
+        Product product = new Product();
+        product.setEnabled(true);
+        product.setInStock(true);
+
+        model.addAttribute("product", product);
+        model.addAttribute("brands", brands);
+        model.addAttribute("pageTitle", "Create New Product");
+        return "products/product_form";
+    }
+
+    @PostMapping("/save")
+    public String saveProduct(Product product) {
+        System.out.println(product.toString());
+        return listAll();
     }
 }
