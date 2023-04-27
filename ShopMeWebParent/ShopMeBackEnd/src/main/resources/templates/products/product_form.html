@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/page_structure :: page_header(${pageTitle})"></head>
+<head th:replace="fragments/page_structure :: page_header_with_richtext(${pageTitle})"></head>
 <body>
 <div class="container-fluid">
     <div th:replace="fragments/navigation :: page_nav"></div>
@@ -10,7 +10,7 @@
     <div class="container">
         <div class="border border-secondary rounded p-3">
             <form th:action="@{/products/save}" method="post" th:object="${product}"
-                  style="max-width: 700px; margin: 0 auto">
+                  style="max-width: 1000px; margin: 0 auto">
                 <div>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -25,14 +25,22 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#details" type="button" role="tab">Details</button>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#shipping" type="button" role="tab">Shipping</button>
+                        </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active p-3" id="overview" role="tabpanel" aria-labelledby="overview-tab" tabindex="0">
                             <div th:replace="products/product_overview :: productOverview"></div>
                         </div>
-                        <div class="tab-pane fade" id="description" role="tabpanel" aria-labelledby="description-tab" tabindex="0">Description</div>
-                        <div class="tab-pane fade" id="images" role="tabpanel" aria-labelledby="images-tab" tabindex="0">Images</div>
-                        <div class="tab-pane fade" id="details" role="tabpanel" aria-labelledby="details-tab" tabindex="0">Details</div>
+                        <div class="tab-pane fade p-3" id="description" role="tabpanel" aria-labelledby="description-tab" tabindex="0">
+                            <th:block th:replace="products/product_description :: productDescription"></th:block>
+                        </div>
+                        <div class="tab-pane fade p-3" id="images" role="tabpanel" aria-labelledby="images-tab" tabindex="0">Images</div>
+                        <div class="tab-pane fade p-3" id="details" role="tabpanel" aria-labelledby="details-tab" tabindex="0">Details</div>
+                        <div class="tab-pane fade p-3" id="shipping" role="tabpanel" aria-labelledby="details-tab" tabindex="0">
+                            <th:block th:replace="products/product_shipping :: productShipping"></th:block>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -48,6 +56,9 @@
     $(document).ready(function () {
         let categoryDropdown = $("#category");
         let brandDropdown = $("#brand");
+
+        $("#shortDescription").richText();
+        $("#fullDescription").richText();
 
         brandDropdown.change(function (e) {
             $(this).children("option:selected").each(function () {

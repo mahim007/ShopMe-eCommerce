@@ -13,32 +13,32 @@
                   enctype="multipart/form-data"
                   class="needs-validation"
                   onsubmit="return checkEmailUnique(this)"
-                  style="max-width: 700px; margin: 0 auto">
+                  style="max-width: 1000px; margin: 0 auto">
                 <input type="hidden" th:field="*{id}"/>
                 <div class="row mb-3">
-                    <label class="col-form-label col-sm-4">Email</label>
-                    <div class="col-sm-8">
+                    <label class="col-form-label col-sm-2">Email</label>
+                    <div class="col-sm-10">
                         <input type="email" class="form-control" th:field="*{email}"
                                required minlength="8" maxlength="128"/>
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <label class="col-form-label col-sm-4">First Name</label>
-                    <div class="col-sm-8">
+                    <label class="col-form-label col-sm-2">First Name</label>
+                    <div class="col-sm-10">
                         <input type="text" class="form-control" th:field="*{firstName}"
                                required minlength="2" maxlength="128"/>
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <label class="col-form-label col-sm-4">Last Name</label>
-                    <div class="col-sm-8">
+                    <label class="col-form-label col-sm-2">Last Name</label>
+                    <div class="col-sm-10">
                         <input type="text" class="form-control" th:field="*{lastName}"
                                required minlength="2" maxlength="128"/>
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <label class="col-form-label col-sm-4">Password</label>
-                    <div class="col-sm-8">
+                    <label class="col-form-label col-sm-2">Password</label>
+                    <div class="col-sm-10">
                         <input type="password" class="form-control" th:field="*{password}" th:if="${user.id == null}"
                                required minlength="8" maxlength="20"/>
                         <input type="password" class="form-control" th:field="*{password}" th:if="${user.id != null}"
@@ -46,8 +46,8 @@
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <label class="col-form-label col-sm-4">Roles</label>
-                    <div class="col-sm-8">
+                    <label class="col-form-label col-sm-2">Roles</label>
+                    <div class="col-sm-10">
                         <th:block th:each="role : ${listRoles}">
                             <input type="checkbox" class="form-check-inline"
                                    th:field="*{roles}" th:text="${role.name}" th:value="${role.id}"/>
@@ -58,16 +58,16 @@
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <label class="col-form-label col-sm-4">Enabled</label>
-                    <div class="col-sm-8">
+                    <label class="col-form-label col-sm-2">Enabled</label>
+                    <div class="col-sm-10">
                         <input type="checkbox" class="form-check-inline"
                                th:field="*{enabled}"/>
                         <small th:text="'enable or disable the user'"></small>
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <label class="col-form-label col-sm-4">Photos</label>
-                    <div class="col-sm-8">
+                    <label class="col-form-label col-sm-2">Photos</label>
+                    <div class="col-sm-10">
                         <input type="hidden" th:field="*{photos}"/>
                         <input type="file" class="mb-2 form-check-inline" id="fileImage" name="image"
                                accept="image/png, image/jpeg"/>
