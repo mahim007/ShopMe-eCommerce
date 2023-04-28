@@ -16,6 +16,7 @@ public class MvcConfig implements WebMvcConfigurer {
         exposeDirectory(UPLOAD_DIR, registry);
         exposeDirectory(CATEGORY_UPLOAD_DIR, registry);
         exposeDirectory(BRAND_UPLOAD_DIR, registry);
+        exposeDirectory(PRODUCT_UPLOAD_DIR, registry);
     }
 
     private void exposeDirectory(String pathPattern, ResourceHandlerRegistry registry) {

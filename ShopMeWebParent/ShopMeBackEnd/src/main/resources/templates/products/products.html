@@ -44,8 +44,9 @@
             <tr th:each="product : ${products}">
                 <td class="hideable-column" th:text="${product.id}"></td>
                 <td style="width: 200px">
-<!--                    <i th:if="${product.logo == null}" class="fas fa-portrait fa-3x icon-silver"></i>-->
-<!--                    <img th:if="${product.logo != null}" th:src="@{${product.imagePath}}" style="height: 100px;width: 160px" />-->
+                    <i th:if="${product.mainImage == null}" class="fas fa-portrait fa-3x icon-silver"></i>
+                    <img th:if="${product.mainImage != null}" th:src="@{${product.mainImagePath}}"
+                         class="img-fluid" style="height: 100px"/>
                 </td>
                 <td class="text-start" th:id="@{'product-' + ${product.id} + '-name'}" th:text="${product.name}">Product Name</td>
                 <td class="text-start" th:text="${product.alias}">Product Alias</td>
@@ -88,8 +89,9 @@
     <div class="less-details">
         <div class="row m-1" th:each="product : ${products}">
             <div class="col-4">
-<!--                <i th:if="${product.logo == null}" class="fas fa-portrait fa-3x icon-silver"></i>-->
-<!--                <img th:if="${product.logo != null}" th:src="@{${product.imagePath}}" style="width: 100px"/>-->
+                <i th:if="${product.mainImage == null}" class="fas fa-portrait fa-3x icon-silver"></i>
+                <img th:if="${product.mainImage != null}" th:src="@{${product.mainImagePath}}"
+                     class="img-fluid" style="height: 100px"/>
             </div>
             <div class="col-8">
                 <div>[[${product.name}]]</div>

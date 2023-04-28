@@ -1,5 +1,6 @@
 package com.mahim.shopme.admin.product.controller;
 
+import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.admin.brand.service.BrandService;
 import com.mahim.shopme.admin.product.exception.ProductNotFoundException;
 import com.mahim.shopme.admin.product.service.ProductService;
@@ -10,11 +11,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.mahim.shopme.admin.product.service.ProductService.PRODUCTS_PER_PAGE;
+import static com.mahim.shopme.admin.utils.StaticPathUtils.PRODUCT_UPLOAD_DIR;
 
 @Controller
 @RequestMapping("/products")
@@ -83,9 +87,27 @@ public class ProductController {
     }
 
     @PostMapping("/save")
-    public String saveProduct(Product product, RedirectAttributes redirectAttributes) {
-        productService.save(product);
-        redirectAttributes.addFlashAttribute("The product has been saved successfully.");
+    public String saveProduct(Product product,
+                              @RequestParam(name = "image") MultipartFile multipartFile,
+                              RedirectAttributes redirectAttributes) {
+        Product productToBeSaved = null;
+        try {
+            if (!multipartFile.isEmpty() && multipartFile.getOriginalFilename() != null) {
+                String fileName = org.springframework.util.StringUtils.cleanPath(multipartFile.getOriginalFilename());
+                product.setMainImage(fileName);
+
+                productToBeSaved = productService.save(product);
+                FileUploadUtil.cleanDir(PRODUCT_UPLOAD_DIR + "/" + productToBeSaved.getId());
+                FileUploadUtil.saveFile(PRODUCT_UPLOAD_DIR + "/" + productToBeSaved.getId(), fileName, multipartFile);
+            } else {
+                productToBeSaved = productService.save(product);
+            }
+
+            redirectAttributes.addFlashAttribute("message","The product has been saved successfully.");
+        } catch (IOException e) {
+            redirectAttributes.addFlashAttribute("exceptionMessage", "Product with id: " +
+                    productToBeSaved.getId() + " could not be saved!");
+        }
         return listAll();
     }
 

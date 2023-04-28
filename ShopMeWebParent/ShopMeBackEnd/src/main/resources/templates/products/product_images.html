@@ -1,28 +1,23 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
-<div th:fragment="search_form(actionUrl)">
-    <form th:action="@{${actionUrl}}" class="form-check-inline m-3">
-        <div class="row align-items-center">
-            <div class="col-auto">
-                <label for="keyword" class="col-form-label">Filter</label>
-            </div>
-            <div class="col-auto">
-                <input type="hidden" class="form-control" name="sortField" th:value="${sortField}" required/>
-                <input type="hidden" class="form-control" name="sortDir" th:value="${sortDir}" required/>
-                <input type="search" class="form-control" id="keyword" name="keyword" th:value="${keyword}"
-                       required/>
-            </div>
-            <div class="col-auto">
-                <button type="submit" value="Search" class="btn btn-primary">
-                    <i class="fas fa-search icon-white"></i>
-                </button>
-                <button type="button" value="Clear" class="btn btn-secondary" onclick="clearFilter()">
-                    <i class="fas fa-eraser icon-white"></i>
-                </button>
+<div th:fragment="productImages">
+    <div class="row">
+        <div class="col border m-3 p-2">
+            <div>
+                <label>Main Image</label>
+                <div class="m-2">
+<!--                    <input type="hidden" th:field="*{photos}"/>-->
+                    <img id="thumbnail" alt="Photos preview" class="img-fluid" style="max-width: 500px"
+                         th:src="@{${product.mainImagePath}}"/>
+                </div>
+                <div>
+                    <input type="file" class="mb-2 form-check-inline" id="fileImage" name="image" required
+                           accept="image/png, image/jpeg"/>
+                </div>
             </div>
         </div>
-    </form>
+    </div>
 </div>
 </body>
 </html>
