@@ -142,7 +142,7 @@
             let deleteUrl = $(e.currentTarget).attr("href");
             let splitUrl = deleteUrl.split("/");
             let productId = splitUrl[splitUrl.length - 1];
-            let productName = $(`#product-${brandId}-name`).text();
+            let productName = $(`#product-${productId}-name`).text();
 
             $("#modalYesBtn").attr("href", deleteUrl);
             showModalDialog("Delete Confirmation", "Are you sure to delete Product <br> (ID: <b>" + productId + "</b>, Name: <b>" + productName + "</b>)?");

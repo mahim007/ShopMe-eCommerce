@@ -97,14 +97,12 @@ public class ProductController {
     ) {
         try {
             boolean status = productService.updateProductStatus(id, enabled);
-
             if (status) {
                 redirectAttributes.addFlashAttribute("message", "Enabled status updated for " +
                         "Product (ID:" + id + ")");
             } else {
                 redirectAttributes.addFlashAttribute("exceptionMessage", "Enabled status could not be updated.");
             }
-
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("exceptionMessage", "Product not found " +
                     "(ID: " + id + ")");
@@ -113,5 +111,19 @@ public class ProductController {
         return listAll();
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteProduct(
+            @PathVariable(name = "id") Integer id,
+            RedirectAttributes redirectAttributes
+    ) {
+        try {
+            productService.delete(id);
+            redirectAttributes.addFlashAttribute("message", "The Product ( id: " + id +" ) has been deleted");
+        } catch (ProductNotFoundException e) {
+            redirectAttributes.addFlashAttribute("exceptionMessage", "Product with id: " + id + " not found.");
+        }
+
+        return listAll();
+    }
 
 }
