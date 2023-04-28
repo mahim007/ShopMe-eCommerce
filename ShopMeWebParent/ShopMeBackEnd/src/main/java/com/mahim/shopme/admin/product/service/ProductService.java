@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,8 +52,7 @@ public class ProductService {
                 productToBeSaved.setAlias(product.getAlias());
                 productToBeSaved.setShortDescription(product.getShortDescription());
                 productToBeSaved.setFullDescription(product.getFullDescription());
-                productToBeSaved.setCreatedTime(product.getCreatedTime());
-                productToBeSaved.setUpdatedTime(product.getUpdatedTime());
+                productToBeSaved.setUpdatedTime(new Date());
                 productToBeSaved.setEnabled(product.isEnabled());
                 productToBeSaved.setInStock(product.isInStock());
                 productToBeSaved.setCost(product.getCost());
@@ -66,6 +66,13 @@ public class ProductService {
                 productToBeSaved = product;
             }
         } else {
+            product.setCreatedTime(new Date());
+            product.setUpdatedTime(new Date());
+            product.setAlias(StringUtils.isEmpty(product.getAlias()) || StringUtils.isBlank(product.getAlias()) ?
+                    product.getName().toLowerCase().replaceAll(" ", "-") :
+                            product.getAlias().toLowerCase().replaceAll(" ", "-")
+                    );
+
             productToBeSaved = product;
         }
 
@@ -94,7 +101,11 @@ public class ProductService {
         boolean isCreatingNew = id == null || id == 0;
 
         Product productByName = productRepository.findByName(name);
-        Product productByAlias = productRepository.findByAlias(alias);
+
+        String calculatedAlias = StringUtils.isEmpty(alias) || StringUtils.isBlank(alias) ?
+                name.toLowerCase().replaceAll(" ", "-") :
+                alias.toLowerCase().replaceAll(" ", "-");
+        Product productByAlias = productRepository.findByAlias(calculatedAlias);
 
         if (isCreatingNew) {
             if (productByName != null) {

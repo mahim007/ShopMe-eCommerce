@@ -105,10 +105,8 @@
             dropdownCategories.children("option:selected").each(function () {
                 let selectedCategory = $(this);
                 let catName = selectedCategory.text();
-                console.log("full category name=",catName);
                 let indexOf = catName.indexOf(". ");
                 catName = catName.slice(indexOf + 2);
-                console.log("modified category name=",catName);
                 chosenCategories.append(`<span class="badge bg-info text-dark m-1">${catName}</span>`);
             });
         });

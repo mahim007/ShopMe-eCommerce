@@ -10,7 +10,9 @@
     <div class="container">
         <div class="border border-secondary rounded p-3">
             <form th:action="@{/products/save}" method="post" th:object="${product}"
+                  onsubmit="return checkProductUnique(this)"
                   style="max-width: 1000px; margin: 0 auto">
+                <input type="hidden" th:field="*{id}"/>
                 <div>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -41,6 +43,10 @@
                         <div class="tab-pane fade p-3" id="shipping" role="tabpanel" aria-labelledby="details-tab" tabindex="0">
                             <th:block th:replace="products/product_shipping :: productShipping"></th:block>
                         </div>
+                    </div>
+                    <div class="text-center">
+                        <input type="submit" value="Save" class="btn btn-primary m-3"/>
+                        <input type="button" value="Cancel" class="btn btn-secondary" id="cancelProductOverview"/>
                     </div>
                 </div>
             </form>
@@ -77,7 +83,7 @@
         let url = brandModuleURL + "/" + brandId + "/categories";
         let _csrf = $("input[name='_csrf']").val();
 
-        fetch(url, {_csrf: _csrf})
+        fetch(url + "?" + new URLSearchParams({_csrf: _csrf}))
             .then(res => res.json())
             .then(data => {
                 data.forEach((item, index) => {
@@ -85,6 +91,38 @@
                 })
             })
             .catch(e => console.log("Error occurred due to: ", e))
+    }
+
+    function checkProductUnique(form) {
+        let url = "[[@{/products/check_unique}]]";
+        let productId = $("#id").val();
+        let productName = $("#name").val();
+        let productAlias = $("#alias").val();
+        let csrf = $("input[name='_csrf']").val();
+
+        let params = {id: productId, name: productName, alias: productAlias, _csrf: csrf};
+
+        fetch(url + "?" + new URLSearchParams(params), {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(res => res.text())
+            .then(data => {
+                if (data === "OK") {
+                    form.submit();
+                } else if(data === "DuplicatedName") {
+                    showModalDialog("Warning", "Product with name: <b>" + productName + "</b> has been registered already.");
+                } else if (data === "DuplicatedAlias") {
+                    showModalDialog("Warning", "Product with alias: <b>" + productAlias + "</b> has been registered already.");
+                }
+            })
+            .catch(e => {
+                showModalDialog("Error", "Could not connect to server.")
+            });
+
+        return false;
     }
 </script>
 <script th:src="@{/js/common_form.js}"></script>

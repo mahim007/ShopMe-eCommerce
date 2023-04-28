@@ -1,80 +1,76 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
-<div th:fragment="productOverview" th:remove="tag">
-    <div class="row mb-3">
-        <label class="col-form-label col-sm-2">Product Name</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control" th:field="*{name}" required minlength="3" maxlength="256"/>
+    <div th:fragment="productOverview" th:remove="tag">
+        <div class="row mb-3">
+            <label class="col-form-label col-sm-2">Product Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" th:field="*{name}" required minlength="3" maxlength="256"/>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-form-label col-sm-2">Alias</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" th:field="*{alias}" minlength="3" maxlength="256"
+                       placeholder="Default is product name (spaces are replaced by dashes -)"/>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-form-label col-sm-2">Brand</label>
+            <div class="col-sm-10">
+                <select class="form-select" th:field="*{brand}" required>
+                    <option value="">[No Brand]</option>
+                    <th:block th:each="brand : ${brands}">
+                        <option th:value="${brand.id}">[[${brand.name}]]</option>
+                    </th:block>
+                </select>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-form-label col-sm-2">Category</label>
+            <div class="col-sm-10">
+                <select class="form-select" th:field="*{category}" required>
+                    <option value="">[No Category]</option>
+                    <th:block th:each="category : ${categories}">
+                        <option th:value="${category.id}">[[${category.name}]]</option>
+                    </th:block>
+                </select>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-form-label col-sm-2">Enabled</label>
+            <div class="col-sm-10">
+                <input type="checkbox" class="form-check-inline"
+                       th:field="*{enabled}"/>
+                <small th:text="'enable or disable the category'"></small>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-form-label col-sm-2">In Stock</label>
+            <div class="col-sm-10">
+                <input type="checkbox" class="form-check-inline"
+                       th:field="*{inStock}"/>
+                <small th:text="'enable or disable the category'"></small>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-form-label col-sm-2">Cost</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" th:field="*{cost}" min="0" />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-form-label col-sm-2">Price</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" th:field="*{price}" min="0" />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-form-label col-sm-2">Discount</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" th:field="*{discountPercent}" min="0" />
+            </div>
         </div>
     </div>
-    <div class="row mb-3">
-        <label class="col-form-label col-sm-2">Alias</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control" th:field="*{alias}" required minlength="3" maxlength="256"
-                   placeholder="Default is product name (spaces are replaced by dashes -)"/>
-        </div>
-    </div>
-    <div class="row mb-3">
-        <label class="col-form-label col-sm-2">Brand</label>
-        <div class="col-sm-10">
-            <select class="form-select" th:field="*{brand}" required>
-                <option value="">[No Brand]</option>
-                <th:block th:each="brand : ${brands}">
-                    <option th:value="${brand.id}">[[${brand.name}]]</option>
-                </th:block>
-            </select>
-        </div>
-    </div>
-    <div class="row mb-3">
-        <label class="col-form-label col-sm-2">Category</label>
-        <div class="col-sm-10">
-            <select class="form-select" th:field="*{category}" required>
-                <option value="">[No Category]</option>
-                <th:block th:each="category : ${categories}">
-                    <option th:value="${category.id}">[[${category.name}]]</option>
-                </th:block>
-            </select>
-        </div>
-    </div>
-    <div class="row mb-3">
-        <label class="col-form-label col-sm-2">Enabled</label>
-        <div class="col-sm-10">
-            <input type="checkbox" class="form-check-inline"
-                   th:field="*{enabled}"/>
-            <small th:text="'enable or disable the category'"></small>
-        </div>
-    </div>
-    <div class="row mb-3">
-        <label class="col-form-label col-sm-2">In Stock</label>
-        <div class="col-sm-10">
-            <input type="checkbox" class="form-check-inline"
-                   th:field="*{inStock}"/>
-            <small th:text="'enable or disable the category'"></small>
-        </div>
-    </div>
-    <div class="row mb-3">
-        <label class="col-form-label col-sm-2">Cost</label>
-        <div class="col-sm-10">
-            <input type="number" class="form-control" th:field="*{cost}" min="0" />
-        </div>
-    </div>
-    <div class="row mb-3">
-        <label class="col-form-label col-sm-2">Price</label>
-        <div class="col-sm-10">
-            <input type="number" class="form-control" th:field="*{price}" min="0" />
-        </div>
-    </div>
-    <div class="row mb-3">
-        <label class="col-form-label col-sm-2">Discount</label>
-        <div class="col-sm-10">
-            <input type="number" class="form-control" th:field="*{discountPercent}" min="0" />
-        </div>
-    </div>
-    <div class="text-center">
-        <input type="submit" value="Save" class="btn btn-primary m-3"/>
-        <input type="button" value="Cancel" class="btn btn-secondary" id="cancelProductOverview"/>
-    </div>
-</div>
 </body>
 </html>
