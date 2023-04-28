@@ -1,6 +1,7 @@
 package com.mahim.shopme.admin.product.controller;
 
 import com.mahim.shopme.admin.brand.service.BrandService;
+import com.mahim.shopme.admin.product.exception.ProductNotFoundException;
 import com.mahim.shopme.admin.product.service.ProductService;
 import com.mahim.shopme.common.entity.Brand;
 import com.mahim.shopme.common.entity.Product;
@@ -87,4 +88,30 @@ public class ProductController {
         redirectAttributes.addFlashAttribute("The product has been saved successfully.");
         return listAll();
     }
+
+    @GetMapping("/{id}/enabled/{enabled}")
+    public String updateEnableStatus(
+            @PathVariable(name = "id") Integer id,
+            @PathVariable(name = "enabled") boolean enabled,
+            RedirectAttributes redirectAttributes
+    ) {
+        try {
+            boolean status = productService.updateProductStatus(id, enabled);
+
+            if (status) {
+                redirectAttributes.addFlashAttribute("message", "Enabled status updated for " +
+                        "Product (ID:" + id + ")");
+            } else {
+                redirectAttributes.addFlashAttribute("exceptionMessage", "Enabled status could not be updated.");
+            }
+
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("exceptionMessage", "Product not found " +
+                    "(ID: " + id + ")");
+        }
+
+        return listAll();
+    }
+
+
 }

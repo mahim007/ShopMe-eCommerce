@@ -9,11 +9,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class ProductService {
     public static final int PRODUCTS_PER_PAGE = 10;
     private final ProductRepository productRepository;
@@ -122,5 +124,14 @@ public class ProductService {
         }
 
         return "OK";
+    }
+
+    public boolean updateProductStatus(Integer id, boolean status) {
+        try {
+            productRepository.updateEnableStatus(id, !status);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 }
