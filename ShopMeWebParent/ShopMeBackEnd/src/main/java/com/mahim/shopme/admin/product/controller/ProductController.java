@@ -88,27 +88,59 @@ public class ProductController {
 
     @PostMapping("/save")
     public String saveProduct(Product product,
-                              @RequestParam(name = "image") MultipartFile multipartFile,
+                              @RequestParam(name = "image") MultipartFile mainImage,
+                              @RequestParam(name = "extraImage") MultipartFile[] extraImages,
                               RedirectAttributes redirectAttributes) {
         Product productToBeSaved = null;
         try {
-            if (!multipartFile.isEmpty() && multipartFile.getOriginalFilename() != null) {
-                String fileName = org.springframework.util.StringUtils.cleanPath(multipartFile.getOriginalFilename());
-                product.setMainImage(fileName);
-
-                productToBeSaved = productService.save(product);
-                FileUploadUtil.cleanDir(PRODUCT_UPLOAD_DIR + "/" + productToBeSaved.getId());
-                FileUploadUtil.saveFile(PRODUCT_UPLOAD_DIR + "/" + productToBeSaved.getId(), fileName, multipartFile);
-            } else {
-                productToBeSaved = productService.save(product);
-            }
-
+            setMainImageName(mainImage, product);
+            setExtraImageNames(extraImages, product);
+            productToBeSaved = productService.save(product);
+            saveUploadedImages(mainImage, extraImages, productToBeSaved);
             redirectAttributes.addFlashAttribute("message","The product has been saved successfully.");
         } catch (IOException e) {
             redirectAttributes.addFlashAttribute("exceptionMessage", "Product with id: " +
                     productToBeSaved.getId() + " could not be saved!");
         }
         return listAll();
+    }
+
+    private void setMainImageName(MultipartFile mainImage, Product product) {
+        if (!mainImage.isEmpty() && mainImage.getOriginalFilename() != null) {
+            String fileName = org.springframework.util.StringUtils.cleanPath(mainImage.getOriginalFilename());
+            product.setMainImage(fileName);
+        }
+    }
+
+    private void setExtraImageNames(MultipartFile[] extraImages, Product product) {
+        if (extraImages != null) {
+            for(MultipartFile extraImage : extraImages) {
+                if (!extraImage.isEmpty() && extraImage.getOriginalFilename() != null) {
+                    String fileName = org.springframework.util.StringUtils.cleanPath(extraImage.getOriginalFilename());
+                    product.addExtraImage(fileName);
+                }
+            }
+        }
+    }
+
+    private void saveUploadedImages(MultipartFile mainImage, MultipartFile[] extraImages, Product product)
+            throws IOException {
+
+        if (!mainImage.isEmpty() && mainImage.getOriginalFilename() != null) {
+            String fileName = org.springframework.util.StringUtils.cleanPath(mainImage.getOriginalFilename());
+            FileUploadUtil.cleanDir(PRODUCT_UPLOAD_DIR + "/" + product.getId());
+            FileUploadUtil.saveFile(PRODUCT_UPLOAD_DIR + "/" + product.getId(), fileName, mainImage);
+        }
+
+        if (extraImages != null) {
+            FileUploadUtil.cleanDir(PRODUCT_UPLOAD_DIR + "/" + product.getId() + "/extras");
+            for(MultipartFile extraImage : extraImages) {
+                if (!extraImage.isEmpty() && extraImage.getOriginalFilename() != null) {
+                    String fileName = org.springframework.util.StringUtils.cleanPath(extraImage.getOriginalFilename());
+                    FileUploadUtil.saveFile(PRODUCT_UPLOAD_DIR + "/" + product.getId() + "/extras", fileName, extraImage);
+                }
+            }
+        }
     }
 
     @GetMapping("/{id}/enabled/{enabled}")
@@ -135,9 +167,7 @@ public class ProductController {
 
     @GetMapping("/delete/{id}")
     public String deleteProduct(
-            @PathVariable(name = "id") Integer id,
-            RedirectAttributes redirectAttributes
-    ) {
+            @PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
         try {
             productService.delete(id);
             redirectAttributes.addFlashAttribute("message", "The Product ( id: " + id +" ) has been deleted");

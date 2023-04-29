@@ -1,5 +1,6 @@
 package com.mahim.shopme.admin.product.service;
 
+import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.admin.product.exception.ProductNotFoundException;
 import com.mahim.shopme.admin.product.repository.ProductRepository;
 import com.mahim.shopme.common.entity.Product;
@@ -13,6 +14,8 @@ import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import static com.mahim.shopme.admin.utils.StaticPathUtils.PRODUCT_UPLOAD_DIR;
 
 @Service
 @Transactional
@@ -97,6 +100,8 @@ public class ProductService {
         }
 
         productRepository.deleteById(id);
+        FileUploadUtil.removeDir(PRODUCT_UPLOAD_DIR + "/" + id + "/extras");
+        FileUploadUtil.removeDir(PRODUCT_UPLOAD_DIR + "/" + id);
     }
 
     public String checkUnique(Integer id, String name, String alias) {

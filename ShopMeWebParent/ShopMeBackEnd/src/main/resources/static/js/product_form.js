@@ -22,7 +22,7 @@ $(document).ready(function () {
 });
 
 function fileOnChangeHandler(e, inputObject) {
-    let name = e.target.name;
+    let name = inputObject.id;
     let num = name ? name[name.length - 1] : "1"
     let thumbnailId = "extraThumbnail" + num;
     let defaultThumbnail = $(thumbnailId).attr("src");
@@ -65,7 +65,8 @@ function addCrossBtn(id) {
 
 function showExtraImageSection() {
     extraImageNo++;
-    let length = $("#images-div").children("div").length;
+    let imagesDiv = $("#images-div");
+    let length = imagesDiv.children("div").length;
     let html = `
         <div class="col border m-3 p-2">
             <div id="extraImageHeader${extraImageNo}">
@@ -77,19 +78,19 @@ function showExtraImageSection() {
                     src="${defaultProductThumbnailSrc}"/>
             </div>
             <div>
-                <input type="file" class="mb-2 form-check-inline extraImage" name="extraImage${extraImageNo}"
+                <input type="file" class="mb-2 form-check-inline extraImage" 
+                    id="extraImage${extraImageNo}" 
+                    name="extraImage"
                     onchange="fileOnChangeHandler(event, this)"
                     accept="image/png, image/jpeg"/>
             </div>
         </div>
     `;
 
-    $("#images-div").append(html);
+    imagesDiv.append(html);
 }
 
 function removeExtraImageSection(id) {
-    console.log("removing extra image for : ", id);
-    console.log("removing extra image for : ", this);
     $("#extraImageHeader" + id).parent().remove();
     decreaseCountForExtraImages(id);
 }
@@ -116,7 +117,7 @@ function fetchCategories(brandId, categoryDropdown) {
 }
 
 function checkProductUnique(form) {
-    let url = "[[@{/products/check_unique}]]";
+    let url = productCheckUniqueUrl;
     let productId = $("#id").val();
     let productName = $("#name").val();
     let productAlias = $("#alias").val();
