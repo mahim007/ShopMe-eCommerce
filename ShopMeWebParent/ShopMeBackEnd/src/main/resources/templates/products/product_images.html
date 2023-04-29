@@ -2,19 +2,31 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
 <div th:fragment="productImages">
-    <div class="row">
+    <div id="images-div" class="row"  style="display: flex">
         <div class="col border m-3 p-2">
             <div>
                 <label>Main Image</label>
-                <div class="m-2">
-<!--                    <input type="hidden" th:field="*{photos}"/>-->
-                    <img id="thumbnail" alt="Photos preview" class="img-fluid" style="max-width: 500px"
-                         th:src="@{${product.mainImagePath}}"/>
-                </div>
-                <div>
-                    <input type="file" class="mb-2 form-check-inline" id="fileImage" name="image" required
-                           accept="image/png, image/jpeg"/>
-                </div>
+            </div>
+            <div class="m-2">
+                <img id="thumbnail" alt="Photos preview" class="img-fluid" style="max-width: 500px"
+                     th:src="@{${product.mainImagePath}}"/>
+            </div>
+            <div>
+                <input type="file" class="mb-2 form-check-inline" id="fileImage" name="image" required
+                       accept="image/png, image/jpeg"/>
+            </div>
+        </div>
+        <div class="col border m-3 p-2">
+            <div id="extraImageHeader1">
+                <label>Extra Image #1</label>
+            </div>
+            <div class="m-2">
+                <img id="extraThumbnail1" alt="Extra image #1 preview" class="img-fluid" style="max-width: 400px"
+                     th:src="@{/images/default-category.png}"/>
+            </div>
+            <div>
+                <input type="file" class="mb-2 form-check-inline extraImage" id="extraImage1" name="extraImage1"
+                       accept="image/png, image/jpeg"/>
             </div>
         </div>
     </div>
