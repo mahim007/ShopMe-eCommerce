@@ -1,28 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
-<div th:fragment="search_form(actionUrl)">
-    <form th:action="@{${actionUrl}}" class="form-check-inline m-3">
-        <div class="row align-items-center">
-            <div class="col-auto">
-                <label for="keyword" class="col-form-label">Filter</label>
-            </div>
-            <div class="col-auto">
-                <input type="hidden" class="form-control" name="sortField" th:value="${sortField}" required/>
-                <input type="hidden" class="form-control" name="sortDir" th:value="${sortDir}" required/>
-                <input type="search" class="form-control" id="keyword" name="keyword" th:value="${keyword}"
-                       required/>
-            </div>
-            <div class="col-auto">
-                <button type="submit" value="Search" class="btn btn-primary">
-                    <i class="fas fa-search icon-white"></i>
-                </button>
-                <button type="button" value="Clear" class="btn btn-secondary" onclick="clearFilter()">
-                    <i class="fas fa-eraser icon-white"></i>
-                </button>
-            </div>
+<div id="product-details" th:fragment="productDetails">
+    <div id="detailItem1" class="row mb-3">
+        <label class="col-form-label col-sm-1">Name</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name="detailNames" required minlength="3" maxlength="255"/>
         </div>
-    </form>
+        <label class="col-form-label col-sm-1">Value</label>
+        <div class="col-sm-5">
+            <input type="text" class="form-control" name="detailValues" required minlength="3" maxlength="255"/>
+        </div>
+        <div class="col-sm-1 cross-btn-container"></div>
+    </div>
 </div>
 </body>
 </html>

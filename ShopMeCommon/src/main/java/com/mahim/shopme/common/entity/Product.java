@@ -67,6 +67,9 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<ProductImage> images = new HashSet<>();
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private Set<ProductDetail> details = new HashSet<>();
+
     public void addExtraImage(String imageName) {
         this.images.add(new ProductImage(imageName, this));
     }
