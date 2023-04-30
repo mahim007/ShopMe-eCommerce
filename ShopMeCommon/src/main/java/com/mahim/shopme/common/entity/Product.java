@@ -74,6 +74,10 @@ public class Product {
         this.images.add(new ProductImage(imageName, this));
     }
 
+    public void addDetail(String name, String value) {
+        this.details.add(new ProductDetail(name, value));
+    }
+
     @Transient
     public String getMainImagePath() {
         if (id == null || mainImage == null) {
