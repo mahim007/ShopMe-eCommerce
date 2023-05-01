@@ -2,6 +2,11 @@ $(document).ready(function () {
     $("input.extraImage").change(function (e) {
         fileOnChangeHandler(e, this);
     });
+
+    $("a[name='removeExtraImage']").click(function (e) {
+        let id = $(e.target).data("id");
+        removeExtraImageSection(id);
+    });
 });
 
 function fileOnChangeHandler(e, inputObject) {

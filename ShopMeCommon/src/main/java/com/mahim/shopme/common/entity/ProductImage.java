@@ -28,4 +28,8 @@ public class ProductImage {
         this.name = name;
         this.product = product;
     }
+
+    public String getImagePath() {
+        return "/product-photos/" + this.product.getId() + "/extras/" + this.name;
+    }
 }

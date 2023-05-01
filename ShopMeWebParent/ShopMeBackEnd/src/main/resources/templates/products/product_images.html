@@ -5,27 +5,53 @@
     <div id="images-div" class="row"  style="display: flex">
         <div class="col border m-3 p-2">
             <div>
-                <label>Main Image</label>
+                <label>Main Image: [[${product.mainImage}]]</label>
             </div>
             <div class="m-2">
                 <img id="thumbnail" alt="Photos preview" class="img-fluid" style="max-width: 500px"
                      th:src="@{${product.mainImagePath}}"/>
             </div>
             <div>
-                <input type="file" class="mb-2 form-check-inline" id="fileImage" name="image" required
+                <input type="file" class="mb-2 form-check-inline" id="fileImage" name="image"
+                       th:required="${product.mainImage == null}"
                        accept="image/png, image/jpeg"/>
             </div>
         </div>
+
+        <th:block th:each="image, status : ${product.images}">
+            <div class="col border m-3 p-2">
+                <div th:id="'extraImageHeader' + ${status.index}">
+                    <label>Extra Image #[[${status.index + 1}]]: [[${image.name}]]</label>
+                    <a class="btn fas fa-times-circle fa-2x icon-dark float-end"
+                       title="remove this image"
+                       name="removeExtraImage"
+                       th:data-id="${status.index}"
+                    ></a>
+                </div>
+                <div class="m-2">
+                    <img th:id="'extraThumbnail' + ${status.index}" alt="Extra image #[[${status.index + 1}]] preview" class="img-fluid"
+                         style="max-width: 400px"
+                         th:src="@{${image.imagePath}}"/>
+                </div>
+                <div>
+                    <input type="file" class="mb-2 form-check-inline extraImage"
+                           th:id="'extraImage' + ${status.index}"
+                           name="extraImage"
+                           accept="image/png, image/jpeg"/>
+                </div>
+            </div>
+        </th:block>
+
         <div class="col border m-3 p-2">
-            <div id="extraImageHeader1">
-                <label>Extra Image #1</label>
+            <div th:id="'extraImageHeader' + ${numOfExtraImages}">
+                <label>Extra Image #[[${numOfExtraImages + 1}]]</label>
             </div>
             <div class="m-2">
-                <img id="extraThumbnail1" alt="Extra image #1 preview" class="img-fluid" style="max-width: 400px"
+                <img th:id="'extraThumbnail' + ${numOfExtraImages}" alt="Extra image # [[${numOfExtraImages}]] preview" class="img-fluid" style="max-width: 400px"
                      th:src="@{/images/default-category.png}"/>
             </div>
             <div>
-                <input type="file" class="mb-2 form-check-inline extraImage" id="extraImage1" name="extraImage"
+                <input type="file" class="mb-2 form-check-inline extraImage" th:id="'extraImage' + ${numOfExtraImages}" name="extraImage"
                        accept="image/png, image/jpeg"/>
             </div>
         </div>

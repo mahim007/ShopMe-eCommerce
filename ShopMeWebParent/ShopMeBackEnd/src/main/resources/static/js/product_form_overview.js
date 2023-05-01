@@ -5,13 +5,19 @@ $(document).ready(function () {
     brandDropdown.change(function (e) {
         $(this).children("option:selected").each(function () {
             categoryDropdown.empty();
-            fetchCategories($(this).val(), categoryDropdown);
+            if ($(this).val()) {
+                fetchCategories($(this).val(), categoryDropdown);
+            } else {
+                console.log("Default category selected from browser");
+                $("<option>").val("").text("[No Category]").appendTo(categoryDropdown);
+                $("#category").val("").change();
+            }
         });
     });
 
-    if (brandDropdown.val()) {
-        fetchCategories(brandDropdown.val(), categoryDropdown);
-    }
+    // if (brandDropdown.val()) {
+    //     fetchCategories(brandDropdown.val(), categoryDropdown);
+    // }
 });
 
 function fetchCategories(brandId, categoryDropdown) {

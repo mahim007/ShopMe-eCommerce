@@ -4,6 +4,7 @@ import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.admin.brand.service.BrandService;
 import com.mahim.shopme.admin.product.exception.ProductNotFoundException;
 import com.mahim.shopme.admin.product.service.ProductService;
+import com.mahim.shopme.common.dto.CategoryDTO;
 import com.mahim.shopme.common.entity.Brand;
 import com.mahim.shopme.common.entity.Product;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.mahim.shopme.admin.product.service.ProductService.PRODUCTS_PER_PAGE;
 import static com.mahim.shopme.admin.utils.StaticPathUtils.PRODUCT_UPLOAD_DIR;
@@ -98,7 +100,9 @@ public class ProductController {
             setMainImageName(mainImage, product);
             setExtraImageNames(extraImages, product);
             setProductDetails(detailNames, detailValues, product);
+
             productToBeSaved = productService.save(product);
+
             saveUploadedImages(mainImage, extraImages, productToBeSaved);
             redirectAttributes.addFlashAttribute("message","The product has been saved successfully.");
         } catch (IOException e) {
@@ -190,6 +194,30 @@ public class ProductController {
         }
 
         return listAll();
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editProduct(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            Product productById = productService.findProductById(id);
+            List<Brand> brands = brandService.listAllSorted();
+
+            int numOfExtraImages = productById.getImages().size();
+            List<CategoryDTO> categories = productById.getBrand().getCategories().stream()
+                    .map(category -> new CategoryDTO(category.getId(), category.getName()))
+                    .sorted((a, b) -> a.getId() - b.getId())
+                    .collect(Collectors.toList());
+
+            model.addAttribute("product", productById);
+            model.addAttribute("brands", brands);
+            model.addAttribute("categories", categories);
+            model.addAttribute("numOfExtraImages", numOfExtraImages);
+            model.addAttribute("pageTitle", "Edit Product (ID: " + id + " )");
+        } catch (ProductNotFoundException e) {
+            redirectAttributes.addFlashAttribute("exceptionMessage", "Product with id: " + id + " not found.");
+        }
+
+        return "products/product_form";
     }
 
 }
