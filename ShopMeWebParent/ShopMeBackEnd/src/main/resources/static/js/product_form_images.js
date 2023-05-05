@@ -21,6 +21,12 @@ function showExtraThumbnail(fileInput, userDefaultImage, thumbnailId) {
     let file = fileInput.files[0];
     let fileReader = new FileReader();
 
+    let fileName = file.name;
+    let imageNameHiddenField = $("#imageName" + thumbnailId[thumbnailId.length - 1]);
+    if (imageNameHiddenField.length) {
+        imageNameHiddenField.val(fileName);
+    }
+
     fileReader.onload = function (e) {
         $(`#${thumbnailId}`).attr("src", e.target.result);
     };
@@ -34,7 +40,7 @@ function showExtraThumbnail(fileInput, userDefaultImage, thumbnailId) {
             fileReader.readAsDataURL(file);
 
             if (extraImageNo === Number(thumbnailId[thumbnailId.length - 1])) {
-                addCrossBtn(extraImageNo);
+                addCrossBtnForImages(extraImageNo);
                 showExtraImageSection();
             }
         }
@@ -43,7 +49,7 @@ function showExtraThumbnail(fileInput, userDefaultImage, thumbnailId) {
     }
 }
 
-function addCrossBtn(id) {
+function addCrossBtnForImages(id) {
     let crossBtn = `<a class="btn fas fa-times-circle fa-2x icon-dark float-end" 
                             title="remove this image"
                             href="javascript:removeExtraImageSection(${id})"

@@ -1,13 +1,15 @@
 $(document).ready(function () {
-    // todo
+    $("input[name='detailNames']").last().focus();
+    $("a[name='removeDetailItem']").click(function (e) {
+        let id = $(e.target).data("id");
+        removeProductDetail(id);
+    });
 });
 
 function addProductDetail(id) {
-    addCrossBtn(id - 1);
-
-    console.log("add product detail: " + id);
+    addCrossBtn(id);
     let html = `
-        <div id="detailItem${id}" class="row mb-3 form-inline">
+        <div id="detailItem${id + 1}" class="row mb-3 form-inline">
             <label class="col-form-label col-sm-1">Name</label>
             <div class="col-sm-4">
                 <input type="text" class="form-control" name="detailNames" required minlength="3" maxlength="255"/>
@@ -23,6 +25,7 @@ function addProductDetail(id) {
     $("#product-details").append(html);
     $("input[name='detailNames']").last().focus();
     detailNo++;
+    console.log(id, detailNo);
 }
 
 function removeProductDetail(id) {

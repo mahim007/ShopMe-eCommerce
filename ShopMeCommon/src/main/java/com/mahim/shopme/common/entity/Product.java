@@ -64,18 +64,22 @@ public class Product {
     @Column(name = "main_image", nullable = false)
     private String mainImage;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProductImage> images = new HashSet<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProductDetail> details = new HashSet<>();
 
     public void addExtraImage(String imageName) {
         this.images.add(new ProductImage(imageName, this));
     }
 
+    public void addExtraImage(Integer id, String imageName) {
+        this.images.add(new ProductImage(imageName, this));
+    }
+
     public void addDetail(String name, String value) {
-        this.details.add(new ProductDetail(name, value));
+        this.details.add(new ProductDetail(name, value, this));
     }
 
     @Transient
@@ -84,5 +88,15 @@ public class Product {
             return "/images/default-category.png";
         }
         return "/product-photos/" + this.id + "/" + this.mainImage;
+    }
+
+    public boolean containsImageName(String fileName) {
+        for (ProductImage image : this.images) {
+            if (image.getName().equals(fileName)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

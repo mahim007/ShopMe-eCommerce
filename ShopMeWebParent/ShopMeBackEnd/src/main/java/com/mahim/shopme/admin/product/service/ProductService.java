@@ -67,6 +67,10 @@ public class ProductService {
                 productToBeSaved.setWidth(product.getWidth());
                 productToBeSaved.setHeight(product.getHeight());
                 productToBeSaved.setWeight(product.getWeight());
+                productToBeSaved.getImages().retainAll(product.getImages());
+                productToBeSaved.getImages().addAll(product.getImages());
+                productToBeSaved.getDetails().retainAll(product.getDetails());
+                productToBeSaved.getDetails().addAll(product.getDetails());
             } else {
                 productToBeSaved = product;
             }

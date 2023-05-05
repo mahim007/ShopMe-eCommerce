@@ -29,7 +29,9 @@
                     ></a>
                 </div>
                 <div class="m-2">
-                    <img th:id="'extraThumbnail' + ${status.index}" alt="Extra image #[[${status.index + 1}]] preview" class="img-fluid"
+                    <img th:id="'extraThumbnail' + ${status.index}"
+                         th:alt="'Extra image #' + ${status.index + 1} + ' preview'"
+                         class="img-fluid"
                          style="max-width: 400px"
                          th:src="@{${image.imagePath}}"/>
                 </div>
@@ -39,6 +41,9 @@
                            name="extraImage"
                            accept="image/png, image/jpeg"/>
                 </div>
+
+                <input type="hidden" name="imageIDs" th:id="'imageID' + ${status.index}" th:value="${image.id}" />
+                <input type="hidden" name="imageNames" th:id="'imageName' + ${status.index}"  th:value="${image.name}" />
             </div>
         </th:block>
 
@@ -47,7 +52,10 @@
                 <label>Extra Image #[[${numOfExtraImages + 1}]]</label>
             </div>
             <div class="m-2">
-                <img th:id="'extraThumbnail' + ${numOfExtraImages}" alt="Extra image # [[${numOfExtraImages}]] preview" class="img-fluid" style="max-width: 400px"
+                <img th:id="'extraThumbnail' + ${numOfExtraImages}"
+                     th:alt="'Extra image #' + ${numOfExtraImages} + ' preview'"
+                     class="img-fluid"
+                     style="max-width: 400px"
                      th:src="@{/images/default-category.png}"/>
             </div>
             <div>

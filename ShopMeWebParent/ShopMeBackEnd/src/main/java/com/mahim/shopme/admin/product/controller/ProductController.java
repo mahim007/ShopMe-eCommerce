@@ -7,7 +7,11 @@ import com.mahim.shopme.admin.product.service.ProductService;
 import com.mahim.shopme.common.dto.CategoryDTO;
 import com.mahim.shopme.common.entity.Brand;
 import com.mahim.shopme.common.entity.Product;
+import com.mahim.shopme.common.entity.ProductDetail;
+import com.mahim.shopme.common.entity.ProductImage;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +20,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.mahim.shopme.admin.product.service.ProductService.PRODUCTS_PER_PAGE;
@@ -25,6 +34,8 @@ import static com.mahim.shopme.admin.utils.StaticPathUtils.PRODUCT_UPLOAD_DIR;
 @Controller
 @RequestMapping("/products")
 public class ProductController {
+    private static  final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
+
     private final ProductService productService;
     private final BrandService brandService;
 
@@ -84,6 +95,9 @@ public class ProductController {
 
         model.addAttribute("product", product);
         model.addAttribute("brands", brands);
+        model.addAttribute("categories", new HashSet<Product>());
+        model.addAttribute("numOfExtraImages", 0);
+        model.addAttribute("numOfDetailItems", 0);
         model.addAttribute("pageTitle", "Create New Product");
         return "products/product_form";
     }
@@ -92,18 +106,23 @@ public class ProductController {
     public String saveProduct(Product product,
                               @RequestParam(name = "image") MultipartFile mainImage,
                               @RequestParam(name = "extraImage") MultipartFile[] extraImages,
+                              @RequestParam(name = "imageIDs", required = false) String[] imageIDs,
+                              @RequestParam(name = "imageNames", required = false) String[] imageNames,
+                              @RequestParam(name = "detailIDs", required = false) String[] detailIDs,
                               @RequestParam(name = "detailNames", required = false) String[] detailNames,
                               @RequestParam(name = "detailValues", required = false) String[] detailValues,
                               RedirectAttributes redirectAttributes) {
         Product productToBeSaved = null;
         try {
             setMainImageName(mainImage, product);
-            setExtraImageNames(extraImages, product);
-            setProductDetails(detailNames, detailValues, product);
+            setExistingExtraImageNames(imageIDs, imageNames, product);
+            setNewExtraImageNames(extraImages, product);
+            setProductDetails(detailNames, detailValues, detailIDs, product);
 
             productToBeSaved = productService.save(product);
 
             saveUploadedImages(mainImage, extraImages, productToBeSaved);
+            deleteUnusedImages(product);
             redirectAttributes.addFlashAttribute("message","The product has been saved successfully.");
         } catch (IOException e) {
             redirectAttributes.addFlashAttribute("exceptionMessage", "Product with id: " +
@@ -112,14 +131,23 @@ public class ProductController {
         return listAll();
     }
 
-    private void setProductDetails(String[] detailNames, String[] detailValues, Product product) {
-        if (detailNames == null || detailNames.length == 0) return;
-        if (detailValues == null || detailValues.length == 0) return;
+    private void deleteUnusedImages(Product product) {
+        String extraImagesDirectory = PRODUCT_UPLOAD_DIR + "/" + product.getId() + "/extras";
+        Path dirPath = Paths.get(extraImagesDirectory);
 
-        for (int i = 0; i < detailNames.length; i++) {
-            if (StringUtils.isNoneEmpty(detailNames[i]) && StringUtils.isNotEmpty(detailValues[i])) {
-                product.addDetail(detailNames[i], detailValues[i]);
-            }
+        try {
+            Files.list(dirPath).forEach(file  -> {
+                String fileName = file.toFile().getName();
+                if (!product.containsImageName(fileName)) {
+                    try {
+                        Files.delete(file);
+                    } catch (IOException e) {
+                        LOGGER.error("Error occurred when deleting {} due to {}", fileName, e.getMessage());
+                    }
+                }
+            });
+        } catch (IOException e) {
+            LOGGER.error("Error occurred when traversing directory {} due to {}", dirPath.toString() , e.getMessage());
         }
     }
 
@@ -130,15 +158,50 @@ public class ProductController {
         }
     }
 
-    private void setExtraImageNames(MultipartFile[] extraImages, Product product) {
+    private void setExistingExtraImageNames(String[] imageIDs, String[] imageNames, Product product) {
+        if (imageIDs == null || imageIDs.length == 0) return;
+        if (imageNames == null || imageNames.length == 0) return;
+
+        Set<ProductImage> images = new HashSet<>();
+
+        for (int i = 0; i < imageIDs.length; i++) {
+            int id = Integer.parseInt(imageIDs[i]);
+            String name = imageNames[i];
+            images.add(new ProductImage(id, name, product));
+        }
+
+        product.setImages(images);
+    }
+
+    private void setNewExtraImageNames(MultipartFile[] extraImages, Product product) {
         if (extraImages != null) {
             for(MultipartFile extraImage : extraImages) {
                 if (!extraImage.isEmpty() && extraImage.getOriginalFilename() != null) {
                     String fileName = org.springframework.util.StringUtils.cleanPath(extraImage.getOriginalFilename());
-                    product.addExtraImage(fileName);
+                    if (!product.containsImageName(fileName)) {
+                        product.addExtraImage(fileName);
+                    }
                 }
             }
         }
+    }
+
+    private void setProductDetails(String[] detailNames, String[] detailValues, String[] detailIDs, Product product) {
+        if (detailNames == null || detailNames.length == 0) return;
+        if (detailValues == null || detailValues.length == 0) return;
+
+        Set<ProductDetail> details = new HashSet<>();
+        for (int i = 0; i < detailNames.length; i++) {
+            if (StringUtils.isNotEmpty(detailNames[i]) && StringUtils.isNotEmpty(detailValues[i])) {
+                if (i < detailIDs.length) {
+                    details.add(new ProductDetail(Integer.parseInt(detailIDs[i]), detailNames[i], detailValues[i], product));
+                } else {
+                    details.add(new ProductDetail(detailNames[i], detailValues[i], product));
+                }
+            }
+        }
+
+        product.setDetails(details);
     }
 
     private void saveUploadedImages(MultipartFile mainImage, MultipartFile[] extraImages, Product product)
@@ -146,12 +209,12 @@ public class ProductController {
 
         if (!mainImage.isEmpty() && mainImage.getOriginalFilename() != null) {
             String fileName = org.springframework.util.StringUtils.cleanPath(mainImage.getOriginalFilename());
-            FileUploadUtil.cleanDir(PRODUCT_UPLOAD_DIR + "/" + product.getId());
+//            FileUploadUtil.cleanDir(PRODUCT_UPLOAD_DIR + "/" + product.getId());
             FileUploadUtil.saveFile(PRODUCT_UPLOAD_DIR + "/" + product.getId(), fileName, mainImage);
         }
 
         if (extraImages != null) {
-            FileUploadUtil.cleanDir(PRODUCT_UPLOAD_DIR + "/" + product.getId() + "/extras");
+//            FileUploadUtil.cleanDir(PRODUCT_UPLOAD_DIR + "/" + product.getId() + "/extras");
             for(MultipartFile extraImage : extraImages) {
                 if (!extraImage.isEmpty() && extraImage.getOriginalFilename() != null) {
                     String fileName = org.springframework.util.StringUtils.cleanPath(extraImage.getOriginalFilename());
@@ -203,6 +266,7 @@ public class ProductController {
             List<Brand> brands = brandService.listAllSorted();
 
             int numOfExtraImages = productById.getImages().size();
+            int numOfDetailItems = productById.getDetails().size();
             List<CategoryDTO> categories = productById.getBrand().getCategories().stream()
                     .map(category -> new CategoryDTO(category.getId(), category.getName()))
                     .sorted((a, b) -> a.getId() - b.getId())
@@ -212,6 +276,7 @@ public class ProductController {
             model.addAttribute("brands", brands);
             model.addAttribute("categories", categories);
             model.addAttribute("numOfExtraImages", numOfExtraImages);
+            model.addAttribute("numOfDetailItems", numOfDetailItems);
             model.addAttribute("pageTitle", "Edit Product (ID: " + id + " )");
         } catch (ProductNotFoundException e) {
             redirectAttributes.addFlashAttribute("exceptionMessage", "Product with id: " + id + " not found.");
