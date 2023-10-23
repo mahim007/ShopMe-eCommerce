@@ -14,10 +14,10 @@ function fileOnChangeHandler(e, inputObject) {
     let num = name ? name[name.length - 1] : "1"
     let thumbnailId = "extraThumbnail" + num;
     let defaultThumbnail = $(thumbnailId).attr("src");
-    showExtraThumbnail(inputObject, defaultThumbnail, thumbnailId);
+    showExtraThumbnailImage(inputObject, defaultThumbnail, thumbnailId);
 }
 
-function showExtraThumbnail(fileInput, userDefaultImage, thumbnailId) {
+function showExtraThumbnailImage(fileInput, userDefaultImage, thumbnailId) {
     let file = fileInput.files[0];
     let fileReader = new FileReader();
 
@@ -91,6 +91,8 @@ function removeExtraImageSection(id) {
 
 function decreaseCountForExtraImages(id) {
     $("#images-div").children("div").each((index, item) => {
-        $(item).find("label").text("Extra Image #" + (index));
+        if (index > 0) {
+            $(item).find("label").text("Extra Image #" + (index));
+        }
     });
 }

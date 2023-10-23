@@ -25,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -117,6 +118,7 @@ public class ProductController {
             setMainImageName(mainImage, product);
             setExistingExtraImageNames(imageIDs, imageNames, product);
             setNewExtraImageNames(extraImages, product);
+            detailIDs = detailIDs == null ? new String[0] : detailIDs;
             setProductDetails(detailNames, detailValues, detailIDs, product);
 
             productToBeSaved = productService.save(product);
@@ -268,6 +270,7 @@ public class ProductController {
             int numOfExtraImages = productById.getImages().size();
             int numOfDetailItems = productById.getDetails().size();
             List<CategoryDTO> categories = productById.getBrand().getCategories().stream()
+                    .filter(category -> Objects.equals(category.getId(), productById.getCategory().getId()))
                     .map(category -> new CategoryDTO(category.getId(), category.getName()))
                     .sorted((a, b) -> a.getId() - b.getId())
                     .collect(Collectors.toList());
@@ -280,6 +283,7 @@ public class ProductController {
             model.addAttribute("pageTitle", "Edit Product (ID: " + id + " )");
         } catch (ProductNotFoundException e) {
             redirectAttributes.addFlashAttribute("exceptionMessage", "Product with id: " + id + " not found.");
+            return "redirect:/products";
         }
 
         return "products/product_form";

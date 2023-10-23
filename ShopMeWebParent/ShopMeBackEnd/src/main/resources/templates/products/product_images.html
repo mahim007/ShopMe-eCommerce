@@ -59,7 +59,8 @@
                      th:src="@{/images/default-category.png}"/>
             </div>
             <div>
-                <input type="file" class="mb-2 form-check-inline extraImage" th:id="'extraImage' + ${numOfExtraImages}" name="extraImage"
+                <input type="file" name="extraImage" class="mb-2 form-check-inline extraImage"
+                       th:id="'extraImage' + ${numOfExtraImages}"
                        accept="image/png, image/jpeg"/>
             </div>
         </div>

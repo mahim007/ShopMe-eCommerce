@@ -30,6 +30,7 @@ public class ProductImage {
         this.product = product;
     }
 
+    @Transient
     public String getImagePath() {
         return "/product-photos/" + this.product.getId() + "/extras/" + this.name;
     }

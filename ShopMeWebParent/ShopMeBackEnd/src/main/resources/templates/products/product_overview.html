@@ -19,7 +19,7 @@
             <label class="col-form-label col-sm-2">Brand</label>
             <div class="col-sm-10">
                 <select class="form-select" th:field="*{brand}" required>
-                    <option value="">[No Brand]</option>
+                    <option value="-1">[No Brand]</option>
                     <th:block th:each="brand : ${brands}">
                         <option th:value="${brand.id}">[[${brand.name}]]</option>
                     </th:block>
@@ -29,12 +29,17 @@
         <div class="row mb-3">
             <label class="col-form-label col-sm-2">Category</label>
             <div class="col-sm-10">
-                <select class="form-select" th:field="*{category}" required>
-                    <option value="">[No Category]</option>
-                    <th:block th:each="category : ${categories}">
-                        <option th:value="${category.id}">[[${category.name}]]</option>
-                    </th:block>
-                </select>
+                <th:block th:if="${product.category != null}">
+                    <select class="form-select" th:field="*{category}" required>
+                        <th:block th:each="category : ${product.brand.categories}">
+                            <option th:value="${category.id}">[[${category.name}]]</option>
+                        </th:block>
+                    </select>
+                </th:block>
+
+                <th:block th:if="${product.category == null}">
+                    <select class="form-select" th:field="*{category}" required></select>
+                </th:block>
             </div>
         </div>
         <div class="row mb-3">

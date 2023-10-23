@@ -15,10 +15,19 @@ $(document).ready(function () {
         });
     });
 
-    // if (brandDropdown.val()) {
-    //     fetchCategories(brandDropdown.val(), categoryDropdown);
-    // }
+    fetchCategoriesForNewForm(brandDropdown.val(), categoryDropdown);
 });
+
+function fetchCategoriesForNewForm(brandId, categoryDropdown) {
+    let categoryId = $("#categoryId");
+    let editMode = false;
+
+    if (categoryId && categoryId.length > 0) {
+        editMode = true;
+    }
+
+    if (!editMode && brandId !== "-1") fetchCategories(brandId, categoryDropdown);
+}
 
 function fetchCategories(brandId, categoryDropdown) {
 

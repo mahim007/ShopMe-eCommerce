@@ -14,6 +14,7 @@
                   enctype="multipart/form-data"
                   style="max-width: 1000px; margin: 0 auto">
                 <input type="hidden" th:field="*{id}"/>
+                <input type="hidden" th:if="${product.category != null}" id="categoryId" th:value="${product.category.id}">
                 <div>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
