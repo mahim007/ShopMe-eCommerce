@@ -1,0 +1,109 @@
+<th:block>
+	<div class="modal-header">
+		<h4 class="modal-title" id="productDetailModalTitle">Product Details</h4>
+		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	</div>
+	<div class="modal-body">
+		<ul class="nav nav-tabs" id="myTab" role="tablist">
+			<li class="nav-item" role="presentation">
+				<button class="nav-link active" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab">Overview</button>
+			</li>
+			<li class="nav-item" role="presentation">
+				<button class="nav-link" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab">Description</button>
+			</li>
+			<li class="nav-item" role="presentation">
+				<button class="nav-link" data-bs-toggle="tab" data-bs-target="#images" type="button" role="tab">Images</button>
+			</li>
+			<li class="nav-item" role="presentation">
+				<button class="nav-link" data-bs-toggle="tab" data-bs-target="#details" type="button" role="tab">Details</button>
+			</li>
+			<li class="nav-item" role="presentation">
+				<button class="nav-link" data-bs-toggle="tab" data-bs-target="#shipping" type="button" role="tab">Shipping</button>
+			</li>
+		</ul>
+		<div class="tab-content" id="myTabContent">
+			<div class="tab-pane fade show active p-3" id="overview" role="tabpanel" aria-labelledby="overview-tab" tabindex="0">
+				<th:block>
+					<div class="row mb-3">
+						<label class="col-form-label col-sm-2">Product Name</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" th:value="${product.name}" readonly />
+						</div>
+					</div>
+					<div class="row mb-3">
+						<label class="col-form-label col-sm-2">Alias</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" th:field="${product.alias}" readonly />
+						</div>
+					</div>
+					<div class="row mb-3">
+						<label class="col-form-label col-sm-2">Brand</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" th:field="${product.brand.name}" readonly />
+						</div>
+					</div>
+					<div class="row mb-3">
+						<label class="col-form-label col-sm-2">Category</label>
+						<div class="col-sm-10">
+							<th:block th:if="${product.category != null}">
+								<input type="text" class="form-control" th:field="${product.category.name}" readonly />
+							</th:block>
+						</div>
+					</div>
+					<div class="row form-group">
+						<label class="col-form-label col-sm-2">Enabled</label>
+						<div class="col-sm-10">
+							<input type="checkbox" class="form-check-inline"
+								   th:checked="${product.enabled}" onclick="return false;"/>
+						</div>
+					</div>
+					<div class="row mb-3">
+						<label class="col-form-label col-sm-2">In Stock</label>
+						<div class="col-sm-10">
+							<input type="checkbox" class="form-check-inline"
+								   th:checked="${product.inStock}" onclick="return false;"/>
+						</div>
+					</div>
+					<div class="row mb-3">
+						<label class="col-form-label col-sm-2">Cost</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" th:value="${product.cost}" readonly />
+						</div>
+					</div>
+					<div class="row mb-3">
+						<label class="col-form-label col-sm-2">Price</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" th:value="${product.price}" readonly />
+						</div>
+					</div>
+					<div class="row mb-3">
+						<label class="col-form-label col-sm-2">Discount</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" th:value="${product.discountPercent}" readonly />
+						</div>
+					</div>
+					<div class="row mb-3">
+						<label class="col-form-label col-sm-2">Update Time:</label>
+						<div class="col-sm-10">
+							<span th:text="${#dates.format(product.updatedTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+						</div>
+					</div>
+				</th:block>
+			</div>
+			<div class="tab-pane fade p-3" id="description" role="tabpanel" aria-labelledby="description-tab" tabindex="0">
+
+			</div>
+			<div class="tab-pane fade p-3" id="images" role="tabpanel" aria-labelledby="images-tab" tabindex="0">
+
+			</div>
+			<div class="tab-pane fade p-3" id="details" role="tabpanel" aria-labelledby="details-tab" tabindex="0">
+
+			</div>
+			<div class="tab-pane fade p-3" id="shipping" role="tabpanel" aria-labelledby="details-tab" tabindex="0">
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+	</div>
+</th:block>

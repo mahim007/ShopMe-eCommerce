@@ -63,7 +63,7 @@
                             class="fas fa-times fa-2x icon-dark"></i></a>
                 </td>
                 <td>
-                    <a th:href="@{'/products/detail/' + ${product.id}}"
+                    <a class="link-detail" th:href="@{'/products/details/' + ${product.id}}"
                        title="View product details"
                     >
                         <i class="fas fa-file-alt fa-2x icon-blue"></i>
@@ -135,6 +135,12 @@
         <h2>No product found</h2>
     </div>
     <div th:replace="fragments/modal::confirmDeleteModal"></div>
+    <div class="modal fade text-center" tabindex="-1" id="productDetailModal" aria-labelledby="productDetailModalTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content"></div>
+        </div>
+    </div>
     <div th:replace="fragments/page_structure :: page_footer"></div>
 </div>
 <script type="text/javascript">
@@ -149,6 +155,12 @@
             $("#modalYesBtn").attr("href", deleteUrl);
             showModalDialog("Delete Confirmation", "Are you sure to delete Product <br> (ID: <b>" + productId + "</b>, Name: <b>" + productName + "</b>)?");
         });
+
+        $(".link-detail").on("click", function (e) {
+            e.preventDefault();
+            let linkDetailURL = $(this).attr("href");
+            $("#productDetailModal").modal("show").find(".modal-content").load(linkDetailURL);
+        })
     });
 
     function clearFilter() {
