@@ -132,7 +132,24 @@
 				</div>
 			</div>
 			<div class="tab-pane fade p-3" id="details" role="tabpanel" aria-labelledby="details-tab" tabindex="0">
-
+				<div>
+					<table class="table table-striped table-bordered table-hover">
+						<thead class="table-dark">
+						<tr>
+							<th>Name</th>
+							<th>Value</th>
+						</tr>
+						</thead>
+						<tbody>
+						<th:block th:each="detail : ${product.details}">
+							<tr>
+								<td>[[${detail.name}]]</td>
+								<td>[[${detail.value}]]</td>
+							</tr>
+						</th:block>
+						</tbody>
+					</table>
+				</div>
 			</div>
 			<div class="tab-pane fade p-3" id="shipping" role="tabpanel" aria-labelledby="details-tab" tabindex="0">
 			</div>
