@@ -99,4 +99,13 @@ public class Product {
 
         return false;
     }
+
+    @Transient
+    public String getShortName() {
+        if (this.name.length() > 56) {
+            return this.name.substring(0, 56).concat("...");
+        }
+
+        return this.name;
+    }
 }

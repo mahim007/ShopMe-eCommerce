@@ -48,7 +48,7 @@
                     <img th:if="${product.mainImage != null}" th:src="@{${product.mainImagePath}}"
                          class="img-fluid" style="height: 100px"/>
                 </td>
-                <td class="text-start" th:id="@{'product-' + ${product.id} + '-name'}" th:text="${product.name}">Product Name</td>
+                <td class="text-start" th:id="@{'product-' + ${product.id} + '-name'}" th:text="${product.shortName}">Product Name</td>
                 <td class="text-start" th:text="${product.alias}">Product Alias</td>
                 <td>
                     <span class="badge bg-info text-dark" th:text="${product.category.name}"></span>

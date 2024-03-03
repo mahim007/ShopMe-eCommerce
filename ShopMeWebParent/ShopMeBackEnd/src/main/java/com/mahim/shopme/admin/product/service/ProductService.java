@@ -7,6 +7,7 @@ import com.mahim.shopme.common.entity.Product;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -41,8 +42,10 @@ public class ProductService {
     public Page<Product> listByKeyword(int pageNum, String sortField, String sortDir, String keyword) {
         Sort sort = Sort.by(sortField);
         sort = StringUtils.equals(sortDir, "asc") ? sort.ascending() : sort.descending();
-        PageRequest pageRequest = PageRequest.of(pageNum - 1, PRODUCTS_PER_PAGE, sort);
-        return productRepository.findAllByKeyword(keyword, pageRequest);
+        Pageable pageable = PageRequest.of(pageNum - 1, PRODUCTS_PER_PAGE, sort);
+
+        return StringUtils.isNotEmpty(keyword) && StringUtils.isNotBlank(keyword) && StringUtils.length(keyword) >= 3 ?
+                productRepository.findAllByKeyword(keyword, pageable) : productRepository.findAll(pageable);
     }
 
     public Product save(Product product) {

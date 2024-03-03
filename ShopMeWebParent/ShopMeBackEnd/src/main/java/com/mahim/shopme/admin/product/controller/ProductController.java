@@ -72,7 +72,7 @@ public class ProductController {
         int endNo = pageNo * PRODUCTS_PER_PAGE;
 
         List<Product> products = productsPage.getContent();
-        String reverseSortDir = StringUtils.equals(sortDir, "asc") ? "asc" : "desc";
+        String reverseSortDir = StringUtils.equals(sortDir, "asc") ? "desc" : "asc";
 
         model.addAttribute("startNo", startNo);
         model.addAttribute("endNo", endNo < totalElements ? endNo : totalElements);
