@@ -69,6 +69,12 @@ public class CategoryService {
             categoryToSave = category;
         }
 
+        Category parent = category.getParent();
+        if (parent != null) {
+            String allParentIds = parent.getAllParentIDs() == null ? "-" : parent.getAllParentIDs();
+            allParentIds += String.valueOf(parent.getId()) + "-";
+            categoryToSave.setAllParentIDs(allParentIds);
+        }
         return categoryRepository.save(categoryToSave);
     }
 
