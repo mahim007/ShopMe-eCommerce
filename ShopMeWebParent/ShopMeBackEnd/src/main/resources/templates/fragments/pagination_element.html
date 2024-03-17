@@ -6,6 +6,7 @@
    th:href="@{'/' + ${moduleName} + '/page/' + ${pageNum} +
    '?sortField=' + ${sortField} +
    '&sortDir=' + ${sortDir} +
-   ${keyword != null ? '&keyword=' + keyword : '' }}">[[${pageLabel}]]</a>
+   ${keyword != null ? '&keyword=' + keyword : '' } +
+   ${categoryId != null ? '&categoryId=' + categoryId : '' }}">[[${pageLabel}]]</a>
 </body>
 </html>

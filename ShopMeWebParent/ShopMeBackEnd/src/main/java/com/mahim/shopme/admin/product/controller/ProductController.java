@@ -2,13 +2,12 @@ package com.mahim.shopme.admin.product.controller;
 
 import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.admin.brand.service.BrandService;
+import com.mahim.shopme.admin.category.CategoryNotFoundException;
+import com.mahim.shopme.admin.category.service.CategoryService;
 import com.mahim.shopme.admin.product.exception.ProductNotFoundException;
 import com.mahim.shopme.admin.product.service.ProductService;
 import com.mahim.shopme.common.dto.CategoryDTO;
-import com.mahim.shopme.common.entity.Brand;
-import com.mahim.shopme.common.entity.Product;
-import com.mahim.shopme.common.entity.ProductDetail;
-import com.mahim.shopme.common.entity.ProductImage;
+import com.mahim.shopme.common.entity.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,10 +38,12 @@ public class ProductController {
 
     private final ProductService productService;
     private final BrandService brandService;
+    private final CategoryService categoryService;
 
-    public ProductController(ProductService productService, BrandService brandService) {
+    public ProductController(ProductService productService, BrandService brandService, CategoryService categoryService) {
         this.productService = productService;
         this.brandService = brandService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("")
@@ -56,15 +57,16 @@ public class ProductController {
             @RequestParam(name = "sortField", defaultValue = "id") String sortField,
             @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
             @RequestParam(name = "keyword", defaultValue = "") String keyword,
+            @RequestParam(name = "categoryId", defaultValue = "0") Integer categoryId,
             Model model
     ) {
+        System.out.println("Category Id: " + categoryId);
         keyword = StringUtils.trim(keyword);
         if (StringUtils.isEmpty(keyword) || StringUtils.isBlank(keyword)) {
             keyword = null;
         }
 
-        Page<Product> productsPage = keyword == null ? productService.listByPage(pageNo, sortField, sortDir) :
-                productService.listByKeyword(pageNo, sortField, sortDir, keyword);
+        Page<Product> productsPage = productService.listByKeyword(pageNo, sortField, sortDir, keyword, categoryId);
 
         int totalPages = productsPage.getTotalPages();
         long totalElements = productsPage.getTotalElements();
@@ -74,12 +76,24 @@ public class ProductController {
         List<Product> products = productsPage.getContent();
         String reverseSortDir = StringUtils.equals(sortDir, "asc") ? "desc" : "asc";
 
+        List<Category> hierarchicalCategories = categoryService.listAll();
+        String categoryName = "";
+        try {
+            Category categoryById = categoryService.findCategoryById(categoryId);
+            categoryName = categoryById.getName();
+        } catch (CategoryNotFoundException ex) {
+            categoryName = "All Categories";
+        }
+
         model.addAttribute("startNo", startNo);
         model.addAttribute("endNo", endNo < totalElements ? endNo : totalElements);
         model.addAttribute("totalPageNo", totalPages);
         model.addAttribute("total", totalElements);
         model.addAttribute("currentPageNo", pageNo);
         model.addAttribute("products", products);
+        model.addAttribute("categories", hierarchicalCategories);
+        model.addAttribute("categoryId", categoryId);
+        model.addAttribute("categoryName", categoryName);
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", reverseSortDir);

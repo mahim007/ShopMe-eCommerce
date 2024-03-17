@@ -20,7 +20,41 @@
     <div th:if="${exceptionMessage != null}" class="alert alert-danger text-center">
         [[${exceptionMessage}]]
     </div>
-    <div th:replace="fragments/search_form :: search_form('/products/page/1')"></div>
+    <div>
+        <form id="productSearchForm" th:action="@{'/products/page/1'}" class="form-check-inline m-3">
+            <input type="hidden" class="form-control" name="sortField" th:value="${sortField}" required/>
+            <input type="hidden" class="form-control" name="sortDir" th:value="${sortDir}" required/>
+
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <label for="keyword" class="col-form-label">Category</label>
+                </div>
+                <div class="col-auto">
+                    <select id="dropdownCategory" class="form-select" name="categoryId">
+                        <option value="0">All Categories</option>
+                        <th:block th:each="cat : ${categories}">
+                            <option th:value="${cat.id}" th:selected="${cat.id == categoryId}">[[${cat.id == categoryId ? categoryName : cat.name}]]</option>
+                        </th:block>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <label for="keyword" class="col-form-label">Filter</label>
+                </div>
+                <div class="col-auto">
+                    <input type="search" class="form-control" id="keyword" name="keyword" th:value="${keyword}"
+                           required/>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" value="Search" class="btn btn-primary">
+                        <i class="fas fa-search icon-white"></i>
+                    </button>
+                    <button type="button" value="Clear" class="btn btn-secondary" onclick="clearFilter()">
+                        <i class="fas fa-eraser icon-white"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
     <div class="full-details">
         <table class="table table-striped table-hover table-bordered text-center">
             <thead class="table-dark">
@@ -54,7 +88,7 @@
                     <span class="badge bg-info text-dark" th:text="${product.category.name}"></span>
                 </td>
                 <td>
-                    <span class="badge bg-info text-dark" th:text="${product.brand.name}"></span>
+                    <span class="badge bg-warning text-dark" th:text="${product.brand.name}"></span>
                 </td>
                 <td>
                     <a th:if="${product.enabled == true}" th:href="@{'/products/' + ${product.id} + '/enabled/' + ${true}}"><i
@@ -160,6 +194,10 @@
             e.preventDefault();
             let linkDetailURL = $(this).attr("href");
             $("#productDetailModal").modal("show").find(".modal-content").load(linkDetailURL);
+        });
+
+        $("#dropdownCategory").on("change", function (e) {
+            $("#productSearchForm").submit();
         })
     });
 

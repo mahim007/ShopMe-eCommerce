@@ -39,13 +39,26 @@ public class ProductService {
         return productRepository.findAll(pageRequest);
     }
 
-    public Page<Product> listByKeyword(int pageNum, String sortField, String sortDir, String keyword) {
+    public Page<Product> listByKeyword(int pageNum, String sortField, String sortDir, String keyword, Integer categoryId) {
         Sort sort = Sort.by(sortField);
         sort = StringUtils.equals(sortDir, "asc") ? sort.ascending() : sort.descending();
         Pageable pageable = PageRequest.of(pageNum - 1, PRODUCTS_PER_PAGE, sort);
+        String categoryIdMatch = "-" + categoryId + "-";
 
-        return StringUtils.isNotEmpty(keyword) && StringUtils.isNotBlank(keyword) && StringUtils.length(keyword) >= 3 ?
-                productRepository.findAllByKeyword(keyword, pageable) : productRepository.findAll(pageable);
+        return isValidKeyword(keyword) && isValidCategoryId(categoryId) ?
+                productRepository.searchInCategory(categoryId, categoryIdMatch, keyword, pageable) :
+                isValidKeyword(keyword) ? productRepository.findAllByKeyword(keyword, pageable) :
+                        isValidCategoryId(categoryId) ?
+                                productRepository.findAllInCategory(categoryId, categoryIdMatch, pageable) :
+                                productRepository.findAll(pageable);
+    }
+
+    private static boolean isValidCategoryId(Integer categoryId) {
+        return categoryId != null && categoryId > 0;
+    }
+
+    private static boolean isValidKeyword(String keyword) {
+        return StringUtils.isNotEmpty(keyword) && StringUtils.isNotBlank(keyword) && StringUtils.length(keyword) >= 3;
     }
 
     public Product save(Product product) {

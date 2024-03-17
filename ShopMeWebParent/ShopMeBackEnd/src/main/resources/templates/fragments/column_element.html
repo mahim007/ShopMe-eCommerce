@@ -4,7 +4,8 @@
 <th th:fragment="column_link(moduleName, fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
     <a class="text-white" th:href="@{'/' + ${moduleName} + '/page/' + ${currentPageNo} + '?sortField=' + ${fieldName} +
         '&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} +
-        ${keyword != null ? '&keyword=' + keyword : '' }}">[[${columnLabel}]]</a>
+        ${keyword != null ? '&keyword=' + keyword : '' } +
+        ${categoryId != null ? '&categoryId=' + categoryId : '' }}">[[${columnLabel}]]</a>
     <span th:class="${sortDir == 'asc' ? 'fas fa-sort-up': 'fas fa-sort-down'}"
           th:if="${sortField == fieldName}"></span>
 </th>
