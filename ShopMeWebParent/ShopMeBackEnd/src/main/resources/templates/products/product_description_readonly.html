@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="row mb-3">
+        <label class="col-form-label col-sm-2">Short Description</label>
+        <div class="col-sm-10">
+            <div class="border rounded p-2 m-2" th:utext="${product.shortDescription}"></div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-form-label col-sm-2">Full Description</label>
+        <div class="col-sm-10">
+            <div class="border rounded p-2 m-2" th:utext="${product.fullDescription}"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
