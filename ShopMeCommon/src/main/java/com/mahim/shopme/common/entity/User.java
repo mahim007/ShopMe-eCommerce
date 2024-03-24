@@ -2,6 +2,7 @@ package com.mahim.shopme.common.entity;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 @Entity
@@ -124,6 +125,16 @@ public class User {
     @Transient
     public String getFullName() {
         return this.firstName + " " + this.lastName;
+    }
+
+    public boolean hasRole(String roleName) {
+        for (Role role : roles) {
+            if (role.getName().equals(roleName)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

@@ -91,7 +91,7 @@
 				</th:block>
 			</div>
 			<div class="tab-pane fade p-3" id="description" role="tabpanel" aria-labelledby="description-tab" tabindex="0">
-				<div th:replace="products/product_description_readonly :: content"><div>
+				<th:block th:replace="products/product_description_readonly :: content"></th:block>>
 			</div>
 			<div class="tab-pane fade p-3" id="images" role="tabpanel" aria-labelledby="images-tab" tabindex="0">
 				<th:block th:replace="products/product_images_readonly :: content"></th:block>
@@ -102,7 +102,7 @@
 			<div class="tab-pane fade p-3" id="shipping" role="tabpanel" aria-labelledby="shipping-tab" tabindex="0">
 				<th:block th:replace="products/product_shipping_readonly :: content"></th:block>
 			</div>
-		</div>
+		</th:block>
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>

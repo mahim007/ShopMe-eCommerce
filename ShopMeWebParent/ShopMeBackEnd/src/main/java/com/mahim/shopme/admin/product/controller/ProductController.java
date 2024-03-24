@@ -6,12 +6,14 @@ import com.mahim.shopme.admin.category.CategoryNotFoundException;
 import com.mahim.shopme.admin.category.service.CategoryService;
 import com.mahim.shopme.admin.product.exception.ProductNotFoundException;
 import com.mahim.shopme.admin.product.service.ProductService;
+import com.mahim.shopme.admin.security.ShopmeUserDetails;
 import com.mahim.shopme.common.dto.CategoryDTO;
 import com.mahim.shopme.common.entity.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -119,16 +121,22 @@ public class ProductController {
 
     @PostMapping("/save")
     public String saveProduct(Product product,
-                              @RequestParam(name = "image") MultipartFile mainImage,
-                              @RequestParam(name = "extraImage") MultipartFile[] extraImages,
+                              @RequestParam(name = "image", value = "image", required = false) MultipartFile mainImage,
+                              @RequestParam(name = "extraImage", value = "extraImage", required = false) MultipartFile[] extraImages,
                               @RequestParam(name = "imageIDs", required = false) String[] imageIDs,
                               @RequestParam(name = "imageNames", required = false) String[] imageNames,
                               @RequestParam(name = "detailIDs", required = false) String[] detailIDs,
                               @RequestParam(name = "detailNames", required = false) String[] detailNames,
                               @RequestParam(name = "detailValues", required = false) String[] detailValues,
+                              @AuthenticationPrincipal ShopmeUserDetails loggedInUser,
                               RedirectAttributes redirectAttributes) {
         Product productToBeSaved = null;
         try {
+            if (loggedInUser.hasRole("Salesperson")) {
+                productService.saveProductPrice(product);
+                redirectAttributes.addFlashAttribute("message","The product has been saved successfully.");
+                return listAll();
+            }
             setMainImageName(mainImage, product);
             setExistingExtraImageNames(imageIDs, imageNames, product);
             setNewExtraImageNames(extraImages, product);
@@ -168,7 +176,7 @@ public class ProductController {
     }
 
     private void setMainImageName(MultipartFile mainImage, Product product) {
-        if (!mainImage.isEmpty() && mainImage.getOriginalFilename() != null) {
+        if (mainImage != null && !mainImage.isEmpty() && mainImage.getOriginalFilename() != null) {
             String fileName = org.springframework.util.StringUtils.cleanPath(mainImage.getOriginalFilename());
             product.setMainImage(fileName);
         }

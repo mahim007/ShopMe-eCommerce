@@ -104,6 +104,15 @@ public class ProductService {
         return productRepository.save(productToBeSaved);
     }
 
+    public void saveProductPrice(Product product) {
+        Product productInDB = productRepository.findById(product.getId()).get();
+        productInDB.setCost(product.getCost());
+        productInDB.setPrice(product.getPrice());
+        productInDB.setDiscountPercent(product.getDiscountPercent());
+
+        productRepository.save(productInDB);
+    }
+
     public Product findProductById(Integer id) throws ProductNotFoundException {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isPresent()) {
