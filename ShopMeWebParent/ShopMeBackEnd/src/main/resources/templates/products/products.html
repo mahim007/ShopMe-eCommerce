@@ -69,11 +69,18 @@
                         <th:block th:replace="fragments/column_element::column_link('products', 'name', 'Product Name', 'tag')" />
                     </th>
 
-                    <th th:replace="fragments/column_element::column_link('products', 'alias', 'Alias', 'none')"></th>
-                    <th th:replace="fragments/column_element::column_link('products', 'category', 'Category', 'none')"></th>
-                    <th th:replace="fragments/column_element::column_link('products', 'brand', 'Brand', 'none')"></th>
+                    <th class="hideable-column">
+                        <th:block th:replace="fragments/column_element::column_link('products', 'alias', 'Alias', 'tag')"></th:block>
+                    </th>
+                    <th class="hideable-column">
+                        <th:block th:replace="fragments/column_element::column_link('products', 'category', 'Category', 'tag')"></th:block>
+                    </th>
+
+                    <th class="hideable-column">
+                        <th:block th:replace="fragments/column_element::column_link('products', 'brand', 'Brand', 'tag')"></th:block>
+                    </th>
                     <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
-                        <th th:replace="fragments/column_element::column_link('products', 'enabled', 'Enabled', 'none')"></th>
+                        <th:block th:replace="fragments/column_element::column_link('products', 'enabled', 'Enabled', 'none')"></th:block>
                     </th:block>
                     <th>Action</th>
                 </tr>
@@ -87,11 +94,11 @@
                          class="img-fluid" style="height: 100px"/>
                 </td>
                 <td class="text-start" th:id="@{'product-' + ${product.id} + '-name'}" th:text="${product.shortName}">Product Name</td>
-                <td class="text-start" th:text="${product.alias}">Product Alias</td>
-                <td>
+                <td class="hideable-column text-start" th:text="${product.alias}">Product Alias</td>
+                <td class="hideable-column">
                     <span class="badge bg-info text-dark" th:text="${product.category.name}"></span>
                 </td>
-                <td>
+                <td class="hideable-column">
                     <span class="badge bg-warning text-dark" th:text="${product.brand.name}"></span>
                 </td>
                 <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
@@ -137,33 +144,31 @@
                      class="img-fluid" style="height: 100px"/>
             </div>
             <div class="col-8">
-                <div>[[${product.name}]]</div>
-                <div>
-                    <span class="badge bg-info text-dark" th:text="${product.category.name}"></span>
-                </div>
+                <div>[[${product.shortName}]]</div>
                 <div class="mt-2">
                     <th:block>
-                        <a th:if="${product.enabled == true}"
-                           th:href="@{'/products/' + ${product.id} + '/enabled/' + ${true}}"><i
-                                class="fas fa-check-circle fa-2x icon-green"></i></a>
-                        <a th:if="${product.enabled == false}"
-                           th:href="@{'/products/' + ${product.id} + '/enabled/' + ${false}}"><i
-                                class="fas fa-times fa-2x icon-dark"></i></a>
-                        &nbsp;
-                    </th:block>
-                    <th:block>
-                        <a th:href="@{'/products/edit/' + ${product.id}}"
-                           title="Edit this category"
+                        <a class="link-detail" th:href="@{'/products/details/' + ${product.id}}"
+                           title="View product details"
                         >
-                            <i class="fas fa-edit fa-2x icon-lightblue"></i>
+                            <i class="fas fa-file-alt fa-2x icon-blue"></i>
                         </a>
                         &nbsp;
-                        <a th:href="@{'/products/delete/' + ${product.id}}"
-                           class="product-delete"
-                           title="Delete this brand"
-                        >
-                            <i class="fas fa-trash fa-2x icon-danger"></i>
-                        </a>
+                        <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Salesperson')">
+                            <a th:href="@{'/products/edit/' + ${product.id}}"
+                               title="Edit this category"
+                            >
+                                <i class="fas fa-edit fa-2x icon-lightblue"></i>
+                            </a>
+                            &nbsp;
+                        </th:block>
+                        <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                            <a th:href="@{'/products/delete/' + ${product.id}}"
+                               class="product-delete"
+                               title="Delete this brand"
+                            >
+                                <i class="fas fa-trash fa-2x icon-danger"></i>
+                            </a>
+                        </th:block>&nbsp;
                     </th:block>
                 </div>
             </div>
