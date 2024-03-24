@@ -18,23 +18,45 @@
 			<div class="collapse navbar-collapse" id="topNavbar">
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					<th:block sec:authorize="hasAuthority('Admin')">
-						<li class="nav-item">
-							<a class="nav-link" th:href="@{/users}">Users</a>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
+							   aria-expanded="false" th:href="@{/users}">Users</a>
+							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<li><a class="dropdown-item" th:href="@{/users/new}">Create New</a></li>
+								<li><a class="dropdown-item" th:href="@{/users}">View All</a></li>
+							</ul>
 						</li>
 					</th:block>
 					<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
-						<li class="nav-item">
-							<a class="nav-link" th:href="@{/categories}">Categories</a>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
+							   aria-expanded="false" th:href="@{/categories}">Categories</a>
+							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<li><a class="dropdown-item" th:href="@{/categories/new}">Create New</a></li>
+								<li><a class="dropdown-item" th:href="@{/categories}">View All</a></li>
+							</ul>
 						</li>
 					</th:block>
 					<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
-						<li class="nav-item">
-							<a class="nav-link" th:href="@{/brands}">Brands</a>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
+							   aria-expanded="false" th:href="@{/brands}">Brands</a>
+							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<li><a class="dropdown-item" th:href="@{/brands/new}">Create New</a></li>
+								<li><a class="dropdown-item" th:href="@{/brands}">View All</a></li>
+							</ul>
 						</li>
 					</th:block>
 					<th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson', 'Editor', 'Shipper')">
-						<li class="nav-item">
-							<a class="nav-link" th:href="@{/products}">Products</a>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
+							   aria-expanded="false" th:href="@{/products}">Products</a>
+							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<li sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+									<a class="dropdown-item" th:href="@{/products/new}">Create New</a>
+								</li>
+								<li><a class="dropdown-item" th:href="@{/products}">View All</a></li>
+							</ul>
 						</li>
 					</th:block>
 					<th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson')">
