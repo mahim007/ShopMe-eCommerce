@@ -1,22 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8" http-equiv="Content-Type" content="text/html">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-
-    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
-
-    <title>Welcome to Shopme</title>
-</head>
+<th:block th:replace="fragments/page_structure :: page_header('Welcome to Shopme')"></th:block>
 <body>
-    <h1>Welcome to shopme eCommerce</h1>
-
-    <div class="container"><br/>
+    <div class="container-fluid">
+        <th:block th:replace="fragments/navigation :: header_nav"></th:block>
+        <h1>Welcome to Shopme eCommerce</h1>
         <div class="alert alert-success">
             <strong>Success!</strong> It is working as we expected.
         </div>
+        <th:block th:replace="fragments/navigation :: footer_nav"></th:block>
     </div>
 </body>
 </html>

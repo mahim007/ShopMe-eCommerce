@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<div th:fragment="header_nav">
+	<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+		<div class="container-fluid">
+			<a class="navbar-brand" th:href="@{/}">
+				<img th:src="@{/images/ShopmeAdminSmall.png}"/>
+			</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavbar"
+					aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="topNavbar">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					<li class="nav-item dropdown">
+						<a class="nav-link" href="">Careers</a>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link" href="">Payments</a>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link" href="">Shipping &amp; Delivery</a>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link" href="">Login</a>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link" href="">Register</a>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link" href="">Contact</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+</div>
+
+<div th:fragment="footer_nav">
+	<div>
+		<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+			<div class="container-fluid">
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bottomNavbar"
+						aria-controls="bottomNavbar" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="bottomNavbar">
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+						<li class="nav-item dropdown">
+							<a class="nav-link" href="">About Us</a>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-link" href="">Privacy Notce</a>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-link" href="">Returns &amp; Refund</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</div>
+	<div th:fragment="copyright" class="text-center m-3">
+		<p>Shopme - Copyright &copy; Shopme Ltd.</p>
+	</div>
+</div>
+</html>

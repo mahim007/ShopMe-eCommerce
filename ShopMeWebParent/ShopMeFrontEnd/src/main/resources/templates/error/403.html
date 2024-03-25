@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en"
+	  xmlns:th="http://www.thymeleaf.org"
+>
+<th:block th:replace="fragments/page_structure :: page_header('Permssion Error - Shopme')"></th:block>
+<body>
+<div class="container-fluid">
+	<div th:replace="fragments/navigation :: header_nav"></div>
+	<div class="m-3">
+		<h2>Sorry, you don't have permission to access this page.</h2>
+	</div>
+
+	<div th:replace="fragments/navigation :: footer_nav"></div>
+</div>
+</body>
+</html>
