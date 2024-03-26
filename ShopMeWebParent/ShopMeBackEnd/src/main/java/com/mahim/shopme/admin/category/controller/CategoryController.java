@@ -1,7 +1,7 @@
 package com.mahim.shopme.admin.category.controller;
 
 import com.mahim.shopme.admin.FileUploadUtil;
-import com.mahim.shopme.admin.category.CategoryNotFoundException;
+import com.mahim.shopme.common.exception.CategoryNotFoundException;
 import com.mahim.shopme.admin.category.exporter.CategoryCsvExporter;
 import com.mahim.shopme.admin.category.exporter.CategoryExcelExporter;
 import com.mahim.shopme.admin.category.exporter.CategoryPdfExporter;

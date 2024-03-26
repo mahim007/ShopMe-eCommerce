@@ -1,6 +1,7 @@
 package com.mahim.shopme.category;
 
 import com.mahim.shopme.common.entity.Category;
+import com.mahim.shopme.common.exception.CategoryNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,8 +31,13 @@ public class CategoryService {
         return listNoChildrenCategories;
     }
 
-    public Category getCategory(String alias) {
-        return categoryRepository.findByAliasEnabled(alias);
+    public Category getCategory(String alias) throws CategoryNotFoundException {
+        Category category = categoryRepository.findByAliasEnabled(alias);
+        if (category == null) {
+            throw new CategoryNotFoundException("Category with alias: " + alias + " not found.");
+        }
+
+        return category;
     }
 
     public List<Category> getCategoryParents(Category child) {

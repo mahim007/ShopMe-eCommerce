@@ -1,4 +1,4 @@
-package com.mahim.shopme.admin.category;
+package com.mahim.shopme.common.exception;
 
 public class CategoryNotFoundException extends Exception {
     public CategoryNotFoundException(String msg) {

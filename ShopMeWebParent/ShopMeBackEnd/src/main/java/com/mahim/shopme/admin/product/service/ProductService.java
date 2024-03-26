@@ -1,7 +1,7 @@
 package com.mahim.shopme.admin.product.service;
 
 import com.mahim.shopme.admin.FileUploadUtil;
-import com.mahim.shopme.admin.product.exception.ProductNotFoundException;
+import com.mahim.shopme.common.exception.ProductNotFoundException;
 import com.mahim.shopme.admin.product.repository.ProductRepository;
 import com.mahim.shopme.common.entity.Product;
 import org.apache.commons.lang3.StringUtils;

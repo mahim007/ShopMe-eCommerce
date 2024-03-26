@@ -1,9 +1,9 @@
 package com.mahim.shopme.admin.product.controller;
 
 import com.mahim.shopme.admin.brand.service.BrandService;
-import com.mahim.shopme.admin.category.CategoryNotFoundException;
+import com.mahim.shopme.common.exception.CategoryNotFoundException;
 import com.mahim.shopme.admin.category.service.CategoryService;
-import com.mahim.shopme.admin.product.exception.ProductNotFoundException;
+import com.mahim.shopme.common.exception.ProductNotFoundException;
 import com.mahim.shopme.admin.product.service.ProductService;
 import com.mahim.shopme.admin.security.ShopmeUserDetails;
 import com.mahim.shopme.common.dto.CategoryDTO;

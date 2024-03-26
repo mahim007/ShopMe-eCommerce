@@ -1,7 +1,7 @@
 package com.mahim.shopme.admin.category.service;
 
 import com.mahim.shopme.admin.FileUploadUtil;
-import com.mahim.shopme.admin.category.CategoryNotFoundException;
+import com.mahim.shopme.common.exception.CategoryNotFoundException;
 import com.mahim.shopme.admin.category.CategoryRepository;
 import com.mahim.shopme.admin.user.UserNotFoundException;
 import com.mahim.shopme.common.entity.Category;

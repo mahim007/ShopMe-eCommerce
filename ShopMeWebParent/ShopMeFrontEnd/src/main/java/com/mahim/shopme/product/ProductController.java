@@ -3,6 +3,7 @@ package com.mahim.shopme.product;
 import com.mahim.shopme.category.CategoryService;
 import com.mahim.shopme.common.entity.Category;
 import com.mahim.shopme.common.entity.Product;
+import com.mahim.shopme.common.exception.CategoryNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,8 +36,11 @@ public class ProductController {
     public String viewCategoryByPage(@PathVariable("category_alias") String alias,
                                @PathVariable("pageNo") Integer pageNo,
                                Model model) {
-        Category category = categoryService.getCategory(alias);
-        if (category == null) {
+        Category category;
+
+        try {
+            category = categoryService.getCategory(alias);
+        } catch (CategoryNotFoundException e) {
             return "error/404";
         }
 
@@ -60,6 +64,6 @@ public class ProductController {
         model.addAttribute("products", products);
         model.addAttribute("listCategoryParents", listCategoryParents);
 
-        return "products_by_category";
+        return "product/products_by_category";
     }
 }

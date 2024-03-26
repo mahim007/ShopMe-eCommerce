@@ -4,30 +4,11 @@
 <body>
     <div class="container-fluid">
         <th:block th:replace="fragments/navigation :: header_nav"></th:block>
-        <div th:if="${listCategoryParents != null && !listCategoryParents.empty}">
-            <div class="row">
-                <div class="col">
-                    <nav style="background: #d4d4d6; height: 38px" aria-label="breadcrumb">
-                        <ol class="breadcrumb" style="padding-top: 6px; padding-left: 10px">
-                            <li class="breadcrumb-item">
-                                <a th:href="@{/}">Home</a>
-                            </li>
-                            <th:block th:each="parent : ${listCategoryParents}">
-                                <li class="breadcrumb-item">
-                                    <a th:href="@{'/c/' + ${parent.alias}}">[[${parent.name}]]</a>
-                                </li>
-                            </th:block>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
-        </div>
-
+        <th:block th:replace="fragments/breadcrumb :: content"></th:block>
         <th:block th:if="${!category.children.empty}">
             <div>
                 <h2>Sub Categories of [[${pageTitle}]]</h2>
             </div>
-
             <div class="row m-2 text-center">
                 <th:block th:each="cat : ${category.children}">
                     <div class="col-md-2 mb-4" th:if="${cat.enabled}">
@@ -40,12 +21,10 @@
                 </th:block>
             </div>
         </th:block>
-
         <th:block th:if="${!products.empty}">
             <div>
                 <h2>Products in [[${pageTitle}]]</h2>
             </div>
-
             <div class="row m-4">
                 <th:block th:each="product : ${products}">
                     <div class="col-md-3 mb-4">
@@ -69,7 +48,6 @@
                 </th:block>
             </div>
         </th:block>
-
         <div class="text-center m-1" th:if="${total > 0}">
             <span>Showing Products # [[${startNo}]] to [[${endNo}]] of [[${total}]]</span>
             <th:block th:replace="fragments/pagination::pagination_fragment('c/' + ${alias})"></th:block>
@@ -77,7 +55,6 @@
         <div class="text-center m-1" th:unless="${total > 0}">
             <h2>No Products found</h2>
         </div>
-
         <th:block th:replace="fragments/navigation :: footer_nav"></th:block>
     </div>
 </body>
