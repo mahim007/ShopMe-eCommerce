@@ -41,35 +41,39 @@
             </div>
         </th:block>
 
-        <div>
-            <h2>Products in [[${pageTitle}]]</h2>
-        </div>
+        <th:block th:if="${!products.empty}">
+            <div>
+                <h2>Products in [[${pageTitle}]]</h2>
+            </div>
 
-        <div class="row m-4">
-            <th:block th:each="product : ${products}">
-                <div class="col-md-3 mb-4">
-                    <div>
-                        <img th:src="@{${product.mainImagePath}}" width="150"/>
-                        <br/>
-                        <b>[[${product.shortName}]]</b>
+            <div class="row m-4">
+                <th:block th:each="product : ${products}">
+                    <div class="col-md-3 mb-4">
+                        <div>
+                            <img th:src="@{${product.mainImagePath}}" width="150"/>
+                            <br/>
+                            <b>[[${product.shortName}]]</b>
+                        </div>
+                        <div th:if="${product.discountPercent <= 0}">
+                            <span>$ [[${product.price}]]</span>
+                        </div>
+                        <div th:if="${product.discountPercent > 0}">
+                            <span style="font-size: larger; color: darkred"
+                                  th:text="${'$ ' + #numbers.formatDecimal(product.discountPrice, 2, 2)}"
+                            >$ [[${product.discountPrice}]]</span>
+                            <del><span>$ [[${product.price}]]</span></del>
+                        </div>
                     </div>
-                    <div th:if="${product.discountPercent <= 0}">
-                        <span>$ [[${product.price}]]</span>
-                    </div>
-                    <div th:if="${product.discountPercent > 0}">
-                        <span style="font-size: larger; color: darkred">$ [[${product.discountPrice}]]</span>
-                        <del><span>$ [[${product.price}]]</span></del>
-                    </div>
-                </div>
-            </th:block>
-        </div>
+                </th:block>
+            </div>
+        </th:block>
 
         <div class="text-center m-1" th:if="${total > 0}">
             <span>Showing Products # [[${startNo}]] to [[${endNo}]] of [[${total}]]</span>
             <th:block th:replace="fragments/pagination::pagination_fragment('c/' + ${alias})"></th:block>
         </div>
         <div class="text-center m-1" th:unless="${total > 0}">
-            <h2>No brand found</h2>
+            <h2>No Products found</h2>
         </div>
 
         <th:block th:replace="fragments/navigation :: footer_nav"></th:block>
