@@ -11,6 +11,16 @@
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
 
     <title>[[${title}]]</title>
+    <style>
+        a {
+            text-decoration: auto;
+            font-weight: 500;
+            color: #6495FF;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 
 <head th:fragment="page_header_with_richtext(title)">
