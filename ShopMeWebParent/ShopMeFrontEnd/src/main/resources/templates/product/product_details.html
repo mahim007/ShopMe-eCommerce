@@ -8,7 +8,17 @@
         <div class="row">
             <div class="col-sm">
                 <div>
-                    <img th:src="@{${product.mainImagePath}}" class="img-fluid" />
+                    <img id="bigImage" class="m-2" th:src="@{${product.mainImagePath}}" height="300" width="300" />
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-2 col-sm-2 col-md-2 col-lg-1 m-2 p-1 border border-secondary">
+                        <img class="image-thumbnail img-fluid" th:src="@{${product.mainImagePath}}" height="50" index="0" />
+                    </div>
+                    <th:block th:each="extraImage, status : ${product.images}">
+                        <div class="col-2 col-sm-2 col-md-2 col-lg-1 m-2 p-1 border border-secondary">
+                            <img class="image-thumbnail img-fluid" th:src="@{${extraImage.imagePath}}" height="50" th:index="${status.count}" />
+                        </div>
+                    </th:block>
                 </div>
             </div>
             <div class="col-sm">
@@ -62,7 +72,26 @@
                 </th:block>
             </div>
         </div>
+        <th:block th:replace="fragments/images_carousel :: content"></th:block>
         <th:block th:replace="fragments/navigation :: footer_nav"></th:block>
     </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        let bigImage = $("#bigImage");
+        $(".image-thumbnail").mouseover(function (e) {
+            let currentImageSrc = $(this).attr("src");
+            let currentImageIndex = $(this).attr("index");
+
+            $(bigImage).attr("src", currentImageSrc);
+            $(bigImage).attr("index", currentImageIndex);
+        });
+
+        $(bigImage).click(function (e) {
+            $("#carouselModal").modal("show");
+            let imageIndex = parseInt(bigImage.attr("index"));
+            $("#carouselExampleIndicators").carousel(imageIndex);
+        });
+    });
+</script>
 </body>
 </html>
