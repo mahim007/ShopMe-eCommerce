@@ -4,7 +4,7 @@
 <a class="page-link"
    th:fragment="page_link(pageNum, pageLabel)"
    th:href="@{'/' + ${moduleName} + '/page/' + ${pageNum} +
-   ${keyword != null ? '&keyword=' + keyword : '' } +
+   ${keyword != null ? '?keyword=' + keyword : '' } +
    ${categoryId != null ? '&categoryId=' + categoryId : '' }}">[[${pageLabel}]]</a>
 </body>
 </html>
