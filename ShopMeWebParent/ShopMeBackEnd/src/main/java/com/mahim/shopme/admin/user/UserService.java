@@ -15,7 +15,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static com.mahim.shopme.admin.utils.StaticPathUtils.UPLOAD_DIR;
+import static com.mahim.shopme.admin.utils.StaticPathUtils.USER_UPLOAD_DIR;
 
 @Service
 @Transactional
@@ -118,7 +118,7 @@ public class UserService {
         }
 
         userRepository.deleteById(id);
-        FileUploadUtil.removeDir(UPLOAD_DIR + "/" + id);
+        FileUploadUtil.removeDir(USER_UPLOAD_DIR + "/" + id);
     }
 
     public void updateEnabledStatus(Integer id, boolean enabled) throws UserNotFoundException {

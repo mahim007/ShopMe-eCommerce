@@ -18,7 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 
-import static com.mahim.shopme.admin.utils.StaticPathUtils.UPLOAD_DIR;
+import static com.mahim.shopme.admin.utils.StaticPathUtils.USER_UPLOAD_DIR;
 
 @Controller
 @RequestMapping("/account")
@@ -55,8 +55,8 @@ public class AccountController {
                 String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
                 user.setPhotos(fileName);
                 savedUser = userService.updateAccount(user);
-                FileUploadUtil.cleanDir(UPLOAD_DIR + "/" + savedUser.getId());
-                FileUploadUtil.saveFile(UPLOAD_DIR + "/" + savedUser.getId(), fileName, multipartFile);
+                FileUploadUtil.cleanDir(USER_UPLOAD_DIR + "/" + savedUser.getId());
+                FileUploadUtil.saveFile(USER_UPLOAD_DIR + "/" + savedUser.getId(), fileName, multipartFile);
             } else {
                 savedUser = userService.updateAccount(user);
             }

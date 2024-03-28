@@ -99,17 +99,8 @@
 						</li>
 					</th:block>
 					<th:block sec:authorize="hasAuthority('Admin')">
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
-							   aria-expanded="false" th:href="@{/settings}">Settings</a>
-							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<li><a class="dropdown-item" href="#">Action</a></li>
-								<li><a class="dropdown-item" href="#">Another action</a></li>
-								<li>
-									<hr class="dropdown-divider">
-								</li>
-								<li><a class="dropdown-item" href="#">Something else here</a></li>
-							</ul>
+						<li class="nav-item">
+							<a class="nav-link" th:href="@{/settings}">Settings</a>
 						</li>
 					</th:block>
 					<li class="nav-item dropdown" style="display: flex">

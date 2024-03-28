@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.mahim.shopme.admin.user.UserService.USERS_PER_PAGE;
-import static com.mahim.shopme.admin.utils.StaticPathUtils.UPLOAD_DIR;
+import static com.mahim.shopme.admin.utils.StaticPathUtils.USER_UPLOAD_DIR;
 
 @Controller
 @RequestMapping("/users")
@@ -98,8 +98,8 @@ public class UserController {
             String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
             user.setPhotos(fileName);
             savedUser = userService.save(user);
-            FileUploadUtil.cleanDir(UPLOAD_DIR + "/" + savedUser.getId());
-            FileUploadUtil.saveFile(UPLOAD_DIR + "/" + savedUser.getId(), fileName, multipartFile);
+            FileUploadUtil.cleanDir(USER_UPLOAD_DIR + "/" + savedUser.getId());
+            FileUploadUtil.saveFile(USER_UPLOAD_DIR + "/" + savedUser.getId(), fileName, multipartFile);
         } else {
             savedUser = userService.save(user);
         }

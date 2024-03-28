@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/page_structure :: page_header_with_richtext('Settings - Shopme admin')"></head>
+<body>
+<div class="container-fluid">
+    <div th:replace="fragments/navigation :: page_nav"></div>
+    <div class="text-center">
+        <h2>Site Settings</h2>
+    </div>
+    <div th:if="${message != null}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
+    <div th:if="${exceptionMessage != null}" class="alert alert-danger text-center">
+        [[${exceptionMessage}]]
+    </div>
+    <div class="container">
+        <div class="border border-secondary rounded p-3">
+            <div>
+                <ul class="nav nav-tabs" id="settingTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab">General</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#countries" type="button" role="tab">Countries</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#states" type="button" role="tab">States</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#mail_server" type="button" role="tab">Mail server</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#mail_templates" type="button" role="tab">Mail templates</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="settingTabContent">
+                    <div class="tab-pane fade show active p-3" id="general" role="tabpanel" aria-labelledby="general-tab" tabindex="0">
+                        <th:block th:replace="settings/general :: content"></th:block>
+                    </div>
+                    <div class="tab-pane fade p-3" id="countries" role="tabpanel" aria-labelledby="countries-tab" tabindex="0">
+                        <h2>Countries</h2>
+                    </div>
+                    <div class="tab-pane fade p-3" id="states" role="tabpanel" aria-labelledby="states-tab" tabindex="0">
+                        <h2>States</h2>
+                    </div>
+                    <div class="tab-pane fade p-3" id="mail_server" role="tabpanel" aria-labelledby="mail_server-tab" tabindex="0">
+                        <h2>Mail server</h2>
+                    </div>
+                    <div class="tab-pane fade p-3" id="mail_templates" role="tabpanel" aria-labelledby="mail_templates-tab" tabindex="0">
+                        <h2>Mail templates </h2>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <div th:replace="fragments/page_structure :: page_footer"></div>
+</div>
+</div>
+<script th:src="@{/js/common_form.js}"></script>
+</body>
+</html>
