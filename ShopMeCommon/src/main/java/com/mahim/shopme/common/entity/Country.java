@@ -27,6 +27,10 @@ public class Country {
     @OneToMany(mappedBy = "country")
     private Set<State> states;
 
+    public Country(String name) {
+        this.name = name;
+    }
+
     @Override
     public String toString() {
         return "Country{" +
