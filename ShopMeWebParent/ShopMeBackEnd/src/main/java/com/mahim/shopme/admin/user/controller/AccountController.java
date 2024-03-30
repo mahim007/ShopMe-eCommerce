@@ -18,7 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 
-import static com.mahim.shopme.admin.utils.StaticPathUtils.USER_UPLOAD_DIR;
+import static com.mahim.shopme.common.util.StaticPathUtils.USER_UPLOAD_DIR;
 
 @Controller
 @RequestMapping("/account")

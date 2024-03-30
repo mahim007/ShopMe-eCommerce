@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static com.mahim.shopme.admin.utils.StaticPathUtils.*;
+import static com.mahim.shopme.common.util.StaticPathUtils.*;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {

@@ -16,7 +16,7 @@ import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.mahim.shopme.admin.utils.StaticPathUtils.PRODUCT_UPLOAD_DIR;
+import static com.mahim.shopme.common.util.StaticPathUtils.PRODUCT_UPLOAD_DIR;
 
 public class ProductSaveHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductSaveHelper.class);

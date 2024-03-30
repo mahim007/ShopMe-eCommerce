@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static com.mahim.shopme.admin.utils.StaticPathUtils.PRODUCT_UPLOAD_DIR;
+import static com.mahim.shopme.common.util.StaticPathUtils.PRODUCT_UPLOAD_DIR;
 
 @Service
 @Transactional

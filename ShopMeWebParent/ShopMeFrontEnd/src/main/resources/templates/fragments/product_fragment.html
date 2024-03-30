@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
->
-<div th:fragment="content" th:remove="tag">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="price_for_list" th:remove="tag">
 	<div class="col col-lg-2 col-md-3 col-sm-6 mb-4">
 		<div>
 			<a th:href="@{'/p/' + ${product.alias}}">
@@ -12,15 +10,52 @@
 			</a>
 		</div>
 		<div th:if="${product.discountPercent <= 0}">
-			<span>$ [[${product.price}]]</span>
+			<span th:if="${CURRENCY_SYMBOL_POSITION == 'before'}">[[${CURRENCY_SYMBOL}]][[${#numbers.formatDecimal(product.price, 1,  THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]</span>
+			<span th:if="${CURRENCY_SYMBOL_POSITION == 'after'}">[[${#numbers.formatDecimal(product.price, 1,  THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]][[${CURRENCY_SYMBOL}]]</span>
 		</div>
 		<div th:if="${product.discountPercent > 0}">
-			<span style="font-size: larger; color: darkred"
-				  th:text="${'$ ' + #numbers.formatDecimal(product.discountPrice, 2, 2)}">
-				$ [[${product.discountPrice}]]
+			<span th:if="${CURRENCY_SYMBOL_POSITION == 'before'}" style="font-size: larger; color: darkred"
+				  th:text="${CURRENCY_SYMBOL + '' + #numbers.formatDecimal(product.discountPrice, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}">
 			</span>
-			<del><span>$ [[${product.price}]]</span></del>
+			<span th:if="${CURRENCY_SYMBOL_POSITION == 'after'}" style="font-size: larger; color: darkred"
+				  th:text="${#numbers.formatDecimal(product.discountPrice, 1,  THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE) + '' + CURRENCY_SYMBOL}">
+			</span>
+			<del>
+				<span th:if="${CURRENCY_SYMBOL_POSITION == 'before'}">[[${CURRENCY_SYMBOL}]][[${#numbers.formatDecimal(product.price, 1,  THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]</span>
+				<span th:if="${CURRENCY_SYMBOL_POSITION == 'after'}">[[${#numbers.formatDecimal(product.price, 1,  THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]][[${CURRENCY_SYMBOL}]]</span>
+			</del>
 		</div>
 	</div>
+</div>
+<div th:fragment="price_for_details" th:remove="tag">
+	<div th:if="${CURRENCY_SYMBOL_POSITION == 'before'}">
+		List Price:
+		<span th:if="${product.discountPercent <= 0}">[[${CURRENCY_SYMBOL}]][[${#numbers.formatDecimal(product.price, 1,  THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]</span>
+		<del th:if="${product.discountPercent > 0}"><span>[[${CURRENCY_SYMBOL}]][[${#numbers.formatDecimal(product.price, 1,  THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]</span></del>
+	</div>
+	<div th:if="${CURRENCY_SYMBOL_POSITION == 'after'}">
+		List Price:
+		<span th:if="${product.discountPercent <= 0}">[[${#numbers.formatDecimal(product.price, 1,  THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]][[${CURRENCY_SYMBOL}]]</span>
+		<del th:if="${product.discountPercent > 0}"><span>[[${#numbers.formatDecimal(product.price, 1,  THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]][[${CURRENCY_SYMBOL}]]</span></del>
+	</div>
+	<th:block th:if="${CURRENCY_SYMBOL_POSITION == 'before'}">
+		<div th:if="${product.discountPercent > 0}">
+			Price:
+			<span style="font-size: larger; color: darkred"
+				  th:text="${CURRENCY_SYMBOL + '' + #numbers.formatDecimal(product.discountPrice, 1,  THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}">
+			</span>
+			([[${#numbers.formatDecimal(product.discountPercent, 1,  THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]] % off)
+		</div>
+	</th:block>
+	<th:block th:if="${CURRENCY_SYMBOL_POSITION == 'after'}">
+		<div th:if="${product.discountPercent > 0}">
+			Price:
+			<span style="font-size: larger; color: darkred"
+				  th:text="${#numbers.formatDecimal(product.discountPrice, 1,  THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE) + '' + CURRENCY_SYMBOL}">
+			</span>
+			([[${#numbers.formatDecimal(product.discountPercent, 1,  THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]] % off)
+		</div>
+	</th:block>
+	<br>
 </div>
 </html>

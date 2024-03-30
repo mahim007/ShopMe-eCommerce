@@ -4,7 +4,6 @@ import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.admin.brand.exception.BrandNotFoundException;
 import com.mahim.shopme.admin.brand.repository.BrandRepository;
 import com.mahim.shopme.common.entity.Brand;
-import com.mahim.shopme.common.entity.Category;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static com.mahim.shopme.admin.utils.StaticPathUtils.BRAND_UPLOAD_DIR;
+import static com.mahim.shopme.common.util.StaticPathUtils.BRAND_UPLOAD_DIR;
 
 @Service
 public class BrandService {

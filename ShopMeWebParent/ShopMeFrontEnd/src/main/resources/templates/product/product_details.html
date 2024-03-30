@@ -25,20 +25,7 @@
             <div class="col-sm">
                 <div><h3>[[${product.name}]]</h3></div>
                 <div><span>Brand: [[${product.brand.name}]]</span></div>
-                <div>
-                    List Price:
-                    <span th:if="${product.discountPercent <= 0}">$ [[${product.price}]]</span>
-                    <del th:if="${product.discountPercent > 0}"><span>$ [[${product.price}]]</span></del>
-                </div>
-                <div th:if="${product.discountPercent > 0}">
-                    Price:
-                    <span style="font-size: larger; color: darkred"
-                          th:text="${'$ ' + #numbers.formatDecimal(product.discountPrice, 2, 2)}">
-                        $ [[${product.discountPrice}]]
-                    </span>
-                    ([[${product.discountPercent}]] % off)
-                </div>
-                <br>
+                <th:block th:replace="fragments/product_fragment :: price_for_details"></th:block>
                 <div th:utext="${product.shortDescription}"></div>
             </div>
             <div class="col-sm-2">

@@ -15,7 +15,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static com.mahim.shopme.admin.utils.StaticPathUtils.USER_UPLOAD_DIR;
+import static com.mahim.shopme.common.util.StaticPathUtils.USER_UPLOAD_DIR;
 
 @Service
 @Transactional

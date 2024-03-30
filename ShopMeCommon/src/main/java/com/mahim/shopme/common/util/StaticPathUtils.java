@@ -1,4 +1,4 @@
-package com.mahim.shopme.admin.utils;
+package com.mahim.shopme.common.util;
 
 public class StaticPathUtils {
     public static final String USER_UPLOAD_DIR = "user-photos";

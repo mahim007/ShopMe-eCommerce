@@ -22,7 +22,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
-import static com.mahim.shopme.admin.utils.StaticPathUtils.SITE_LOGO_DIR;
+import static com.mahim.shopme.common.util.StaticPathUtils.SITE_LOGO_DIR;
 
 @Controller
 @RequestMapping("/settings")

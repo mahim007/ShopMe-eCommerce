@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.mahim.shopme.admin.category.service.CategoryService.CATEGORIES_PER_PAGE;
-import static com.mahim.shopme.admin.utils.StaticPathUtils.CATEGORY_UPLOAD_DIR;
+import static com.mahim.shopme.common.util.StaticPathUtils.CATEGORY_UPLOAD_DIR;
 
 @Controller
 @RequestMapping("/categories")

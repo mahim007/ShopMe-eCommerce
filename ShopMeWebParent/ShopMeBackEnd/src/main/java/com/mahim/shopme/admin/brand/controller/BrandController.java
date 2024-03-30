@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.mahim.shopme.admin.brand.service.BrandService.BRANDS_PER_PAGE;
-import static com.mahim.shopme.admin.utils.StaticPathUtils.BRAND_UPLOAD_DIR;
+import static com.mahim.shopme.common.util.StaticPathUtils.BRAND_UPLOAD_DIR;
 
 @Controller
 @RequestMapping("/brands")

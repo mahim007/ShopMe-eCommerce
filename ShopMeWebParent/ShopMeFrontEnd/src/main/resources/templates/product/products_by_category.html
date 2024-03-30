@@ -28,7 +28,7 @@
             </div>
             <div class="row m-4">
                 <th:block th:each="product : ${products}">
-                    <th:block th:replace="fragments/product_fragment :: content"></th:block>
+                    <th:block th:replace="fragments/product_fragment :: price_for_list"></th:block>
                 </th:block>
             </div>
         </th:block>

@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.mahim.shopme.admin.user.UserService.USERS_PER_PAGE;
-import static com.mahim.shopme.admin.utils.StaticPathUtils.USER_UPLOAD_DIR;
+import static com.mahim.shopme.common.util.StaticPathUtils.USER_UPLOAD_DIR;
 
 @Controller
 @RequestMapping("/users")

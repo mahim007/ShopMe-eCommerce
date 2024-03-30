@@ -7,6 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static com.mahim.shopme.common.util.StaticPathUtils.SITE_LOGO_DIR;
 import static com.mahim.shopme.utils.StaticPathUtils.*;
 
 @Configuration
@@ -16,6 +17,7 @@ public class MvcConfig implements WebMvcConfigurer {
         exposeDirectory(CATEGORY_UPLOAD_DIR, registry);
         exposeDirectory(BRAND_UPLOAD_DIR, registry);
         exposeDirectory(PRODUCT_UPLOAD_DIR, registry);
+        exposeDirectory(SITE_LOGO_DIR, registry);
     }
 
     private void exposeDirectory(String pathPattern, ResourceHandlerRegistry registry) {
