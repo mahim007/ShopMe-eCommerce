@@ -4,27 +4,27 @@
     <div th:fragment="content" th:remove="tag">
         <div>
             <p>Use this page to manage countries which will be displayed to the customers registration form.
-            Click load countries load first.</p>
+            Click <b>Load Country List</b> first.</p>
         </div>
         <div>
-            <input type="button" value="Load country list" id="loadCountriesBtn" class="btn btn-primary m-2">
+            <input type="button" value="Load Country List" id="loadCountriesBtn" class="btn btn-primary m-2">
         </div>
         <div>
             <select id="loadCountriesSelect" class="form-control m-2" style="height: 300px" size="3"></select>
         </div>
         <div class="row m-2">
-            <div class="col-auto"><label class="col-form-label">Country Name</label></div>
+            <div class="col-auto"><label id="labelCountryName" class="col-form-label">Country Name</label></div>
             <div class="col-auto mb-2">
                 <input type="text" class="form-control" id="fieldCountryName">
             </div>
-            <div class="col-auto"><label class="col-form-label">Country Name</label></div>
+            <div class="col-auto"><label class="col-form-label">Country Code</label></div>
             <div class="col-auto mb-2">
                 <input type="text" class="form-control" id="fieldCountryCode">
             </div>
             <div class="col-auto">
-                <input type="button" value="Add" class="btn btn-secondary mr-2" >
-                <input type="button" value="Update" class="btn btn-secondary mr-2" >
-                <input type="button" value="Delete" class="btn btn-secondary" >
+                <input type="button" id="addCountryBtn" value="New" class="btn btn-success mx-2" >
+                <input type="button" id="updateCountryBtn" value="Update" class="btn btn-warning mx-2" disabled="disabled" >
+                <input type="button" id="deleteCountryBtn" value="Delete" class="btn btn-danger mx-2" disabled="disabled">
             </div>
         </div>
     </div>
