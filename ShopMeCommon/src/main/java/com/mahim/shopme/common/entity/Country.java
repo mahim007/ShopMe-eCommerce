@@ -1,5 +1,6 @@
 package com.mahim.shopme.common.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,39 +25,20 @@ public class Country {
     @Column(nullable = false, length = 5)
     private String code;
 
-    @OneToMany(mappedBy = "country")
+    @OneToMany(mappedBy = "country", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<State> states;
 
     public Country(String name) {
         this.name = name;
     }
 
-    @Override
-    public String toString() {
-        return "Country{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", code='" + code + '\'' +
-                '}';
+    public Country(Integer id) {
+        this.id = id;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Country country = (Country) o;
-
-        if (!id.equals(country.id)) return false;
-        if (!name.equals(country.name)) return false;
-        return code.equals(country.code);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + name.hashCode();
-        result = 31 * result + code.hashCode();
-        return result;
+    public Country(Integer id, String name) {
+        this.id = id;
+        this.name = name;
     }
 }

@@ -1,8 +1,8 @@
 package com.mahim.shopme.common.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -10,8 +10,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "states")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class State {
 
     @Id
@@ -25,24 +25,8 @@ public class State {
     @JoinColumn(name = "country_id")
     private Country country;
 
-    @Override
-    public String toString() {
-        return "State{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        State state = (State) o;
-        return Objects.equals(id, state.id) && Objects.equals(name, state.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
+    public State(String name, Country country) {
+        this.name = name;
+        this.country = country;
     }
 }

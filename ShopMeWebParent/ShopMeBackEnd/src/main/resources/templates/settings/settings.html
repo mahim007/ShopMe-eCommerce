@@ -41,7 +41,7 @@
                         <th:block th:replace="settings/countries :: content"></th:block>
                     </div>
                     <div class="tab-pane fade p-3" id="states" role="tabpanel" aria-labelledby="states-tab" tabindex="0">
-                        <h2>States</h2>
+                        <th:block th:replace="settings/states :: content"></th:block>
                     </div>
                     <div class="tab-pane fade p-3" id="mail_server" role="tabpanel" aria-labelledby="mail_server-tab" tabindex="0">
                         <h2>Mail server</h2>
@@ -70,5 +70,6 @@
 </script>
 <script th:src="@{/js/common_form.js}"></script>
 <script th:src="@{/js/country_settings.js}"></script>
+<script th:src="@{/js/states_settings.js}"></script>
 </body>
 </html>
