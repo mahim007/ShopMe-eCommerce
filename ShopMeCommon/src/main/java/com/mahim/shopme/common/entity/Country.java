@@ -25,7 +25,7 @@ public class Country {
     @Column(nullable = false, length = 5)
     private String code;
 
-    @OneToMany(mappedBy = "country", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "country")
     @JsonIgnore
     private Set<State> states;
 

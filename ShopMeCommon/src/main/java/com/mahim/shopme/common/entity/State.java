@@ -1,11 +1,7 @@
 package com.mahim.shopme.common.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Table(name = "states")
