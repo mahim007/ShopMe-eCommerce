@@ -7,8 +7,14 @@ let deleteStateBtn;
 let labelStateName;
 let fieldStateName;
 
-function getOrDeleteDataInStates(url, successCallback, errorCallback) {
-    fetch(url)
+function getOrDeleteDataInStates(url, method, successCallback, errorCallback) {
+    fetch(url, {
+        method: method,
+        headers: {
+            "Content-Type": "application/json",
+            [csrfHeaderName]: csrfHeaderValue
+        }
+    })
         .then(res => res.text())
         .then(text => text.length > 0 ? JSON.parse(text) : {})
         .then(data => {
@@ -20,8 +26,7 @@ function getOrDeleteDataInStates(url, successCallback, errorCallback) {
 function loadCountriesInStates() {
     let url = contextPath + "countries/list";
 
-    getOrDeleteDataInStates(url, function (data) {
-        console.log("printing data in states: ", data);
+    getOrDeleteDataInStates(url, "GET", function (data) {
         loadCountriesSelectInState.empty();
         data.forEach(item => {
             let optionValue = item.id + "-" + item.code;
@@ -40,7 +45,7 @@ function loadStates() {
     let countryId = selected.val().split("-")[0];
     let url = contextPath + "states/list_by_country/" + countryId;
 
-    getOrDeleteDataInStates(url, function (data) {
+    getOrDeleteDataInStates(url, "GET", function (data) {
         loadStatesSelect.empty();
         data.forEach(item => {
             let optionValue = item.id;
@@ -157,7 +162,7 @@ function deleteState() {
     let id = selectedState.val();
     let url= contextPath + "states/delete/" + id;
 
-    getOrDeleteDataInStates(url, function () {
+    getOrDeleteDataInStates(url, "DELETE", function () {
         $(`#loadStatesSelect option[value='${id}']`).remove();
         showToastMessageInStates("The state has been deleted.");
         changeFormToAddInStates();

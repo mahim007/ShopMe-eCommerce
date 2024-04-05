@@ -26,7 +26,7 @@ public class CountryRestController {
         return String.valueOf(saved.getId());
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable("id") Integer id) {
         countryRepository.deleteById(id);
     }

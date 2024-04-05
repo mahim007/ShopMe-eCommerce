@@ -7,8 +7,14 @@ let labelCountryName;
 let fieldCountryName;
 let fieldCountryCode;
 
-function getOrDeleteData(url, successCallback, errorCallback) {
-    fetch(url)
+function getOrDeleteData(url, method, successCallback, errorCallback) {
+    fetch(url, {
+        method: method,
+        headers: {
+            "Content-Type": "application/json",
+            [csrfHeaderName]: csrfHeaderValue
+        }
+    })
         .then(res => res.text())
         .then(text => text.length > 0 ? JSON.parse(text) : {})
         .then(data => {
@@ -20,7 +26,7 @@ function getOrDeleteData(url, successCallback, errorCallback) {
 function loadCountries() {
     let url = contextPath + "countries/list";
 
-    getOrDeleteData(url, function (data) {
+    getOrDeleteData(url, "GET", function (data) {
         loadCountriesSelect.empty();
         data.forEach(item => {
             let optionValue = item.id + "-" + item.code;
@@ -132,7 +138,7 @@ function deleteCountry() {
     let id = selected.val().split("-")[0];
     let url= contextPath + "countries/delete/" + id;
 
-    getOrDeleteData(url, function () {
+    getOrDeleteData(url, "DELETE", function () {
         $(`#loadCountriesSelect option[value='${selected.val()}']`).remove();
         showToastMessage("The country has been deleted.");
         changeFormStateToNew();
