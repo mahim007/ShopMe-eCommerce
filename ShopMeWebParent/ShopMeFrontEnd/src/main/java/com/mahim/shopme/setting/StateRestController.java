@@ -1,4 +1,4 @@
-package com.mahim.shopme.admin.setting.state;
+package com.mahim.shopme.setting;
 
 import com.mahim.shopme.common.dto.StateDTO;
 import com.mahim.shopme.common.entity.Country;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/states")
+@RequestMapping("/settings")
 public class StateRestController {
 
     private final StateRepository stateRepository;
@@ -18,7 +18,7 @@ public class StateRestController {
         this.stateRepository = stateRepository;
     }
 
-    @GetMapping("/list_by_country/{id}")
+    @GetMapping("/list_states_by_country/{id}")
     public List<StateDTO> listByCountry(@PathVariable("id") Integer id) {
         List<State> states = stateRepository.findAllByCountryOrderByNameAsc(new Country(id));
         List<StateDTO> results = new ArrayList<>();
@@ -28,16 +28,5 @@ public class StateRestController {
         }
 
         return results;
-    }
-
-    @PostMapping("/save")
-    public String save(@RequestBody State state) {
-        State saved = stateRepository.save(state);
-        return String.valueOf(saved.getId());
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable("id") Integer id) {
-        stateRepository.deleteById(id);
     }
 }

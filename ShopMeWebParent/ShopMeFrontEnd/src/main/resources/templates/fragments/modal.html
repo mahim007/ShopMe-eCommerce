@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<div th:fragment="shopmeModal" class="modal fade text-center" tabindex="-1" id="shopmeModal" aria-labelledby="shopmeModalTitle"
+	 aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="shopmeModalTitle">Warning</h4>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<span id="shopmeModalBody"></span>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div th:fragment="confirmDeleteModal" class="modal fade text-center" tabindex="-1" id="shopmeModal" aria-labelledby="confirmDeleteModalTitle"
+	 aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="shopmeModalTitle">Warning</h4>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<span id="shopmeModalBody"></span>
+			</div>
+			<div class="modal-footer">
+				<a id="modalYesBtn" class="btn btn-success" th:href="@{'#'}">Yes</a>
+				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

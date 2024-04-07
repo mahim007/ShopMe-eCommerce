@@ -1,4 +1,4 @@
-package com.mahim.shopme.admin.setting.state;
+package com.mahim.shopme.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
