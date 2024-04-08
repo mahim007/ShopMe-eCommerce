@@ -47,10 +47,10 @@
                         <th:block th:replace="settings/states :: content"></th:block>
                     </div>
                     <div class="tab-pane fade p-3" id="mailServer" role="tabpanel" aria-labelledby="mail_server-tab" tabindex="0">
-                        <h2>Mail server</h2>
+                        <th:block th:replace="settings/mail_server :: content"></th:block>
                     </div>
                     <div class="tab-pane fade p-3" id="mailTemplates" role="tabpanel" aria-labelledby="mail_templates-tab" tabindex="0">
-                        <h2>Mail templates </h2>
+                        <th:block th:replace="settings/mail_templates/mail_templates :: content"></th:block>
                     </div>
                     <div class="tab-pane fade p-3" id="payment" role="tabpanel" aria-labelledby="payment-tab" tabindex="0">
                         <h2>Payment</h2>
@@ -73,6 +73,10 @@
     const contextPath = "[[@{/}]]";
     const csrfHeaderName = "[[${_csrf.headerName}]]";
     const csrfHeaderValue = "[[${_csrf.token}]]";
+
+    $(document).ready(function () {
+        $("textarea[name='CUSTOMER_VERIFY_CONTENT']").richText();
+    });
 </script>
 <script th:src="@{/js/common.js}"></script>
 <script th:src="@{/js/common_form.js}"></script>

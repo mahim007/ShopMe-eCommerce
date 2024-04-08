@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="content" th:remove="tag">
+        <form th:action="@{/settings/save_mail_templates}" method="post">
+            <div>
+                <ul class="nav nav-tabs" id="mailTemplatesTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#customerVerification" href="#customerVerification" role="tab">Customer Verification</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" data-bs-toggle="tab" data-bs-target="#orderConfirmation" href="#orderConfirmation" role="tab">Order Confirmation</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="mailTemplatesTabContent">
+                    <div class="tab-pane fade show active p-3" id="customerVerification" role="tabpanel" aria-labelledby="general-tab" tabindex="0">
+                        <th:block th:replace="settings/mail_templates/customer_verification :: content"></th:block>
+                    </div>
+                    <div class="tab-pane fade p-3" id="orderConfirmation" role="tabpanel" aria-labelledby="countries-tab" tabindex="0">
+                        <h2>Order Confirmation Email Template</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <input type="submit" value="Save" class="btn btn-primary m-3"/>
+                <input type="button" value="Cancel" class="btn btn-secondary" id="cancelUserCreate"/>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
