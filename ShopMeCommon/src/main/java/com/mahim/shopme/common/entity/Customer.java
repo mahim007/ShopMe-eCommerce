@@ -59,4 +59,8 @@ public class Customer {
 
     @Column(name = "verification_code", length = 64)
     private String verificationCode;
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 }

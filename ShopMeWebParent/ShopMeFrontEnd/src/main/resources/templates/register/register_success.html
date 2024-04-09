@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments/page_structure :: page_header('Welcome to Shopme')"></th:block>
+<body>
+    <div class="container-fluid">
+        <th:block th:replace="fragments/navigation :: header_nav"></th:block>
+        <div>&nbsp;</div>
+        <div class="text-center">
+            <h2>Customer Registration</h2>
+            <h4>You have registered successfully as a customer</h4>
+            <p>Please check your email to verify your account</p>
+            <p><a th:href="@{/login}">Login here</a></p>
+        </div>
+        <div>&nbsp;</div>
+
+        <th:block th:replace="fragments/navigation :: footer_nav"></th:block>
+    </div>
+</body>
+</html>
