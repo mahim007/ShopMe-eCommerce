@@ -7,10 +7,12 @@ import net.bytebuddy.utility.RandomString;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 
 @Service
+@Transactional
 public class CustomerService {
 
     private final CountryRepository countryRepository;
@@ -45,5 +47,15 @@ public class CustomerService {
 
     private void encodePassword(Customer customer) {
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+    }
+
+    public boolean verify(String verificationCode) {
+        Customer customer = customerRepository.findByVerificationCode(verificationCode);
+        if (customer == null || customer.isEnabled()) {
+            return false;
+        } else {
+            customerRepository.enable(customer.getId());
+            return true;
+        }
     }
 }

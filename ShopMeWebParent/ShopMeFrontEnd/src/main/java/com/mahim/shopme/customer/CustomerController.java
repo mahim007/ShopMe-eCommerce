@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -78,5 +79,15 @@ public class CustomerController {
         System.out.println("to address " + toAddress);
         System.out.println("from address " + emailSettings.getFromAddress());
         System.out.println("verification url: " + verifyURL);
+    }
+
+    @GetMapping("/verify")
+    public String verifyAccount(@RequestParam("code") String code, Model model) {
+        boolean verified = customerService.verify(code);
+        if (verified) {
+            return "register/verify_success";
+        } else {
+            return "register/verify_failed";
+        }
     }
 }
