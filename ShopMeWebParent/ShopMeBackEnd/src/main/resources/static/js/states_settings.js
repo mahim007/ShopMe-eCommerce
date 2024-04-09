@@ -111,7 +111,19 @@ function postDataInStates(url, requestObject, successCallback, errorCallback) {
         .catch(error => errorCallback())
 }
 
+function validateFormState() {
+    let formState = document.getElementById("formState");
+    if (!formState.checkValidity()) {
+        formState.reportValidity();
+        return false;
+    }
+
+    return true;
+}
+
 function addState() {
+    if (!validateFormState()) return;
+
     let selected = $("#loadCountriesSelectInState option:selected");
     let country = {
         id: selected.val().split("-")[0],
@@ -132,6 +144,8 @@ function addState() {
 }
 
 function updateState() {
+    if (!validateFormState()) return;
+
     let url = contextPath + "states/save";
     let selectedCountry = $("#loadCountriesSelectInState option:selected");
     let selectedState = $("#loadStatesSelect option:selected");

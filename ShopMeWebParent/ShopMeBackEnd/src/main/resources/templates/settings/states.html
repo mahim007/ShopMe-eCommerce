@@ -18,17 +18,19 @@
         <div>
             <select id="loadStatesSelect" class="form-select m-2" style="height: 300px" size="3"></select>
         </div>
-        <div class="row m-2">
-            <div class="col-auto"><label id="labelStateName" class="col-form-label">Country Name</label></div>
-            <div class="col-auto mb-2">
-                <input type="text" class="form-control" id="fieldStateName">
+        <form id="formState">
+            <div class="row m-2">
+                <div class="col-auto"><label id="labelStateName" class="col-form-label">Country Name</label></div>
+                <div class="col-auto mb-2">
+                    <input type="text" class="form-control" id="fieldStateName" required minlength="3" maxlength="45">
+                </div>
+                <div class="col-auto">
+                    <input type="button" id="addStateBtn" value="New" class="btn btn-success mx-2" >
+                    <input type="button" id="updateStateBtn" value="Update" class="btn btn-warning mx-2" disabled="disabled" >
+                    <input type="button" id="deleteStateBtn" value="Delete" class="btn btn-danger mx-2" disabled="disabled">
+                </div>
             </div>
-            <div class="col-auto">
-                <input type="button" id="addStateBtn" value="New" class="btn btn-success mx-2" >
-                <input type="button" id="updateStateBtn" value="Update" class="btn btn-warning mx-2" disabled="disabled" >
-                <input type="button" id="deleteStateBtn" value="Delete" class="btn btn-danger mx-2" disabled="disabled">
-            </div>
-        </div>
+        </form>
     </div>
 </body>
 </html>

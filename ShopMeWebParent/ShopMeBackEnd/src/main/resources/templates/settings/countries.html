@@ -12,21 +12,23 @@
         <div>
             <select id="loadCountriesSelect" class="form-control m-2" style="height: 300px" size="3"></select>
         </div>
-        <div class="row m-2">
-            <div class="col-auto"><label id="labelCountryName" class="col-form-label">Country Name</label></div>
-            <div class="col-auto mb-2">
-                <input type="text" class="form-control" id="fieldCountryName">
+        <form id="formCountry">
+            <div class="row m-2">
+                <div class="col-auto"><label id="labelCountryName" class="col-form-label">Country Name</label></div>
+                <div class="col-auto mb-2">
+                    <input type="text" class="form-control" id="fieldCountryName" required minlength="3" maxlength="45">
+                </div>
+                <div class="col-auto"><label class="col-form-label">Country Code</label></div>
+                <div class="col-auto mb-2">
+                    <input type="text" class="form-control" id="fieldCountryCode" required minlength="2" maxlength="3">
+                </div>
+                <div class="col-auto">
+                    <input type="button" id="addCountryBtn" value="New" class="btn btn-success mx-2" >
+                    <input type="button" id="updateCountryBtn" value="Update" class="btn btn-warning mx-2" disabled="disabled" >
+                    <input type="button" id="deleteCountryBtn" value="Delete" class="btn btn-danger mx-2" disabled="disabled">
+                </div>
             </div>
-            <div class="col-auto"><label class="col-form-label">Country Code</label></div>
-            <div class="col-auto mb-2">
-                <input type="text" class="form-control" id="fieldCountryCode">
-            </div>
-            <div class="col-auto">
-                <input type="button" id="addCountryBtn" value="New" class="btn btn-success mx-2" >
-                <input type="button" id="updateCountryBtn" value="Update" class="btn btn-warning mx-2" disabled="disabled" >
-                <input type="button" id="deleteCountryBtn" value="Delete" class="btn btn-danger mx-2" disabled="disabled">
-            </div>
-        </div>
+        </form>
     </div>
 </body>
 </html>

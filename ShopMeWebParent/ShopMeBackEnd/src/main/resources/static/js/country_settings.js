@@ -97,7 +97,18 @@ function postData(url, country, successCallback, errorCallback) {
         .catch(error => errorCallback())
 }
 
+function validateFormCountry() {
+    let formCountry = document.getElementById("formCountry");
+    if (!formCountry.checkValidity()) {
+        formCountry.reportValidity();
+        return false;
+    }
+
+    return true;
+}
+
 function addCountry() {
+    if (!validateFormCountry()) return;
     let url = contextPath + "countries/save";
     let country = {
         name: fieldCountryName.val(),
@@ -113,6 +124,8 @@ function addCountry() {
 }
 
 function updateCountry() {
+    if (!validateFormCountry()) return;
+
     let url = contextPath + "countries/save";
     let selected = $("#loadCountriesSelect option:selected");
 
