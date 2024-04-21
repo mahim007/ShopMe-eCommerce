@@ -1,0 +1,101 @@
+<th:block>
+	<div class="modal-header">
+		<h4 class="modal-title" id="customerDetailModalTitle">Customer Details</h4>
+		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	</div>
+	<div class="modal-body">
+		<ul class="nav nav-tabs" id="customerDetailTab" role="tablist">
+			<li class="nav-item" role="presentation">
+				<button class="nav-link active" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab">General</button>
+			</li>
+			<li class="nav-item" role="presentation">
+				<button class="nav-link" data-bs-toggle="tab" data-bs-target="#address" type="button" role="tab">Address</button>
+			</li>
+		</ul>
+		<div class="tab-content" id="customerDetailContent">
+			<div class="tab-pane fade show active p-3" id="general" role="tabpanel" aria-labelledby="general-tab" tabindex="0">
+				<div class="border border-secondary rounded p-3">
+					<div class="row mb-3">
+						<label class="col-form-label col-sm-3">First Name</label>
+						<div class="col-sm-9">
+							<input class="form-control" type="text" th:value="${customer.firstName}" readonly />
+						</div>
+					</div>
+					<div class="row mb-3">
+						<label class="col-form-label col-sm-3">Last Name</label>
+						<div class="col-sm-9">
+							<input class="form-control" type="text" th:value="${customer.lastName}" readonly />
+						</div>
+					</div>
+					<div class="row mb-3">
+						<label class="col-form-label col-sm-3">Email</label>
+						<div class="col-sm-9">
+							<input class="form-control" type="email" th:value="${customer.email}" readonly />
+						</div>
+					</div>
+					<div class="row mb-3">
+						<label class="col-form-label col-sm-3">Phone Number</label>
+						<div class="col-sm-9">
+							<input class="form-control" type="text" th:value="${customer.phoneNumber}" readonly />
+						</div>
+					</div>
+					<div class="row mb-3">
+						<label class="col-form-label col-sm-3">Enabled</label>
+						<div class="col-sm-1">
+							<input class="form-check-inline" type="checkbox" th:checked="${customer.enabled}" disabled="disabled" />
+						</div>
+					</div>
+					<div class="row mb-3">
+						<label class="col-form-label col-sm-3">Created Time:</label>
+						<div class="col-12 col-sm-5 col-md-5 col-lg-3 col-xl-2">
+							<span th:text="${#dates.format(customer.createdTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade p-3" id="address" role="tabpanel" aria-labelledby="address-tab" tabindex="0">
+				<div class="border border-secondary rounded p-3">
+					<div class="row mb-3">
+						<label class="col-form-label col-sm-3">Address Line 1</label>
+						<div class="col-sm-9">
+							<input class="form-control" type="text" th:value="${customer.addressLine1}" readonly />
+						</div>
+					</div>
+					<div class="row mb-3">
+						<label class="col-form-label col-sm-3">Address Line 2</label>
+						<div class="col-sm-9">
+							<input class="form-control" type="text" th:value="${customer.addressLine2}" readonly />
+						</div>
+					</div>
+					<div class="row mb-3">
+						<label class="col-form-label col-sm-3">City</label>
+						<div class="col-sm-9">
+							<input class="form-control" type="text" th:value="${customer.city}" readonly />
+						</div>
+					</div>
+					<div class="row mb-3">
+						<label class="col-form-label col-sm-3">Country</label>
+						<div class="col-sm-9">
+							<input class="form-control" type="text" th:value="${customer.country.name}" readonly />
+						</div>
+					</div>
+					<div class="row mb-3">
+						<label class="col-form-label col-sm-3">State/Province</label>
+						<div class="col-sm-9">
+							<input class="form-control" type="text" th:value="${customer.state}" readonly />
+						</div>
+					</div>
+					<div class="row mb-3">
+						<label class="col-form-label col-sm-3">Postal Code</label>
+						<div class="col-sm-9">
+							<input class="form-control" type="text" th:value="${customer.postalCode}" readonly />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+	</div>
+</th:block>

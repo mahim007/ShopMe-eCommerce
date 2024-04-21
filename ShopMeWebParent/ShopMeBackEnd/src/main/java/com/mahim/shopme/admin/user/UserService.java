@@ -141,7 +141,7 @@ public class UserService {
         boolean isCreatingNewUser = (id == null);
 
         if (isCreatingNewUser) {
-            if (userByEmail != null) return false;
+            return false;
         } else {
             if (userByEmail.getId() != id) {
                 return false;

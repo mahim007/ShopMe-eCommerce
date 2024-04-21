@@ -5,7 +5,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "states")
-@Data
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class State {
