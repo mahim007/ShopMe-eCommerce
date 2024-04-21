@@ -38,7 +38,7 @@
                             <th:block th:replace="products/product_overview :: productOverview"></th:block>
                         </div>
                         <div class="tab-pane fade p-3" id="description" role="tabpanel" aria-labelledby="description-tab" tabindex="0">
-                            <th:block sec:authorize="hasAuthority('Salesperson')">
+                            <th:block sec:authorize="hasAuthority('Salesperson') && !hasAuthority('Admin') && !hasAuthority('Editor')">
                                 <th:block th:replace="products/product_description_readonly :: content"></th:block>
                             </th:block>
                             <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
@@ -46,7 +46,7 @@
                             </th:block>
                         </div>
                         <div class="tab-pane fade p-3" id="images" role="tabpanel" aria-labelledby="images-tab" tabindex="0">
-                            <th:block sec:authorize="hasAuthority('Salesperson')">
+                            <th:block sec:authorize="hasAuthority('Salesperson') && !hasAuthority('Admin') && !hasAuthority('Editor')">
                                 <th:block th:replace="products/product_images_readonly :: content"></th:block>
                             </th:block>
                             <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
@@ -54,7 +54,7 @@
                             </th:block>
                         </div>
                         <div class="tab-pane fade p-3" id="details" role="tabpanel" aria-labelledby="details-tab" tabindex="0">
-                            <th:block sec:authorize="hasAuthority('Salesperson')">
+                            <th:block sec:authorize="hasAuthority('Salesperson') && !hasAuthority('Admin') && !hasAuthority('Editor')">
                                 <th:block th:replace="products/product_details_readonly :: content"></th:block>
                             </th:block>
                             <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
@@ -67,7 +67,7 @@
                             </th:block>
                         </div>
                         <div class="tab-pane fade p-3" id="shipping" role="tabpanel" aria-labelledby="details-tab" tabindex="0">
-                            <th:block sec:authorize="hasAuthority('Salesperson')">
+                            <th:block sec:authorize="hasAuthority('Salesperson') && !hasAuthority('Admin') && !hasAuthority('Editor')">
                                 <th:block th:replace="products/product_shipping_readonly :: content"></th:block>
                             </th:block>
                             <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
