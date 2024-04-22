@@ -7,13 +7,13 @@
     <div>
         <h2>Manage Products</h2>
         <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
-            <a th:href="@{/products/new}" class="mr-2"><i class="fas fa-folder-plus fa-2x icon-dark"></i></a>
+            <a th:href="@{${moduleURL} + '/new'}" class="mr-2"><i class="fas fa-folder-plus fa-2x icon-dark"></i></a>
             &nbsp;|&nbsp;
-            <a th:href="@{/products/export/csv}" class="fas fa-file-csv fa-2x icon-dark mr-2"></a>
+            <a th:href="@{${moduleURL} + '/export/csv'}" class="fas fa-file-csv fa-2x icon-dark mr-2"></a>
             &nbsp;|&nbsp;
-            <a th:href="@{/products/export/excel}" class="fas fa-file-excel fa-2x icon-dark mr-2"></a>
+            <a th:href="@{${moduleURL} + '/export/excel'}" class="fas fa-file-excel fa-2x icon-dark mr-2"></a>
             &nbsp;|&nbsp;
-            <a th:href="@{/products/export/pdf}" class="fas fa-file-pdf fa-2x icon-dark mr-2"></a>
+            <a th:href="@{${moduleURL} + '/export/pdf'}" class="fas fa-file-pdf fa-2x icon-dark mr-2"></a>
         </th:block>
     </div>
     <div th:if="${message != null}" class="alert alert-success text-center">
@@ -23,7 +23,7 @@
         [[${exceptionMessage}]]
     </div>
     <div>
-        <form id="productSearchForm" th:action="@{'/products/page/1'}" class="form-check-inline m-3">
+        <form id="productSearchForm" th:action="@{${moduleURL} + '/page/1'}" class="form-check-inline m-3">
             <input type="hidden" class="form-control" name="sortField" th:value="${sortField}" required/>
             <input type="hidden" class="form-control" name="sortDir" th:value="${sortDir}" required/>
 
@@ -62,25 +62,25 @@
             <thead class="table-dark">
                 <tr>
                     <th class="hideable-column">
-                        <th:block th:replace="fragments/column_element::column_link('products', 'id', 'ID', 'tag')" />
+                        <th:block th:replace="fragments/column_element::column_link('id', 'ID', 'tag')" />
                     </th>
                     <th>Product Image</th>
                     <th>
-                        <th:block th:replace="fragments/column_element::column_link('products', 'name', 'Product Name', 'tag')" />
+                        <th:block th:replace="fragments/column_element::column_link('name', 'Product Name', 'tag')" />
                     </th>
 
                     <th class="hideable-column">
-                        <th:block th:replace="fragments/column_element::column_link('products', 'alias', 'Alias', 'tag')"></th:block>
+                        <th:block th:replace="fragments/column_element::column_link('alias', 'Alias', 'tag')"></th:block>
                     </th>
                     <th class="hideable-column">
-                        <th:block th:replace="fragments/column_element::column_link('products', 'category', 'Category', 'tag')"></th:block>
+                        <th:block th:replace="fragments/column_element::column_link('category', 'Category', 'tag')"></th:block>
                     </th>
 
                     <th class="hideable-column">
-                        <th:block th:replace="fragments/column_element::column_link('products', 'brand', 'Brand', 'tag')"></th:block>
+                        <th:block th:replace="fragments/column_element::column_link('brand', 'Brand', 'tag')"></th:block>
                     </th>
                     <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
-                        <th:block th:replace="fragments/column_element::column_link('products', 'enabled', 'Enabled', 'none')"></th:block>
+                        <th:block th:replace="fragments/column_element::column_link('enabled', 'Enabled', 'none')"></th:block>
                     </th:block>
                     <th>Action</th>
                 </tr>
@@ -103,28 +103,28 @@
                 </td>
                 <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
                     <td>
-                        <a th:if="${product.enabled == true}" th:href="@{'/products/' + ${product.id} + '/enabled/' + ${true}}"><i
+                        <a th:if="${product.enabled == true}" th:href="@{${moduleURL} + '/' + ${product.id} + '/enabled/' + ${true}}"><i
                                 class="fas fa-check-circle fa-2x icon-green"></i></a>
-                        <a th:if="${product.enabled == false}" th:href="@{'/products/' + ${product.id} + '/enabled/' + ${false}}"><i
+                        <a th:if="${product.enabled == false}" th:href="@{${moduleURL} + '/' + ${product.id} + '/enabled/' + ${false}}"><i
                                 class="fas fa-times fa-2x icon-dark"></i></a>
                     </td>
                 </th:block>
                 <td>
-                    <a class="link-detail" th:href="@{'/products/details/' + ${product.id}}"
+                    <a class="link-detail" th:href="@{${moduleURL} + '/details/' + ${product.id}}"
                        title="View product details"
                     >
                         <i class="fas fa-file-alt fa-2x icon-blue"></i>
                     </a>
                     &nbsp;
                     <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Salesperson')">
-                        <a th:href="@{'/products/edit/' + ${product.id}}"
+                        <a th:href="@{${moduleURL} + '/edit/' + ${product.id}}"
                            title="Edit this category"
                         >
                             <i class="fas fa-edit fa-2x icon-lightblue"></i>
                         </a>
                     </th:block>
                     <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
-                        <a th:href="@{'/products/delete/' + ${product.id}}"
+                        <a th:href="@{${moduleURL} + '/delete/' + ${product.id}}"
                            class="product-delete"
                            title="Delete this brand"
                         >
@@ -147,14 +147,14 @@
                 <div>[[${product.shortName}]]</div>
                 <div class="mt-2">
                     <th:block>
-                        <a class="link-detail" th:href="@{'/products/details/' + ${product.id}}"
+                        <a class="link-detail" th:href="@{${moduleURL} + '/details/' + ${product.id}}"
                            title="View product details"
                         >
                             <i class="fas fa-file-alt fa-2x icon-blue"></i>
                         </a>
                         &nbsp;
                         <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Salesperson')">
-                            <a th:href="@{'/products/edit/' + ${product.id}}"
+                            <a th:href="@{${moduleURL} + '/edit/' + ${product.id}}"
                                title="Edit this category"
                             >
                                 <i class="fas fa-edit fa-2x icon-lightblue"></i>
@@ -162,7 +162,7 @@
                             &nbsp;
                         </th:block>
                         <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
-                            <a th:href="@{'/products/delete/' + ${product.id}}"
+                            <a th:href="@{${moduleURL} + '/delete/' + ${product.id}}"
                                class="product-delete"
                                title="Delete this brand"
                             >
@@ -177,7 +177,7 @@
     </div>
     <div class="text-center m-1" th:if="${total > 0}">
         <span>Showing categories # [[${startNo}]] to [[${endNo}]] of [[${total}]]</span>
-        <nav th:replace="fragments/pagination::pagination_fragment('products')" />
+        <nav th:replace="fragments/pagination::pagination_fragment"></nav>
     </div>
     <div class="text-center m-1" th:unless="${total > 0}">
         <h2>No product found</h2>
