@@ -7,11 +7,11 @@
     <div>
         <h2>Manage Customers</h2>
         &nbsp;|&nbsp;
-        <a th:href="@{/customers/export/csv}" class="fas fa-file-csv fa-2x icon-dark mr-2"></a>
+        <a th:href="@{${moduleURL} + '/export/csv'}" class="fas fa-file-csv fa-2x icon-dark mr-2"></a>
         &nbsp;|&nbsp;
-        <a th:href="@{/customers/export/excel}" class="fas fa-file-excel fa-2x icon-dark mr-2"></a>
+        <a th:href="@{${moduleURL} + '/export/excel'}" class="fas fa-file-excel fa-2x icon-dark mr-2"></a>
         &nbsp;|&nbsp;
-        <a th:href="@{/customers/export/pdf}" class="fas fa-file-pdf fa-2x icon-dark mr-2"></a>
+        <a th:href="@{${moduleURL} + '/export/pdf'}" class="fas fa-file-pdf fa-2x icon-dark mr-2"></a>
     </div>
     <div th:if="${message != null}" class="alert alert-success text-center">
         [[${message}]]
@@ -19,27 +19,27 @@
     <div th:if="${exceptionMessage != null}" class="alert alert-danger text-center">
         [[${exceptionMessage}]]
     </div>
-    <div th:replace="fragments/search_form :: search_form('/customers/page/1')"></div>
+    <div th:replace="fragments/search_form :: search_form"></div>
     <div class="full-details">
         <table class="table table-striped table-hover table-bordered text-center">
             <thead class="table-dark">
             <tr>
                 <th class="hideable-column">
-                    <th:block th:replace="fragments/column_element::column_link('customers', 'id', 'ID', 'tag')" />
+                    <th:block th:replace="fragments/column_element::column_link('id', 'ID', 'tag')" />
                 </th>
-                <th:block th:replace="fragments/column_element::column_link('customers', 'firstName', 'First Name', 'none')"/>
-                <th:block th:replace="fragments/column_element::column_link('customers', 'lastName', 'Last Name', 'none')"/>
+                <th:block th:replace="fragments/column_element::column_link('firstName', 'First Name', 'none')"/>
+                <th:block th:replace="fragments/column_element::column_link('lastName', 'Last Name', 'none')"/>
                 <th class="hideable-column">
-                    <th:block th:replace="fragments/column_element::column_link('customers', 'email', 'Email', 'tag')"/>
-                </th>
-                <th class="hideable-column">
-                    <th:block th:replace="fragments/column_element::column_link('customers', 'city', 'City', 'tag')"/>
+                    <th:block th:replace="fragments/column_element::column_link('email', 'Email', 'tag')"/>
                 </th>
                 <th class="hideable-column">
-                    <th:block th:replace="fragments/column_element::column_link('customers', 'state', 'State', 'tag')"/>
+                    <th:block th:replace="fragments/column_element::column_link('city', 'City', 'tag')"/>
                 </th>
-                <th:block th:replace="fragments/column_element::column_link('customers', 'country', 'Country', 'none')"/>
-                <th:block th:replace="fragments/column_element::column_link('customers', 'enabled', 'Enabled', 'none')"/>
+                <th class="hideable-column">
+                    <th:block th:replace="fragments/column_element::column_link('state', 'State', 'tag')"/>
+                </th>
+                <th:block th:replace="fragments/column_element::column_link('country', 'Country', 'none')"/>
+                <th:block th:replace="fragments/column_element::column_link('enabled', 'Enabled', 'none')"/>
                 <th>Action</th>
             </tr>
             </thead>
@@ -53,25 +53,25 @@
                 <td class="hideable-column" th:text="${customer.state}"></td>
                 <td th:text="${customer.country.name}"></td>
                 <td>
-                    <a th:if="${customer.enabled == true}" th:href="@{'/customers/' + ${customer.id} + '/enabled/' + ${true}}"><i
+                    <a th:if="${customer.enabled == true}" th:href="@{${moduleURL} + '/' + ${customer.id} + '/enabled/' + ${true}}"><i
                             class="fas fa-check-circle fa-2x icon-green"></i></a>
-                    <a th:if="${customer.enabled == false}" th:href="@{'/customers/' + ${customer.id} + '/enabled/' + ${false}}"><i
+                    <a th:if="${customer.enabled == false}" th:href="@{${moduleURL} + '/' + ${customer.id} + '/enabled/' + ${false}}"><i
                             class="fas fa-times fa-2x icon-dark"></i></a>
                 </td>
                 <td>
-                    <a class="link-detail" th:href="@{'/customers/details/' + ${customer.id}}"
+                    <a class="link-detail" th:href="@{${moduleURL} + '/details/' + ${customer.id}}"
                        title="View Customer details"
                     >
                         <i class="fas fa-file-alt fa-2x icon-blue"></i>
                     </a>
                     &nbsp;
-                    <a th:href="@{'/customers/edit/' + ${customer.id}}"
+                    <a th:href="@{${moduleURL} + '/edit/' + ${customer.id}}"
                        title="Edit this customer"
                     >
                         <i class="fas fa-edit fa-2x icon-lightblue"></i>
                     </a>
                     &nbsp;
-                    <a th:href="@{'/customers/delete/' + ${customer.id}}"
+                    <a th:href="@{${moduleURL} + '/delete/' + ${customer.id}}"
                        class="customer-delete"
                        title="Delete this customer"
                     >
@@ -95,27 +95,27 @@
                     <div>[[${customer.country.name}]]</div>
                     <th:block>
                         <a th:if="${customer.enabled == true}"
-                           th:href="@{'/customers/' + ${customer.id} + '/enabled/' + ${true}}"><i
+                           th:href="@{${moduleURL} + '/' + ${customer.id} + '/enabled/' + ${true}}"><i
                                 class="fas fa-check-circle fa-2x icon-green"></i></a>
                         <a th:if="${customer.enabled == false}"
-                           th:href="@{'/customers/' + ${customer.id} + '/enabled/' + ${false}}"><i
+                           th:href="@{${moduleURL} + '/' + ${customer.id} + '/enabled/' + ${false}}"><i
                                 class="fas fa-times fa-2x icon-dark"></i></a>
                         &nbsp;
                     </th:block>
                     <th:block>
-                        <a class="link-detail" th:href="@{'/customers/details/' + ${customer.id}}"
+                        <a class="link-detail" th:href="@{${moduleURL} + '/details/' + ${customer.id}}"
                            title="View Customer details"
                         >
                             <i class="fas fa-file-alt fa-2x icon-blue"></i>
                         </a>
                         &nbsp;
-                        <a th:href="@{'/customers/edit/' + ${customer.id}}"
+                        <a th:href="@{${moduleURL} + '/edit/' + ${customer.id}}"
                            title="Edit this customer"
                         >
                             <i class="fas fa-edit fa-2x icon-lightblue"></i>
                         </a>
                         &nbsp;
-                        <a th:href="@{'/customers/delete/' + ${customer.id}}"
+                        <a th:href="@{${moduleURL} + '/delete/' + ${customer.id}}"
                            class="customer-delete"
                            title="Delete this customer"
                         >
@@ -129,7 +129,7 @@
     </div>
     <div class="text-center m-1" th:if="${total > 0}">
         <span>Showing customers # [[${startNo}]] to [[${endNo}]] of [[${total}]]</span>
-        <nav th:replace="fragments/pagination::pagination_fragment('customers')" />
+        <nav th:replace="fragments/pagination::pagination_fragment"></nav>
     </div>
     <div class="text-center m-1" th:unless="${total > 0}">
         <h2>No customers found</h2>
