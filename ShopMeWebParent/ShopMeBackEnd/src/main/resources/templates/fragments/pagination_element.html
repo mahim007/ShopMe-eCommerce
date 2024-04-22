@@ -3,7 +3,7 @@
 <body>
 <a class="page-link"
    th:fragment="page_link(pageNum, pageLabel)"
-   th:href="@{'/' + ${moduleName} + '/page/' + ${pageNum} +
+   th:href="@{${moduleURL} + '/page/' + ${pageNum} +
    '?sortField=' + ${sortField} +
    '&sortDir=' + ${sortDir} +
    ${keyword != null ? '&keyword=' + keyword : '' } +

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
-<th th:fragment="column_link(moduleName, fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
-    <a class="text-white" th:href="@{'/' + ${moduleName} + '/page/' + ${currentPageNo} + '?sortField=' + ${fieldName} +
+<th th:fragment="column_link(fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
+    <a class="text-white" th:href="@{${moduleURL} + '/page/' + ${currentPageNo} + '?sortField=' + ${fieldName} +
         '&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} +
         ${keyword != null ? '&keyword=' + keyword : '' } +
         ${categoryId != null ? '&categoryId=' + categoryId : '' }}">[[${columnLabel}]]</a>

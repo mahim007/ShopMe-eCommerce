@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
-<div th:fragment="search_form(actionUrl)">
-    <form th:action="@{${actionUrl}}" class="form-check-inline m-3">
+<div th:fragment="search_form">
+    <form th:action="@{${moduleURL} + '/page/1'}" class="form-check-inline m-3">
         <div class="row align-items-center">
             <div class="col-auto">
                 <label for="keyword" class="col-form-label">Filter</label>

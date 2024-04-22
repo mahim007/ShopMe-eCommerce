@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
 <nav
-        th:fragment="pagination_fragment(moduleName)"
+        th:fragment="pagination_fragment"
         th:if="${totalPageNo > 1}" aria-label="Page navigation example">
     <ul class="pagination justify-content-center d-flex flex-wrap">
         <li th:class="${currentPageNo > 1 ? 'page-item' : 'page-item disabled'}">
