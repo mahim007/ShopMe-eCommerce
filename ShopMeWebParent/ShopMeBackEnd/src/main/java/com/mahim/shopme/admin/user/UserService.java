@@ -1,6 +1,7 @@
 package com.mahim.shopme.admin.user;
 
 import com.mahim.shopme.admin.FileUploadUtil;
+import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
 import com.mahim.shopme.common.entity.Role;
 import com.mahim.shopme.common.entity.User;
 import org.apache.commons.lang3.StringUtils;
@@ -37,18 +38,15 @@ public class UserService {
         return (List<User>) userRepository.findAll();
     }
 
-    public Page<User> listByPage(int pageNum, String sortField, String sortDir) {
-        Sort sort = Sort.by(sortField);
-        sort = StringUtils.equals(sortDir, "asc") ? sort.ascending() : sort.descending();
+    public Page<User> listByKeyword(int pageNum, PagingAndSortingHelper helper) {
+        Sort sort = Sort.by(helper.getSortField());
+        sort = StringUtils.equals(helper.getSortDir(), "asc") ? sort.ascending() : sort.descending();
         Pageable pageable = PageRequest.of(pageNum -1, USERS_PER_PAGE, sort);
-        return  userRepository.findAll(pageable);
-    }
-
-    public Page<User> listByKeyword(int pageNum, String sortField, String sortDir, String keyword) {
-        Sort sort = Sort.by(sortField);
-        sort = StringUtils.equals(sortDir, "asc") ? sort.ascending() : sort.descending();
-        Pageable pageable = PageRequest.of(pageNum -1, USERS_PER_PAGE, sort);
-        return userRepository.findAllByKeyword(keyword, pageable);
+        if (helper.getKeyword() != null) {
+            return userRepository.findAllByKeyword(helper.getKeyword(), pageable);
+        } else {
+            return userRepository.findAll(pageable);
+        }
     }
 
     public List<Role> listRoles() {

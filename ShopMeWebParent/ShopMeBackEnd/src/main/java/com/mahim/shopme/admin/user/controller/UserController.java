@@ -1,6 +1,8 @@
 package com.mahim.shopme.admin.user.controller;
 
 import com.mahim.shopme.admin.FileUploadUtil;
+import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
+import com.mahim.shopme.admin.paging.PagingAndSortingParam;
 import com.mahim.shopme.admin.user.UserNotFoundException;
 import com.mahim.shopme.admin.user.UserService;
 import com.mahim.shopme.admin.user.exporter.UserCsvExporter;
@@ -45,38 +47,12 @@ public class UserController {
     }
 
     @GetMapping("/page/{pageNo}")
-    public String listByPage(@PathVariable(name = "pageNo") int pageNo,
-                             @RequestParam(name = "sortField", defaultValue = "id") String sortField,
-                             @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
-                             @RequestParam(name = "keyword", defaultValue = "") String keyword,
-                             Model model) {
-        keyword = org.apache.commons.lang3.StringUtils.trim(keyword);
-        if (org.apache.commons.lang3.StringUtils.isEmpty(keyword) || org.apache.commons.lang3.StringUtils.isBlank(keyword)) {
-            keyword = null;
-        }
-        Page<User> userPage = keyword == null ? userService.listByPage(pageNo, sortField, sortDir) :
-                userService.listByKeyword(pageNo, sortField, sortDir, keyword);
-
-        int totalPages = userPage.getTotalPages();
-        long totalElements = userPage.getTotalElements();
-        int currentPageSize = userPage.getNumberOfElements();
-        int startNo = ((pageNo - 1) * USERS_PER_PAGE) + 1;
-        int endNo = (startNo + currentPageSize) - 1;
-
-        List<User> userList = userPage.getContent();
-        String reverseSortDir = org.apache.commons.lang3.StringUtils.equals(sortDir, "asc") ? "desc" : "asc";
-
-        model.addAttribute("startNo", startNo);
-        model.addAttribute("endNo", endNo);
-        model.addAttribute("totalPageNo", totalPages);
-        model.addAttribute("total", totalElements);
-        model.addAttribute("currentPageNo", pageNo);
-        model.addAttribute("listUsers", userList);
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDir", sortDir);
-        model.addAttribute("reverseSortDir", reverseSortDir);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("moduleURL", "/users");
+    public String listByPage(
+            @PagingAndSortingParam(listName = "listUsers", moduleURL = "/users") PagingAndSortingHelper helper,
+            @PathVariable(name = "pageNo") int pageNo,
+            Model model) {
+        Page<User> userPage = userService.listByKeyword(pageNo, helper);
+        helper.updateModelAttributes(pageNo, userPage);
         return "users/users";
     }
 
@@ -126,7 +102,7 @@ public class UserController {
             return "users/user_form";
         } catch (UserNotFoundException e) {
             redirectAttributes.addFlashAttribute("exceptionMessage", e.getMessage());
-            return listAll();
+            return "redirect:/users";
         }
     }
 
@@ -139,7 +115,7 @@ public class UserController {
             redirectAttributes.addFlashAttribute("exceptionMessage", "User with id: " + id + " not found.");
         }
 
-        return listAll();
+        return "redirect:/users";
     }
 
     @GetMapping("/{id}/enabled/{enabled}")
@@ -147,10 +123,10 @@ public class UserController {
         try {
             userService.updateEnabledStatus(id, enabled);
             redirectAttributes.addFlashAttribute("message", "Enabled status updated for user (ID: "+ id + ")");
-            return listAll();
+            return "redirect:/users";
         } catch (UserNotFoundException ex) {
             redirectAttributes.addFlashAttribute("exceptionMessage", "User not found (ID: " + id + ")");
-            return listAll();
+            return "redirect:/users";
         }
     }
 
