@@ -1,5 +1,7 @@
 package com.mahim.shopme.admin.customer;
 
+import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
+import com.mahim.shopme.admin.paging.PagingAndSortingParam;
 import com.mahim.shopme.common.entity.Country;
 import com.mahim.shopme.common.entity.Customer;
 import com.mahim.shopme.common.exception.CustomerNotFoundException;
@@ -30,39 +32,11 @@ public class CustomerController {
 
     @GetMapping("/page/{pageNo}")
     public String listByPage(
-            @PathVariable int pageNo,
-            @RequestParam(name = "sortField", defaultValue = "id") String sortField,
-            @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
-            @RequestParam(name = "keyword", defaultValue = "") String keyword,
-            Model model
-    ) {
-        keyword = keyword.trim();
+            @PagingAndSortingParam(listName = "customers", moduleURL = "/customers") PagingAndSortingHelper helper,
+            @PathVariable int pageNo) {
 
-        Page<Customer> customerPage = keyword.isEmpty() && keyword.isBlank() ?
-                customerService.listByPage(pageNo, sortField, sortDir) :
-                customerService.listByKeyword(pageNo, sortField, sortDir, keyword);
-
-        int totalPages = customerPage.getTotalPages();
-        long totalElements = customerPage.getTotalElements();
-        int currentPageSize = customerPage.getNumberOfElements();
-        int startNo = ((pageNo - 1) * CUSTOMERS_PER_PAGE) + 1;
-        int endNo = (startNo + currentPageSize) - 1;
-
-        List<Customer> customers = customerPage.getContent();
-        String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
-
-        model.addAttribute("startNo", startNo);
-        model.addAttribute("endNo", endNo);
-        model.addAttribute("totalPageNo", totalPages);
-        model.addAttribute("total", totalElements);
-        model.addAttribute("currentPageNo", pageNo);
-        model.addAttribute("customers", customers);
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDir", sortDir);
-        model.addAttribute("reverseSortDir", reverseSortDir);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("moduleURL", "/customers");
-
+        Page<Customer> customers = customerService.listByKeyword(pageNo, helper);
+        helper.updateModelAttributes(pageNo, customers);
         return "customers/customers";
     }
 

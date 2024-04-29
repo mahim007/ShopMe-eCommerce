@@ -1,5 +1,6 @@
 package com.mahim.shopme.admin.customer;
 
+import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
 import com.mahim.shopme.admin.setting.country.CountryRepository;
 import com.mahim.shopme.common.entity.Country;
 import com.mahim.shopme.common.entity.Customer;
@@ -37,18 +38,15 @@ public class CustomerService {
         return (List<Customer>) customerRepository.findAll();
     }
 
-     public Page<Customer> listByPage(int pageNum, String sortField, String sortDir) {
-        Sort sort = Sort.by(sortField);
-        sort = StringUtils.equals(sortDir, "asc") ? sort.ascending() : sort.descending();
-        Pageable pageable = PageRequest.of(pageNum - 1, CUSTOMERS_PER_PAGE, sort);
-        return customerRepository.findAll(pageable);
-     }
-
-     public Page<Customer> listByKeyword(int pageNum, String sortField, String sortDir, String keyword) {
-         Sort sort = Sort.by(sortField);
-         sort = StringUtils.equals(sortDir, "asc") ? sort.ascending() : sort.descending();
+     public Page<Customer> listByKeyword(int pageNum, PagingAndSortingHelper helper) {
+         Sort sort = Sort.by(helper.getSortField());
+         sort = StringUtils.equals(helper.getSortDir(), "asc") ? sort.ascending() : sort.descending();
          Pageable pageable = PageRequest.of(pageNum - 1, CUSTOMERS_PER_PAGE, sort);
-         return customerRepository.findAllByKeyword(keyword, pageable);
+         if (helper.getKeyword() != null) {
+             return customerRepository.findAllByKeyword(helper.getKeyword(), pageable);
+         } else {
+             return customerRepository.findAll(pageable);
+         }
      }
 
      public Customer save(Customer customer) {
