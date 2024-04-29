@@ -43,4 +43,8 @@ public class PagingAndSortingHelper {
         model.addAttribute(listName, items);
         model.addAttribute("moduleURL", moduleURL);
     }
+
+    public void addAttribute(String name, Object value) {
+        model.addAttribute(name, value);
+    }
 }

@@ -1,6 +1,8 @@
 package com.mahim.shopme.admin.product.controller;
 
 import com.mahim.shopme.admin.brand.service.BrandService;
+import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
+import com.mahim.shopme.admin.paging.PagingAndSortingParam;
 import com.mahim.shopme.common.exception.CategoryNotFoundException;
 import com.mahim.shopme.admin.category.service.CategoryService;
 import com.mahim.shopme.common.exception.ProductNotFoundException;
@@ -51,26 +53,12 @@ public class ProductController {
     @GetMapping("/page/{pageNo}")
     public String listByPage(
             @PathVariable(name = "pageNo") int pageNo,
-            @RequestParam(name = "sortField", defaultValue = "id") String sortField,
-            @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
-            @RequestParam(name = "keyword", defaultValue = "") String keyword,
+            @PagingAndSortingParam(listName = "products", moduleURL = "/products") PagingAndSortingHelper helper,
             @RequestParam(name = "categoryId", defaultValue = "0") Integer categoryId,
-            Model model
-    ) {
-        keyword = StringUtils.trim(keyword);
-        if (StringUtils.isEmpty(keyword) || StringUtils.isBlank(keyword)) {
-            keyword = null;
-        }
+            Model model) {
 
-        Page<Product> productsPage = productService.listByKeyword(pageNo, sortField, sortDir, keyword, categoryId);
-
-        int totalPages = productsPage.getTotalPages();
-        long totalElements = productsPage.getTotalElements();
-        int startNo = ((pageNo - 1) * PRODUCTS_PER_PAGE) + 1;
-        int endNo = pageNo * PRODUCTS_PER_PAGE;
-
-        List<Product> products = productsPage.getContent();
-        String reverseSortDir = StringUtils.equals(sortDir, "asc") ? "desc" : "asc";
+        Page<Product> products = productService.listByKeyword(pageNo, helper, categoryId);
+        helper.updateModelAttributes(pageNo, products);
 
         List<Category> hierarchicalCategories = categoryService.listAll();
         String categoryName = "";
@@ -81,20 +69,9 @@ public class ProductController {
             categoryName = "All Categories";
         }
 
-        model.addAttribute("startNo", startNo);
-        model.addAttribute("endNo", endNo < totalElements ? endNo : totalElements);
-        model.addAttribute("totalPageNo", totalPages);
-        model.addAttribute("total", totalElements);
-        model.addAttribute("currentPageNo", pageNo);
-        model.addAttribute("products", products);
-        model.addAttribute("categories", hierarchicalCategories);
-        model.addAttribute("categoryId", categoryId);
-        model.addAttribute("categoryName", categoryName);
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDir", sortDir);
-        model.addAttribute("reverseSortDir", reverseSortDir);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("moduleURL", "/products");
+        helper.addAttribute("categories", hierarchicalCategories);
+        helper.addAttribute("categoryId", categoryId);
+        helper.addAttribute("categoryName", categoryName);
         return "products/products";
     }
 

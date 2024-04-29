@@ -1,6 +1,7 @@
 package com.mahim.shopme.admin.product.service;
 
 import com.mahim.shopme.admin.FileUploadUtil;
+import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
 import com.mahim.shopme.common.exception.ProductNotFoundException;
 import com.mahim.shopme.admin.product.repository.ProductRepository;
 import com.mahim.shopme.common.entity.Product;
@@ -32,22 +33,15 @@ public class ProductService {
         return (List<Product>) productRepository.findAll();
     }
 
-    public Page<Product> listByPage(int pageNum, String sortField, String sortDir) {
-        Sort sort = Sort.by(sortField);
-        sort = StringUtils.equals(sortDir, "asc") ? sort.ascending() : sort.descending();
-        PageRequest pageRequest = PageRequest.of(pageNum - 1, PRODUCTS_PER_PAGE, sort);
-        return productRepository.findAll(pageRequest);
-    }
-
-    public Page<Product> listByKeyword(int pageNum, String sortField, String sortDir, String keyword, Integer categoryId) {
-        Sort sort = Sort.by(sortField);
-        sort = StringUtils.equals(sortDir, "asc") ? sort.ascending() : sort.descending();
+    public Page<Product> listByKeyword(int pageNum, PagingAndSortingHelper helper, Integer categoryId) {
+        Sort sort = Sort.by(helper.getSortField());
+        sort = StringUtils.equals(helper.getSortDir(), "asc") ? sort.ascending() : sort.descending();
         Pageable pageable = PageRequest.of(pageNum - 1, PRODUCTS_PER_PAGE, sort);
         String categoryIdMatch = "-" + categoryId + "-";
 
-        return isValidKeyword(keyword) && isValidCategoryId(categoryId) ?
-                productRepository.searchInCategory(categoryId, categoryIdMatch, keyword, pageable) :
-                isValidKeyword(keyword) ? productRepository.findAllByKeyword(keyword, pageable) :
+        return isValidKeyword(helper.getKeyword()) && isValidCategoryId(categoryId) ?
+                productRepository.searchInCategory(categoryId, categoryIdMatch, helper.getKeyword(), pageable) :
+                isValidKeyword(helper.getKeyword()) ? productRepository.findAllByKeyword(helper.getKeyword(), pageable) :
                         isValidCategoryId(categoryId) ?
                                 productRepository.findAllInCategory(categoryId, categoryIdMatch, pageable) :
                                 productRepository.findAll(pageable);
