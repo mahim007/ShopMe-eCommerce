@@ -1,6 +1,7 @@
 package com.mahim.shopme.admin.category.service;
 
 import com.mahim.shopme.admin.FileUploadUtil;
+import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
 import com.mahim.shopme.common.exception.CategoryNotFoundException;
 import com.mahim.shopme.admin.category.CategoryRepository;
 import com.mahim.shopme.admin.user.UserNotFoundException;
@@ -34,18 +35,15 @@ public class CategoryService {
         return getHierarchicalCategories(categories);
     }
 
-    public Page<Category> listByPage(int pageNum, String sortField, String sortDir) {
-        Sort sort = Sort.by(sortField);
-        sort = StringUtils.equals(sortDir, "asc") ? sort.ascending() : sort.descending();
-        Pageable pageable = PageRequest.of(pageNum - 1, CATEGORIES_PER_PAGE, sort);
-        return categoryRepository.findAll(pageable);
-    }
-
-    public Page<Category> listByKeyword(int pageNum, String sortField, String sortDir, String keyword) {
-        Sort sort = Sort.by(sortField);
-        sort = StringUtils.equals(sortDir, "asc") ? sort.ascending() : sort.descending();
+    public Page<Category> listByKeyword(int pageNum, PagingAndSortingHelper helper) {
+        Sort sort = Sort.by(helper.getSortField());
+        sort = StringUtils.equals(helper.getSortDir(), "asc") ? sort.ascending() : sort.descending();
         PageRequest pageRequest = PageRequest.of(pageNum - 1, CATEGORIES_PER_PAGE, sort);
-        return categoryRepository.findAllByKeyword(keyword, pageRequest);
+        if (helper.getKeyword() != null) {
+            return categoryRepository.findAllByKeyword(helper.getKeyword(), pageRequest);
+        } else {
+            return categoryRepository.findAll(pageRequest);
+        }
     }
 
     public Category save(Category category) {

@@ -1,6 +1,8 @@
 package com.mahim.shopme.admin.category.controller;
 
 import com.mahim.shopme.admin.FileUploadUtil;
+import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
+import com.mahim.shopme.admin.paging.PagingAndSortingParam;
 import com.mahim.shopme.common.exception.CategoryNotFoundException;
 import com.mahim.shopme.admin.category.exporter.CategoryCsvExporter;
 import com.mahim.shopme.admin.category.exporter.CategoryExcelExporter;
@@ -48,40 +50,12 @@ public class CategoryController {
     }
 
     @GetMapping("/page/{pageNo}")
-    public String listByPage(@PathVariable(name = "pageNo") int pageNo,
-                             @RequestParam(name = "sortField", defaultValue = "id") String sortField,
-                             @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
-                             @RequestParam(name = "keyword", defaultValue = "") String keyword,
-                             Model model
-                             ) {
-        keyword = StringUtils.trim(keyword);
-        if (StringUtils.isEmpty(keyword) || StringUtils.isBlank(keyword)) {
-            keyword = null;
-        }
+    public String listByPage(
+            @PagingAndSortingParam(listName = "categories", moduleURL = "/categories") PagingAndSortingHelper helper,
+            @PathVariable(name = "pageNo") int pageNo) {
 
-        Page<Category> categoriesPage = keyword == null ? categoryService.listByPage(pageNo, sortField, sortDir) :
-                categoryService.listByKeyword(pageNo, sortField, sortDir, keyword);
-
-        int totalPages = categoriesPage.getTotalPages();
-        long totalElements = categoriesPage.getTotalElements();
-        int currentPageSize = categoriesPage.getNumberOfElements();
-        int startNo = ((pageNo - 1) * CATEGORIES_PER_PAGE) + 1;
-        int endNo = (startNo + currentPageSize) - 1;
-
-        List<Category> categories = categoriesPage.getContent();
-        String reverseSortDir = StringUtils.equals(sortDir, "asc") ? "desc" : "asc";
-
-        model.addAttribute("startNo", startNo);
-        model.addAttribute("endNo", endNo);
-        model.addAttribute("totalPageNo", totalPages);
-        model.addAttribute("total", totalElements);
-        model.addAttribute("currentPageNo", pageNo);
-        model.addAttribute("categories", categories);
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDir", sortDir);
-        model.addAttribute("reverseSortDir", reverseSortDir);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("moduleURL", "/categories");
+        Page<Category> categories = categoryService.listByKeyword(pageNo, helper);
+        helper.updateModelAttributes(pageNo, categories);
         return "categories/categories";
     }
 
