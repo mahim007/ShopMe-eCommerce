@@ -7,6 +7,8 @@ import com.mahim.shopme.admin.brand.exporter.BrandExcelExporter;
 import com.mahim.shopme.admin.brand.exporter.BrandPdfExporter;
 import com.mahim.shopme.admin.brand.service.BrandService;
 import com.mahim.shopme.admin.category.service.CategoryService;
+import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
+import com.mahim.shopme.admin.paging.PagingAndSortingParam;
 import com.mahim.shopme.common.entity.Brand;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -53,39 +55,11 @@ public class BrandController {
 
     @GetMapping("/page/{pageNo}")
     public String listByPage(
-            @PathVariable(name = "pageNo") int pageNo,
-            @RequestParam(name = "sortField", defaultValue = "id") String sortField,
-            @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
-            @RequestParam(name = "keyword", defaultValue = "") String keyword,
-            Model model
-    ) {
-        keyword = StringUtils.trim(keyword);
-        if (StringUtils.isEmpty(keyword) || StringUtils.isBlank(keyword)) {
-            keyword = null;
-        }
+            @PagingAndSortingParam(listName = "brands", moduleURL = "/brands") PagingAndSortingHelper helper,
+            @PathVariable(name = "pageNo") int pageNo) {
 
-        Page<Brand> brandPage = keyword == null ? brandService.listByPage(pageNo, sortField, sortDir) :
-                brandService.listByKeyword(pageNo, sortField, sortDir, keyword);
-
-        int totalPages = brandPage.getTotalPages();
-        long totalElements = brandPage.getTotalElements();
-        int startNo = ((pageNo - 1) * BRANDS_PER_PAGE) + 1;
-        int endNo = pageNo * BRANDS_PER_PAGE;
-
-        List<Brand> brands = brandPage.getContent();
-        String reverseSortDir = StringUtils.equals(sortDir, "asc") ? "desc" : "asc";
-
-        model.addAttribute("startNo", startNo);
-        model.addAttribute("endNo", endNo < totalElements ? endNo : totalElements);
-        model.addAttribute("totalPageNo", totalPages);
-        model.addAttribute("total", totalElements);
-        model.addAttribute("currentPageNo", pageNo);
-        model.addAttribute("brands", brands);
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDir", sortDir);
-        model.addAttribute("reverseSortDir", reverseSortDir);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("moduleURL", "/brands");
+        Page<Brand> brands = brandService.listByKeyword(pageNo, helper);
+        helper.updateModelAttributes(pageNo, brands);
         return "brands/brands";
     }
 

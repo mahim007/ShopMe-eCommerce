@@ -49,8 +49,8 @@ public class UserController {
     @GetMapping("/page/{pageNo}")
     public String listByPage(
             @PagingAndSortingParam(listName = "listUsers", moduleURL = "/users") PagingAndSortingHelper helper,
-            @PathVariable(name = "pageNo") int pageNo,
-            Model model) {
+            @PathVariable(name = "pageNo") int pageNo) {
+
         Page<User> userPage = userService.listByKeyword(pageNo, helper);
         helper.updateModelAttributes(pageNo, userPage);
         return "users/users";
