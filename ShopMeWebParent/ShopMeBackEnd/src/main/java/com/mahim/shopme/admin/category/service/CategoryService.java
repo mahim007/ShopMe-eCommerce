@@ -6,11 +6,7 @@ import com.mahim.shopme.common.exception.CategoryNotFoundException;
 import com.mahim.shopme.admin.category.CategoryRepository;
 import com.mahim.shopme.admin.user.UserNotFoundException;
 import com.mahim.shopme.common.entity.Category;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,14 +32,7 @@ public class CategoryService {
     }
 
     public Page<Category> listByKeyword(int pageNum, PagingAndSortingHelper helper) {
-        Sort sort = Sort.by(helper.getSortField());
-        sort = StringUtils.equals(helper.getSortDir(), "asc") ? sort.ascending() : sort.descending();
-        PageRequest pageRequest = PageRequest.of(pageNum - 1, CATEGORIES_PER_PAGE, sort);
-        if (helper.getKeyword() != null) {
-            return categoryRepository.findAllByKeyword(helper.getKeyword(), pageRequest);
-        } else {
-            return categoryRepository.findAll(pageRequest);
-        }
+        return (Page<Category>) helper.listEntities(pageNum, CATEGORIES_PER_PAGE, categoryRepository);
     }
 
     public Category save(Category category) {

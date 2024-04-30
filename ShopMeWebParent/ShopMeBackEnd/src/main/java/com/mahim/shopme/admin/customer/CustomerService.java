@@ -5,11 +5,7 @@ import com.mahim.shopme.admin.setting.country.CountryRepository;
 import com.mahim.shopme.common.entity.Country;
 import com.mahim.shopme.common.entity.Customer;
 import com.mahim.shopme.common.exception.CustomerNotFoundException;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,14 +35,7 @@ public class CustomerService {
     }
 
      public Page<Customer> listByKeyword(int pageNum, PagingAndSortingHelper helper) {
-         Sort sort = Sort.by(helper.getSortField());
-         sort = StringUtils.equals(helper.getSortDir(), "asc") ? sort.ascending() : sort.descending();
-         Pageable pageable = PageRequest.of(pageNum - 1, CUSTOMERS_PER_PAGE, sort);
-         if (helper.getKeyword() != null) {
-             return customerRepository.findAllByKeyword(helper.getKeyword(), pageable);
-         } else {
-             return customerRepository.findAll(pageable);
-         }
+         return (Page<Customer>) helper.listEntities(pageNum, CUSTOMERS_PER_PAGE, customerRepository);
      }
 
      public Customer save(Customer customer) {

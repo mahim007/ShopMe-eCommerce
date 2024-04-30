@@ -5,7 +5,6 @@ import com.mahim.shopme.admin.brand.exception.BrandNotFoundException;
 import com.mahim.shopme.admin.brand.repository.BrandRepository;
 import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
 import com.mahim.shopme.common.entity.Brand;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -32,14 +31,7 @@ public class BrandService {
     }
 
     public Page<Brand> listByKeyword(int pageNum, PagingAndSortingHelper helper) {
-        Sort sort = Sort.by(helper.getSortField());
-        sort = StringUtils.equals(helper.getSortDir(), "asc") ? sort.ascending() : sort.descending();
-        PageRequest pageRequest = PageRequest.of(pageNum - 1, BRANDS_PER_PAGE, sort);
-        if (helper.getKeyword() != null) {
-            return brandRepository.findAllByKeyword(helper.getKeyword(), pageRequest);
-        } else {
-            return brandRepository.findAll(pageRequest);
-        }
+        return (Page<Brand>) helper.listEntities(pageNum, BRANDS_PER_PAGE, brandRepository);
     }
 
     public Brand save(Brand brand) {

@@ -1,5 +1,6 @@
 package com.mahim.shopme.admin.product.repository;
 
+import com.mahim.shopme.admin.paging.SearchRepository;
 import com.mahim.shopme.common.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -8,7 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface ProductRepository extends PagingAndSortingRepository<Product, Integer> {
+public interface ProductRepository extends SearchRepository<Product, Integer> {
 
     int countById(Integer id);
     Product findByName(String name);

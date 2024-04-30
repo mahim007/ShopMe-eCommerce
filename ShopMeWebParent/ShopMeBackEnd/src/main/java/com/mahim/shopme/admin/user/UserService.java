@@ -4,11 +4,7 @@ import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
 import com.mahim.shopme.common.entity.Role;
 import com.mahim.shopme.common.entity.User;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,14 +35,7 @@ public class UserService {
     }
 
     public Page<User> listByKeyword(int pageNum, PagingAndSortingHelper helper) {
-        Sort sort = Sort.by(helper.getSortField());
-        sort = StringUtils.equals(helper.getSortDir(), "asc") ? sort.ascending() : sort.descending();
-        Pageable pageable = PageRequest.of(pageNum -1, USERS_PER_PAGE, sort);
-        if (helper.getKeyword() != null) {
-            return userRepository.findAllByKeyword(helper.getKeyword(), pageable);
-        } else {
-            return userRepository.findAll(pageable);
-        }
+        return (Page<User>) helper.listEntities(pageNum, USERS_PER_PAGE, userRepository);
     }
 
     public List<Role> listRoles() {

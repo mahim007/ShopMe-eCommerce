@@ -1,13 +1,17 @@
 package com.mahim.shopme.admin.paging;
 
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.util.List;
 
 @Getter
 public class PagingAndSortingHelper {
+
     private final ModelAndViewContainer model;
     private final String listName;
     private final String moduleURL;
@@ -46,5 +50,16 @@ public class PagingAndSortingHelper {
 
     public void addAttribute(String name, Object value) {
         model.addAttribute(name, value);
+    }
+
+    public Page<?> listEntities(int pageNum, int pageSize, SearchRepository<?, Integer> repository) {
+        Sort sort = Sort.by(this.getSortField());
+        sort = StringUtils.equals(this.getSortDir(), "asc") ? sort.ascending() : sort.descending();
+        PageRequest pageRequest = PageRequest.of(pageNum - 1, pageSize, sort);
+        if (this.getKeyword() != null) {
+            return repository.findAllByKeyword(this.getKeyword(), pageRequest);
+        } else {
+            return repository.findAll(pageRequest);
+        }
     }
 }

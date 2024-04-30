@@ -1,16 +1,16 @@
 package com.mahim.shopme.admin.category;
 
+import com.mahim.shopme.admin.paging.SearchRepository;
 import com.mahim.shopme.common.entity.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
-public interface CategoryRepository  extends PagingAndSortingRepository<Category, Integer> {
+public interface CategoryRepository  extends SearchRepository<Category, Integer> {
 
     Long countById(Integer id);
 
