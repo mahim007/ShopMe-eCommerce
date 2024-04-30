@@ -104,7 +104,8 @@ public class ProductController {
                               RedirectAttributes redirectAttributes) {
         Product productToBeSaved = null;
         try {
-            if (loggedInUser.hasRole("Salesperson")) {
+            if (!loggedInUser.hasRole("Admin") && !loggedInUser.hasRole("Editor") 
+                    && loggedInUser.hasRole("Salesperson")) {
                 productService.saveProductPrice(product);
                 redirectAttributes.addFlashAttribute("message","The product has been saved successfully.");
                 return listAll();
