@@ -4,6 +4,7 @@ import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
 import com.mahim.shopme.admin.setting.country.CountryRepository;
 import com.mahim.shopme.common.entity.Country;
 import com.mahim.shopme.common.entity.Customer;
+import com.mahim.shopme.common.enums.AuthenticationType;
 import com.mahim.shopme.common.exception.CustomerNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -108,6 +109,12 @@ public class CustomerService {
 
      public List<Country> listAllCountry() {
         return countryRepository.findAllByOrderByNameAsc();
+     }
+
+     public void updateAuthenticationType(Customer customer, AuthenticationType authenticationType) {
+        if (!customer.getAuthenticationType().equals(authenticationType)) {
+            customerRepository.updateAuthenticationType(authenticationType, customer.getId());
+        }
      }
 
 }

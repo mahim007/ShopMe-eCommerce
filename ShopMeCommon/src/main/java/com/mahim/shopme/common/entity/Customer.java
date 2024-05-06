@@ -1,5 +1,6 @@
 package com.mahim.shopme.common.entity;
 
+import com.mahim.shopme.common.enums.AuthenticationType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -47,6 +48,10 @@ public class Customer {
     @ManyToOne
     @JoinColumn(name = "country_id", nullable = false)
     private Country country;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "authentication_type")
+    private AuthenticationType authenticationType;
 
     @Column(name = "postal_code", nullable = false, length = 10)
     private String postalCode;

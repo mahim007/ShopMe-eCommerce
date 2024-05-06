@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments/page_structure :: page_header('Welcome to Shopme')"></th:block>
+<body>
+<div class="container-fluid text-center">
+    <th:block th:replace="fragments/navigation :: header_nav"></th:block>
+    <div class="text-center">
+        <h2>Customer Login</h2>
+    </div>
+    <form th:action="@{/login}" method="post" style="max-width: 350px; margin: 20px auto">
+        <div th:if="${param.error}">
+            <p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+        </div>
+        <div th:if="${param.logout}">
+            <p class="text-warning">You have been logged out.</p>
+        </div>
+        <div class="border border-secondary rounded p-3">
+            <div class="mb-3">
+                <input type="email" name="email" placeholder="Email" class="form-control" required/>
+            </div>
+            <div class="mb-3">
+                <input type="password" name="password" placeholder="Password" class="form-control" required/>
+            </div>
+            <div class="mb-3">
+                <input type="checkbox" name="remember-me"/> &nbsp; Remember me
+            </div>
+            <input type="submit" class="btn btn-primary" value="Login"/>
+        </div>
+    </form>
+    <th:block th:replace="fragments/navigation :: footer_nav"></th:block>
+</div>
+</body>
+</html>
