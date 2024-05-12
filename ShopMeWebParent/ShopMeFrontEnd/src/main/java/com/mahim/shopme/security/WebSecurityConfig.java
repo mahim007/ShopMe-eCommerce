@@ -1,6 +1,8 @@
 package com.mahim.shopme.security;
 
 import com.mahim.shopme.customer.CustomerRepository;
+import com.mahim.shopme.oauth.CustomerOAuth2UserService;
+import com.mahim.shopme.oauth.OAuth2LoginSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -18,9 +20,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomerRepository customerRepository;
+    private final CustomerOAuth2UserService customerOAuth2UserService;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final DatabaseLoginSuccessHandler dbLoginSuccessHandler;
 
-    public WebSecurityConfig(CustomerRepository customerRepository) {
+    public WebSecurityConfig(CustomerRepository customerRepository,
+                             CustomerOAuth2UserService customerOAuth2UserService,
+                             OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler,
+                             DatabaseLoginSuccessHandler dbLoginSuccessHandler) {
         this.customerRepository = customerRepository;
+        this.customerOAuth2UserService = customerOAuth2UserService;
+        this.oAuth2LoginSuccessHandler = oAuth2LoginSuccessHandler;
+        this.dbLoginSuccessHandler = dbLoginSuccessHandler;
     }
 
     @Bean
@@ -53,18 +64,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/customer").authenticated()
                     .anyRequest().permitAll()
                 .and()
-                .formLogin()
+                    .formLogin()
+                        .loginPage("/login")
+                        .usernameParameter("email")
+                        .passwordParameter("password")
+                        .successHandler(dbLoginSuccessHandler)
+                        .permitAll()
+                .and()
+                    .oauth2Login()
                     .loginPage("/login")
-                    .usernameParameter("email")
-                    .passwordParameter("password")
-                    .permitAll()
+                    .userInfoEndpoint()
+                        .userService(customerOAuth2UserService)
+                    .and()
+                        .successHandler(oAuth2LoginSuccessHandler)
                 .and()
-                .logout()
-                    .permitAll()
+                    .logout().permitAll()
                 .and()
-                .rememberMe()
-                    .key("ABCD1234abcd")
-                    .tokenValiditySeconds(14 * 24 * 60 * 60);
+                    .rememberMe()
+                        .key("ABCD1234abcd")
+                        .tokenValiditySeconds(14 * 24 * 60 * 60);
 
     }
 

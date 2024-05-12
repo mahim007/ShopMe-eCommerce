@@ -7,7 +7,11 @@
     <div class="text-center">
         <h2>Customer Login</h2>
     </div>
-    <form th:action="@{/login}" method="post" style="max-width: 350px; margin: 20px auto">
+    <div class="mt-3">
+        <a class="btn btn-lg btn-primary fab fa-google" th:href="@{/oauth2/authorization/google}">Continue with Google</a>
+    </div>
+    <div>&nbsp;</div>
+    <form th:action="@{/login}" method="post" style="max-width: 350px; margin: 10px auto">
         <div th:if="${param.error}">
             <p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
         </div>
@@ -27,6 +31,9 @@
             <input type="submit" class="btn btn-primary" value="Login"/>
         </div>
     </form>
+    <div>&nbsp;</div>
+    <div>Don't have an account? <a th:href="@{/register}">Sign up</a></div>
+    <div>&nbsp;</div>
     <th:block th:replace="fragments/navigation :: footer_nav"></th:block>
 </div>
 </body>

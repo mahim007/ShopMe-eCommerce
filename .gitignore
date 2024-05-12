@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### project secrets ###
+**/src/main/resources/secrets.yml

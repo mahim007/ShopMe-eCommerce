@@ -2,6 +2,7 @@ package com.mahim.shopme.customer;
 
 import com.mahim.shopme.common.entity.Country;
 import com.mahim.shopme.common.entity.Customer;
+import com.mahim.shopme.common.enums.AuthenticationType;
 import com.mahim.shopme.setting.CountryRepository;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -42,6 +44,7 @@ public class CustomerService {
         customer.setCreatedTime(new Date());
         String randomCode = RandomString.make(64);
         customer.setVerificationCode(randomCode);
+        customer.setAuthenticationType(AuthenticationType.DATABASE);
         customerRepository.save(customer);
     }
 
@@ -56,6 +59,49 @@ public class CustomerService {
         } else {
             customerRepository.enable(customer.getId());
             return true;
+        }
+    }
+
+    public void updateAuthentication(Customer customer, AuthenticationType type) {
+        if (!customer.getAuthenticationType().equals(type)) {
+            customerRepository.updateAuthenticationType(customer.getId(), type);
+        }
+    }
+
+    public Optional<Customer> getCustomerByEmail(String email) {
+        Customer customer = customerRepository.findByEmail(email);
+        if (customer != null && customer.isEnabled()) {
+            return Optional.of(customer);
+        }
+        return Optional.empty();
+    }
+
+    public void addNewCustomerUponAuthLogin(String name, String email, String countryCode) {
+        Customer customer = new Customer();
+        customer.setEmail(email);
+        setName(name, customer);
+        customer.setEnabled(true);
+        customer.setCreatedTime(new Date());
+        customer.setAuthenticationType(AuthenticationType.GOOGLE);
+        customer.setPassword("");
+        customer.setAddressLine1("");
+        customer.setCity("");
+        customer.setState("");
+        customer.setPhoneNumber("");
+        customer.setPostalCode("");
+        customer.setCountry(countryRepository.findByCode(countryCode));
+
+        customerRepository.save(customer);
+    }
+
+    private void setName(String name, Customer customer) {
+        String[] nameArray = name.split(" ");
+        if (nameArray.length < 2) {
+            customer.setFirstName(name);
+            customer.setLastName("");
+        } else {
+            customer.setFirstName(nameArray[0]);
+            customer.setLastName(name.replaceFirst(nameArray[0], ""));
         }
     }
 }

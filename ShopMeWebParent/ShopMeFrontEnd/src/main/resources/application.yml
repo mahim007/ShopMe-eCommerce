@@ -1,0 +1,36 @@
+server:
+    port: 8081
+    servlet:
+        context-path: /shopme
+spring:
+    datasource:
+        password: admin
+        url: jdbc:mysql://localhost:3306/shopmedb
+        username: root
+    devtools:
+        livereload:
+            port: 35730
+    jpa:
+        database-platform: org.hibernate.dialect.MySQL8Dialect
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MySQL8Dialect
+                format_sql: true
+        show-sql: false
+    security:
+        oauth2:
+            client:
+                registration:
+                    google:
+                        scope:
+                          - email
+                          - profile
+    mvc:
+        pathmatch:
+            matching-strategy: ant-path-matcher
+    config:
+        import: optional:secrets.yml
+
+
