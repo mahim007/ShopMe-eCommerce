@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 public class CustomerOAuth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        return new CustomerOAuth2User(super.loadUser(userRequest));
+        String clientName = userRequest.getClientRegistration().getClientName();
+        return new CustomerOAuth2User(clientName, super.loadUser(userRequest));
     }
 }

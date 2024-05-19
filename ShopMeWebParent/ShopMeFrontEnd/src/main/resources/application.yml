@@ -27,10 +27,12 @@ spring:
                         scope:
                           - email
                           - profile
+                    facebook:
+                        scope:
+                          - email
+                          - public_profile
     mvc:
         pathmatch:
             matching-strategy: ant-path-matcher
     config:
         import: optional:secrets.yml
-
-

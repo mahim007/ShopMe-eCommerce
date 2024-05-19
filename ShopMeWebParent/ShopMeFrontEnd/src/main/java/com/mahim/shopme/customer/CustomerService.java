@@ -76,13 +76,13 @@ public class CustomerService {
         return Optional.empty();
     }
 
-    public void addNewCustomerUponAuthLogin(String name, String email, String countryCode) {
+    public void addNewCustomerUponAuthLogin(String name, String email, String countryCode, AuthenticationType authenticationType) {
         Customer customer = new Customer();
         customer.setEmail(email);
         setName(name, customer);
         customer.setEnabled(true);
         customer.setCreatedTime(new Date());
-        customer.setAuthenticationType(AuthenticationType.GOOGLE);
+        customer.setAuthenticationType(authenticationType);
         customer.setPassword("");
         customer.setAddressLine1("");
         customer.setCity("");

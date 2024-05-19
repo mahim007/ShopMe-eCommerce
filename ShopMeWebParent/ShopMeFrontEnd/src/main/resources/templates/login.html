@@ -8,7 +8,10 @@
         <h2>Customer Login</h2>
     </div>
     <div class="mt-3">
-        <a class="btn btn-lg btn-primary fab fa-google" th:href="@{/oauth2/authorization/google}">Continue with Google</a>
+        <a class="btn btn-lg btn-primary fab fa-google" th:href="@{/oauth2/authorization/google}"> Continue with Google</a>
+    </div>
+    <div class="mt-3">
+        <a class="btn btn-lg btn-primary fab fa-facebook" th:href="@{/oauth2/authorization/facebook}"> Continue with Facebook</a>
     </div>
     <div>&nbsp;</div>
     <form th:action="@{/login}" method="post" style="max-width: 350px; margin: 10px auto">
