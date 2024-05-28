@@ -28,10 +28,8 @@ public class SettingFilter implements Filter {
             return;
         }
 
-        System.out.println("Request URL: " + url);
         List<Setting> settings = settingService.getGeneralSetting();
         for (Setting setting : settings) {
-            System.out.println(setting);
             servletRequest.setAttribute(setting.getKey(), setting.getValue());
         }
 

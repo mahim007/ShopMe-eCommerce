@@ -56,7 +56,7 @@
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					<th:block sec:authorize="isAuthenticated()">
 						<li class="nav-item">
-							<a class="nav-link" th:href="@{/customer}">
+							<a class="nav-link" th:href="@{/account_details}">
 								<b sec:authentication="principal.fullName">Full Name</b>
 							</a>
 						</li>

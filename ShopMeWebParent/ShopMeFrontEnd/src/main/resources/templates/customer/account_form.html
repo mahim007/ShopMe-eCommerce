@@ -6,12 +6,24 @@
         <th:block th:replace="fragments/navigation :: header_nav"></th:block>
         <div>&nbsp;</div>
         <div class="text-center">
-            <h1>Customer Registration</h1>
+            <h2>Your Account Details</h2>
         </div>
         <div class="container">
-            <form th:action="@{/create_customer}" method="post" th:object="${customer}"
-                  onsubmit="return checkEmailUnique(this)">
+            <form th:action="@{/create_customer}" method="post" th:object="${customer}">
+                <input type="hidden" th:field="*{id}">
                 <div class="border border-secondary rounded p-3">
+                    <div class="row mb-3">
+                        <label class="col-form-label col-sm-3">Authentication Type</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" th:field="*{authenticationType}" readonly/>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-form-label col-sm-3">Email</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" th:field="*{email}" readonly/>
+                        </div>
+                    </div>
                     <div class="row mb-3">
                         <label class="col-form-label col-sm-3">First Name</label>
                         <div class="col-sm-9">
@@ -24,13 +36,6 @@
                         <div class="col-sm-9">
                             <input class="form-control" type="text" th:field="*{lastName}"
                                    required minlength="2" maxlength="45" />
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label class="col-form-label col-sm-3">Email</label>
-                        <div class="col-sm-9">
-                            <input class="form-control" type="email" th:field="*{email}"
-                                   required minlength="8" maxlength="45" />
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -112,11 +117,11 @@
         <th:block th:replace="fragments/modal::shopmeModal"></th:block>
         <th:block th:replace="fragments/navigation :: footer_nav"></th:block>
     </div>
-<script type="text/javascript">
-    const contextPath = "[[@{/}]]";
-    const csrfHeaderName = "[[${_csrf.headerName}]]";
-    const csrfHeaderValue = "[[${_csrf.token}]]";
-</script>
+    <script type="text/javascript">
+        const contextPath = "[[@{/}]]";
+        const csrfHeaderName = "[[${_csrf.headerName}]]";
+        const csrfHeaderValue = "[[${_csrf.token}]]";
+    </script>
 <script type="text/javascript" th:src="@{/js/common_customer_form.js}"></script>
 </body>
 </html>

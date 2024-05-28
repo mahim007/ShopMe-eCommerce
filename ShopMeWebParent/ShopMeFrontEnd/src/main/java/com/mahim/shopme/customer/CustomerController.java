@@ -2,11 +2,16 @@ package com.mahim.shopme.customer;
 
 import com.mahim.shopme.common.entity.Country;
 import com.mahim.shopme.common.entity.Customer;
+import com.mahim.shopme.oauth.CustomerOAuth2User;
 import com.mahim.shopme.setting.EmailSettingBag;
 import com.mahim.shopme.setting.SettingService;
 import com.mahim.shopme.utils.EmailUtils;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.authentication.RememberMeAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +23,9 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class CustomerController {
@@ -89,5 +96,32 @@ public class CustomerController {
         } else {
             return "register/verify_failed";
         }
+    }
+
+    @GetMapping("/account_details")
+    public String viewAccountDetails(Model model, HttpServletRequest request) {
+        String email = getEmailFromAuthenticatedCustomer(request);
+        Optional<Customer> customerOptional = customerService.getCustomerByEmail(email);
+        if (customerOptional.isPresent()) {
+            Customer customer = customerOptional.get();
+            model.addAttribute("customer", customer);
+            model.addAttribute("countries", customerService.listAllCountries());
+        }
+        return "customer/account_form";
+    }
+
+    private String getEmailFromAuthenticatedCustomer(HttpServletRequest request) {
+        Principal principal = request.getUserPrincipal();
+        String customerEmail = null;
+
+        if (principal instanceof UsernamePasswordAuthenticationToken || principal instanceof RememberMeAuthenticationToken) {
+            customerEmail = principal.getName();
+        } else if (principal instanceof OAuth2AuthenticationToken) {
+            OAuth2AuthenticationToken oAuth2Token = (OAuth2AuthenticationToken) principal;
+            CustomerOAuth2User oAuth2User = (CustomerOAuth2User)oAuth2Token.getPrincipal();
+            customerEmail = oAuth2User.getEmail();
+        }
+
+        return customerEmail;
     }
 }

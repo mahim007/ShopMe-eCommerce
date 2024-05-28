@@ -101,7 +101,7 @@ public class CustomerService {
             customer.setLastName("");
         } else {
             customer.setFirstName(nameArray[0]);
-            customer.setLastName(name.replaceFirst(nameArray[0], ""));
+            customer.setLastName(name.replaceFirst(nameArray[0], "").trim());
         }
     }
 }
