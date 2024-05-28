@@ -38,22 +38,24 @@
                                    required minlength="2" maxlength="45" />
                         </div>
                     </div>
-                    <div class="row mb-3">
-                        <label class="col-form-label col-sm-3">Password</label>
-                        <div class="col-sm-9">
-                            <input class="form-control" type="password" th:field="*{password}"
-                                   required minlength="6" maxlength="15"
-                                   oninput="checkPasswordMatch(document.getElementById('confirmPassword'))"
-                            />
+                    <th:block th:if="${customer.authenticationType.name() == 'DATABASE'}">
+                        <div class="row mb-3">
+                            <label class="col-form-label col-sm-3">Password</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" type="password" th:field="*{password}"
+                                       minlength="6" maxlength="15"
+                                       oninput="checkPasswordMatch(document.getElementById('confirmPassword'))"
+                                />
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label class="col-form-label col-sm-3">Retype Password</label>
-                        <div class="col-sm-9">
-                            <input class="form-control" type="password" id="confirmPassword"
-                                   required minlength="6" maxlength="15" oninput="checkPasswordMatch(this)" />
+                        <div class="row mb-3">
+                            <label class="col-form-label col-sm-3">Retype Password</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" type="password" id="confirmPassword"
+                                       minlength="6" maxlength="15" oninput="checkPasswordMatch(this)" />
+                            </div>
                         </div>
-                    </div>
+                    </th:block>
                     <div class="row mb-3">
                         <label class="col-form-label col-sm-3">Phone Number</label>
                         <div class="col-sm-9">
