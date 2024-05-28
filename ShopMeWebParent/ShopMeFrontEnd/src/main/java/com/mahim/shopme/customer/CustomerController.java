@@ -3,6 +3,7 @@ package com.mahim.shopme.customer;
 import com.mahim.shopme.common.entity.Country;
 import com.mahim.shopme.common.entity.Customer;
 import com.mahim.shopme.oauth.CustomerOAuth2User;
+import com.mahim.shopme.security.CustomerUserDetails;
 import com.mahim.shopme.setting.EmailSettingBag;
 import com.mahim.shopme.setting.SettingService;
 import com.mahim.shopme.utils.EmailUtils;
@@ -11,13 +12,13 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.RememberMeAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -123,5 +124,29 @@ public class CustomerController {
         }
 
         return customerEmail;
+    }
+
+    @PostMapping("/update_account_details")
+    public String updateAccountDetails(@ModelAttribute("customer") Customer customer, HttpServletRequest request, RedirectAttributes ra) {
+        customerService.update(customer);
+        ra.addFlashAttribute("message", "Your account details have been updated");
+        updateNameForAuthenticatedCustomer(customer, request);
+        return "redirect:/account_details";
+    }
+
+    private void updateNameForAuthenticatedCustomer(Customer customer, HttpServletRequest request) {
+        Principal principal = request.getUserPrincipal();
+        String fullName = customer.getFirstName() + " " + customer.getLastName();
+
+        if (principal instanceof UsernamePasswordAuthenticationToken || principal instanceof RememberMeAuthenticationToken) {
+            CustomerUserDetails userDetails = (CustomerUserDetails) principal;
+            Customer authenticatedCustomer = userDetails.getCustomer();
+            authenticatedCustomer.setFirstName(customer.getFirstName());
+            authenticatedCustomer.setLastName(customer.getLastName());
+        } else if (principal instanceof OAuth2AuthenticationToken) {
+            OAuth2AuthenticationToken oAuth2Token = (OAuth2AuthenticationToken) principal;
+            CustomerOAuth2User oAuth2User = (CustomerOAuth2User)oAuth2Token.getPrincipal();
+            oAuth2User.setFullName(fullName);
+        }
     }
 }

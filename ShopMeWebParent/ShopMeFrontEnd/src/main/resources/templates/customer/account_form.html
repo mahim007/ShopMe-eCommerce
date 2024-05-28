@@ -9,8 +9,14 @@
             <h2>Your Account Details</h2>
         </div>
         <div class="container">
-            <form th:action="@{/create_customer}" method="post" th:object="${customer}">
+            <form th:action="@{/update_account_details}" method="post" th:object="${customer}">
                 <input type="hidden" th:field="*{id}">
+                <div th:if="${message != null}" class="alert alert-success text-center">
+                    [[${message}]]
+                </div>
+                <div th:if="${exceptionMessage != null}" class="alert alert-danger text-center">
+                    [[${exceptionMessage}]]
+                </div>
                 <div class="border border-secondary rounded p-3">
                     <div class="row mb-3">
                         <label class="col-form-label col-sm-3">Authentication Type</label>
@@ -110,7 +116,7 @@
                         </div>
                     </div>
                     <div class="text-center mb-3">
-                        <input type="submit" value="Create Account" class="btn btn-primary">
+                        <input type="submit" value="Update Account" class="btn btn-primary">
                     </div>
                 </div>
             </form>
