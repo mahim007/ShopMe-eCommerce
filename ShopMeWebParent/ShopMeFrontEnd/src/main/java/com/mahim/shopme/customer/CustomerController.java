@@ -137,9 +137,10 @@ public class CustomerController {
     private void updateNameForAuthenticatedCustomer(Customer customer, HttpServletRequest request) {
         Principal principal = request.getUserPrincipal();
         String fullName = customer.getFirstName() + " " + customer.getLastName();
+        getCustomerUserDetails(principal);
 
         if (principal instanceof UsernamePasswordAuthenticationToken || principal instanceof RememberMeAuthenticationToken) {
-            CustomerUserDetails userDetails = (CustomerUserDetails) principal;
+            CustomerUserDetails userDetails = getCustomerUserDetails(principal);
             Customer authenticatedCustomer = userDetails.getCustomer();
             authenticatedCustomer.setFirstName(customer.getFirstName());
             authenticatedCustomer.setLastName(customer.getLastName());
@@ -148,5 +149,19 @@ public class CustomerController {
             CustomerOAuth2User oAuth2User = (CustomerOAuth2User)oAuth2Token.getPrincipal();
             oAuth2User.setFullName(fullName);
         }
+    }
+
+    private CustomerUserDetails getCustomerUserDetails(Principal principal) {
+        CustomerUserDetails customerUserDetails = null;
+
+        if (principal instanceof UsernamePasswordAuthenticationToken) {
+            UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+            customerUserDetails = (CustomerUserDetails) authenticationToken.getPrincipal();
+        } else if (principal instanceof RememberMeAuthenticationToken) {
+            RememberMeAuthenticationToken authenticationToken = (RememberMeAuthenticationToken) principal;
+            customerUserDetails = (CustomerUserDetails) authenticationToken.getPrincipal();
+        }
+
+        return customerUserDetails;
     }
 }

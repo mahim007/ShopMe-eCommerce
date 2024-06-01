@@ -28,7 +28,10 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
 
         CustomerOAuth2User oAuth2User = (CustomerOAuth2User) authentication.getPrincipal();
         Optional<Customer> customerByEmail = customerService.getCustomerByEmail(oAuth2User.getEmail());
-        customerByEmail.ifPresent(customer -> customerService.updateAuthentication(customer, getAuthenticationType(oAuth2User.getClientName())));
+        customerByEmail.ifPresent(customer -> {
+            customerService.updateAuthentication(customer, getAuthenticationType(oAuth2User.getClientName()));
+            oAuth2User.setFullName(customer.getFullName());
+        });
 
         if (customerByEmail.isEmpty()) {
             String countryCode = request.getLocale().getCountry();
