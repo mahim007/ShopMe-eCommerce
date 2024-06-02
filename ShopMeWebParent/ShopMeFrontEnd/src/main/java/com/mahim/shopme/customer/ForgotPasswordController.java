@@ -1,5 +1,6 @@
 package com.mahim.shopme.customer;
 
+import com.mahim.shopme.common.entity.Customer;
 import com.mahim.shopme.common.exception.CustomerNotFoundException;
 import com.mahim.shopme.setting.EmailSettingBag;
 import com.mahim.shopme.setting.SettingService;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -67,5 +69,16 @@ public class ForgotPasswordController {
         mimeMessageHelper.setText(emailContent, true);
 
         mailSender.send(mimeMessage);
+    }
+
+    @GetMapping("/reset_password")
+    public String showResetPasswordForm(@RequestParam("token") String token, Model model) {
+        Customer customer = customerService.getByResetPasswordToken(token);
+        if (customer != null) {
+            model.addAttribute("token", token);
+        } else {
+            model.addAttribute("exceptionMessage", "Invalid Token.");
+        }
+        return "customer/reset_password_form";
     }
 }

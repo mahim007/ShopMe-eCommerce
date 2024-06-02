@@ -140,4 +140,8 @@ public class CustomerService {
             throw new CustomerNotFoundException("Could not find any customer with the email : " + email);
         }
     }
+
+    public Customer getByResetPasswordToken(String token) {
+        return customerRepository.findByResetPasswordToken(token);
+    }
 }
