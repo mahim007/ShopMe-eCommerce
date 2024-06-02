@@ -82,11 +82,6 @@ public class CustomerController {
         mimeMessageHelper.setText(emailContent, true);
 
         mailSender.send(mimeMessage);
-
-        System.out.println("Username " + customer.getFullName());
-        System.out.println("to address " + toAddress);
-        System.out.println("from address " + emailSettings.getFromAddress());
-        System.out.println("verification url: " + verifyURL);
     }
 
     @GetMapping("/verify")

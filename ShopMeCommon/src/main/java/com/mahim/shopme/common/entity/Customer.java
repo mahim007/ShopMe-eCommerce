@@ -65,6 +65,9 @@ public class Customer {
     @Column(name = "verification_code", length = 64)
     private String verificationCode;
 
+    @Column(name = "reset_password_token", length = 30, nullable = true)
+    private String resetPasswordToken;
+
     public String getFullName() {
         return firstName + " " + lastName;
     }

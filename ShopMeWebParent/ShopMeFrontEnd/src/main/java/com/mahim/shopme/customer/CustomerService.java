@@ -3,6 +3,7 @@ package com.mahim.shopme.customer;
 import com.mahim.shopme.common.entity.Country;
 import com.mahim.shopme.common.entity.Customer;
 import com.mahim.shopme.common.enums.AuthenticationType;
+import com.mahim.shopme.common.exception.CustomerNotFoundException;
 import com.mahim.shopme.setting.CountryRepository;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -123,7 +124,20 @@ public class CustomerService {
         customerInForm.setCreatedTime(customerInDB.getCreatedTime());
         customerInForm.setVerificationCode(customerInDB.getVerificationCode());
         customerInForm.setAuthenticationType(customerInDB.getAuthenticationType());
+        customerInForm.setResetPasswordToken(customerInDB.getResetPasswordToken());
 
         customerRepository.save(customerInForm);
+    }
+
+    public String updateResetPasswordToken(String email) throws CustomerNotFoundException {
+        Customer customer = customerRepository.findByEmail(email);
+        if (customer != null && customer.isEnabled()) {
+            String token = RandomString.make(30);
+            customer.setResetPasswordToken(token);
+            customerRepository.save(customer);
+            return token;
+        } else {
+            throw new CustomerNotFoundException("Could not find any customer with the email : " + email);
+        }
     }
 }
