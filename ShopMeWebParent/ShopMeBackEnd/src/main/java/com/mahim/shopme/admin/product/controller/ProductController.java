@@ -166,10 +166,17 @@ public class ProductController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editProduct(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+    public String editProduct(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes,
+                              @AuthenticationPrincipal ShopmeUserDetails loggedInUser) {
         try {
             Product productById = productService.findProductById(id);
             List<Brand> brands = brandService.listAllSorted();
+            boolean isReadOnlyForSalesPerson = false;
+
+            if (!loggedInUser.hasRole("Admin") && !loggedInUser.hasRole("Editor")
+                    && loggedInUser.hasRole("Salesperson")) {
+                isReadOnlyForSalesPerson = true;
+            }
 
             int numOfExtraImages = productById.getImages().size();
             int numOfDetailItems = productById.getDetails().size();
@@ -185,6 +192,7 @@ public class ProductController {
             model.addAttribute("categories", categories);
             model.addAttribute("numOfExtraImages", numOfExtraImages);
             model.addAttribute("numOfDetailItems", numOfDetailItems);
+            model.addAttribute("isReadOnlyForSalesPerson", isReadOnlyForSalesPerson);
             model.addAttribute("pageTitle", "Edit Product (ID: " + id + " )");
         } catch (ProductNotFoundException e) {
             redirectAttributes.addFlashAttribute("exceptionMessage", "Product with id: " + id + " not found.");
