@@ -144,4 +144,16 @@ public class CustomerService {
     public Customer getByResetPasswordToken(String token) {
         return customerRepository.findByResetPasswordToken(token);
     }
+
+    public void updatePassword(String token, String password) throws CustomerNotFoundException {
+        Customer customer = customerRepository.findByResetPasswordToken(token);
+        if (customer == null) {
+            throw new CustomerNotFoundException("No customer found: invalid token");
+        }
+
+        customer.setPassword(password);
+        encodePassword(customer);
+        customer.setResetPasswordToken(null);
+        customerRepository.save(customer);
+    }
 }
