@@ -28,6 +28,8 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
+import static com.mahim.shopme.utils.EmailUtils.getEmailFromAuthenticatedCustomer;
+
 @Controller
 public class CustomerController {
 
@@ -106,20 +108,7 @@ public class CustomerController {
         return "customer/account_form";
     }
 
-    private String getEmailFromAuthenticatedCustomer(HttpServletRequest request) {
-        Principal principal = request.getUserPrincipal();
-        String customerEmail = null;
 
-        if (principal instanceof UsernamePasswordAuthenticationToken || principal instanceof RememberMeAuthenticationToken) {
-            customerEmail = principal.getName();
-        } else if (principal instanceof OAuth2AuthenticationToken) {
-            OAuth2AuthenticationToken oAuth2Token = (OAuth2AuthenticationToken) principal;
-            CustomerOAuth2User oAuth2User = (CustomerOAuth2User)oAuth2Token.getPrincipal();
-            customerEmail = oAuth2User.getEmail();
-        }
-
-        return customerEmail;
-    }
 
     @PostMapping("/update_account_details")
     public String updateAccountDetails(@ModelAttribute("customer") Customer customer, HttpServletRequest request, RedirectAttributes ra) {
