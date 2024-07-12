@@ -5,10 +5,13 @@ import com.mahim.shopme.common.entity.Customer;
 import com.mahim.shopme.common.enums.AuthenticationType;
 import com.mahim.shopme.common.exception.CustomerNotFoundException;
 import com.mahim.shopme.setting.CountryRepository;
+import com.mahim.shopme.shoppingcart.ShoppingCartRestController;
+import com.mahim.shopme.utils.EmailUtils;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
@@ -155,5 +158,19 @@ public class CustomerService {
         encodePassword(customer);
         customer.setResetPasswordToken(null);
         customerRepository.save(customer);
+    }
+
+    public Customer getAuthenticatedCustomer(HttpServletRequest request) throws CustomerNotFoundException {
+        String email = EmailUtils.getEmailFromAuthenticatedCustomer(request);
+        if (email == null) {
+            throw new CustomerNotFoundException("You must login to add this product to the cart!");
+        }
+
+        Optional<Customer> customerByEmail = getCustomerByEmail(email);
+        if (customerByEmail.isPresent()) {
+            return customerByEmail.get();
+        } else {
+            throw new CustomerNotFoundException("Customer not found for email: " + email);
+        }
     }
 }

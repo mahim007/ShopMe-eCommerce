@@ -5,6 +5,8 @@ import com.mahim.shopme.common.entity.Customer;
 import com.mahim.shopme.common.entity.Product;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ShoppingCartService {
 
@@ -34,5 +36,9 @@ public class ShoppingCartService {
 
         cartItemRepository.save(cartItem);
         return cartItem.getQuantity();
+    }
+
+    public List<CartItem> listCartItems(Customer customer) {
+        return cartItemRepository.findByCustomer(customer);
     }
 }

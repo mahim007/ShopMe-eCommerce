@@ -3,14 +3,12 @@ package com.mahim.shopme.shoppingcart;
 import com.mahim.shopme.common.entity.Customer;
 import com.mahim.shopme.common.exception.CustomerNotFoundException;
 import com.mahim.shopme.customer.CustomerService;
-import com.mahim.shopme.utils.EmailUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/cart")
@@ -29,7 +27,7 @@ public class ShoppingCartRestController {
                                    @PathVariable(name = "quantity") Integer quantity,
                                    HttpServletRequest request) {
         try {
-            Customer customer = getAuthenticatedCustomer(request);
+            Customer customer = customerService.getAuthenticatedCustomer(request);
             Integer added = shoppingCartService.addProductToCart(productId, quantity, customer);
             return added + " item" + (added <= 1 ? "" : "s") + " fo this product added to the cart.";
         } catch (CustomerNotFoundException | ShoppingCartException e) {
@@ -37,17 +35,4 @@ public class ShoppingCartRestController {
         }
     }
 
-    private Customer getAuthenticatedCustomer(HttpServletRequest request) throws CustomerNotFoundException {
-        String email = EmailUtils.getEmailFromAuthenticatedCustomer(request);
-        if (email == null) {
-            throw new CustomerNotFoundException("You must login to add this product to the cart!");
-        }
-
-        Optional<Customer> customerByEmail = customerService.getCustomerByEmail(email);
-        if (customerByEmail.isPresent()) {
-            return customerByEmail.get();
-        } else {
-            throw new CustomerNotFoundException("Customer not found for email: " + email);
-        }
-    }
 }
