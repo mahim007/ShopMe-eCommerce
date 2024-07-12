@@ -14,11 +14,16 @@ public class ShoppingCartService {
         this.cartItemRepository = cartItemRepository;
     }
 
-    public Integer addProductToCart(Integer productId, Integer quantity, Customer customer) {
+    public Integer addProductToCart(Integer productId, Integer quantity, Customer customer) throws ShoppingCartException {
         Product product = new Product(productId);
         CartItem cartItem = cartItemRepository.findByCustomerAndProduct(customer, product);
 
         if (cartItem != null) {
+            if ((cartItem.getQuantity() + quantity) > 5) {
+                throw new ShoppingCartException("Could not add " + quantity + " items, " +
+                        "because there's already " + cartItem.getQuantity() + " items in your cart. " +
+                        "Maximum allowed quantity is 5.");
+            }
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
         } else {
             cartItem = new CartItem();
@@ -28,6 +33,6 @@ public class ShoppingCartService {
         }
 
         cartItemRepository.save(cartItem);
-        return quantity;
+        return cartItem.getQuantity();
     }
 }
