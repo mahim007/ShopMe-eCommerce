@@ -32,7 +32,13 @@ public class ShoppingCartController {
             Customer customer = customerService.getAuthenticatedCustomer(request);
             List<CartItem> cartItems = shoppingCartService.listCartItems(customer);
 
+            double total = 0;
+            for (CartItem cartItem : cartItems) {
+                total += cartItem.getQuantity() * cartItem.getProduct().getDiscountPrice();
+            }
+
             model.addAttribute("cartItems", cartItems);
+            model.addAttribute("estimatedTotal", total);
         } catch (CustomerNotFoundException e) {
             ra.addFlashAttribute("exceptionMessage", "Customer not found");
             model.addAttribute("cartItems", Collections.EMPTY_LIST);

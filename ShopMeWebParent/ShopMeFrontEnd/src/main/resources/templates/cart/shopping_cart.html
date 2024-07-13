@@ -14,20 +14,53 @@
          [[${exceptionMessage}]]
       </div>
    </div>
-   <div class="row">
-      <div class="col">
+   <div class="row m-1">
+      <div class="col-sm-8">
          <th:block th:each="item, status : ${cartItems}">
-            <div class="row border rounded">
-               <div class="col-1">
+            <div class="row border rounded p-1" th:with="product = ${item.product}">
+               <div class="col-1 col-sm-1">
                   <div>[[${status.count}]]</div>
+                  <div>
+                     <a class="fas fa-trash" href=""></a>
+                  </div>
                </div>
-               <div></div>
-               <div class="col-3">
-                  <img th:src="@{${item.main}}"/>
+               <div class="col-3 col-sm-3">
+                  <img th:src="@{${item.product.mainImagePath}}" class="img-fluid"/>
+               </div>
+               <div class="col-6 col-sm-6">
+                  <div>
+                     <a th:href="@{'/p/' + ${item.product.alias}}" target="_blank" th:title="${product.name}">
+                        <b>[[${item.product.shortName}]]</b>
+                     </a>
+                  </div>
+                  <th:block th:replace="cart/quantity_control::content(${item.quantity}, ${product.id})"></th:block>
+                  <div>
+                     <span>X&nbsp;</span>
+                     <th:block th:replace="fragments/product_fragment :: simple_product_price('tag')"></th:block>
+                  </div>
+                  <div>
+                     <span>=&nbsp;</span>
+                     <th:block th:replace="fragments/product_fragment :: simple_price(${item.subTotal})"></th:block>
+                  </div>
                </div>
             </div>
+            <div class="row m-1">&nbsp;</div>
          </th:block>
       </div>
+      <div class="col-sm-4" th:unless="${#lists.isEmpty(cartItems)}">
+         <div>
+            <span class="h3">Estimated Total:</span>
+         </div>
+         <div class="mt-2">
+            <th:block th:replace="fragments/product_fragment :: simple_price(${estimatedTotal})"></th:block>
+         </div>
+         <div class="mt-2">
+            <button class="btn btn-danger p-3 mt-2">Check Out</button>
+         </div>
+      </div>
+   </div>
+   <div class="text-center" th:if="${#lists.isEmpty(cartItems)}">
+      <h3>You have not chosen any products yet.</h3>
    </div>
    <th:block th:replace="fragments/navigation :: footer_nav"></th:block>
 </div>
