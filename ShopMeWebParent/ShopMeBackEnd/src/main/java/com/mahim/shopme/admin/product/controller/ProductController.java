@@ -76,11 +76,18 @@ public class ProductController {
     }
 
     @GetMapping("/new")
-    public String newProduct(Model model) {
+    public String newProduct(Model model, @AuthenticationPrincipal ShopmeUserDetails loggedInUser) {
         List<Brand> brands = brandService.listAllSorted();
         Product product = new Product();
         product.setEnabled(true);
         product.setInStock(true);
+
+        boolean isReadOnlyForSalesPerson = false;
+
+        if (!loggedInUser.hasRole("Admin") && !loggedInUser.hasRole("Editor")
+                && loggedInUser.hasRole("Salesperson")) {
+            isReadOnlyForSalesPerson = true;
+        }
 
         model.addAttribute("product", product);
         model.addAttribute("brands", brands);
@@ -88,6 +95,7 @@ public class ProductController {
         model.addAttribute("numOfExtraImages", 0);
         model.addAttribute("numOfDetailItems", 0);
         model.addAttribute("pageTitle", "Create New Product");
+        model.addAttribute("isReadOnlyForSalesPerson", isReadOnlyForSalesPerson);
         return "products/product_form";
     }
 
