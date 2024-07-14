@@ -16,11 +16,9 @@ function addToCart() {
         }
     }).then(response => response.text())
         .then(data => {
-            console.log(data);
             showModalDialog("Shopping Cart", data);
         })
         .catch(err => {
-            console.log(err);
             showModalDialog("Shopping Cart", err);
         });
 }

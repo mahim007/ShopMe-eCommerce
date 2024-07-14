@@ -38,7 +38,7 @@
                      <span>X&nbsp;</span>
                      <th:block th:replace="fragments/product_fragment :: simple_product_price('tag')"></th:block>
                   </div>
-                  <div>
+                  <div th:id="'subtotal-' + ${product.id}" class="subtotal">
                      <span>=&nbsp;</span>
                      <th:block th:replace="fragments/product_fragment :: simple_price(${item.subTotal})"></th:block>
                   </div>
@@ -51,7 +51,7 @@
          <div>
             <span class="h3">Estimated Total:</span>
          </div>
-         <div class="mt-2">
+         <div class="mt-2" id="estimatedTotal">
             <th:block th:replace="fragments/product_fragment :: simple_price(${estimatedTotal})"></th:block>
          </div>
          <div class="mt-2">
@@ -63,6 +63,14 @@
       <h3>You have not chosen any products yet.</h3>
    </div>
    <th:block th:replace="fragments/navigation :: footer_nav"></th:block>
+   <th:block th:replace="fragments/modal :: shopmeModal"></th:block>
 </div>
+<script type="text/javascript">
+   const contextPath = "[[@{/}]]";
+   const csrfHeaderName = "[[${_csrf.headerName}]]";
+   const csrfHeaderValue = "[[${_csrf.token}]]";
+</script>
+<script type="text/javascript" th:src="@{/js/common_modal.js}"></script>
+<script type="text/javascript" th:src="@{/js/shopping_cart/shopping_cart.js}"></script>
 </body>
 </html>
