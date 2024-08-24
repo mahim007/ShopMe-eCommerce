@@ -2,11 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <th:block th:replace="fragments/page_structure :: page_header('Welcome to Shopme')"></th:block>
 <body>
-    <div class="container-fluid">
+    <div class="container">
         <th:block th:replace="fragments/navigation :: header_nav"></th:block>
         <th:block th:replace="fragments/navigation :: search_nav"></th:block>
-        <div>
-            <h1>Shopping by Categories</h1>
+        <div class="hero-title">
+            <h2>Shopping by Categories</h2>
         </div>
         <div class="row m-4">
             <th:block th:each="cat : ${categories}">

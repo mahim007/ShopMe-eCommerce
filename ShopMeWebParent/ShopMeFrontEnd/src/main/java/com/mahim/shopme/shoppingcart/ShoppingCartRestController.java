@@ -3,10 +3,7 @@ package com.mahim.shopme.shoppingcart;
 import com.mahim.shopme.common.entity.Customer;
 import com.mahim.shopme.common.exception.CustomerNotFoundException;
 import com.mahim.shopme.customer.CustomerService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -45,11 +42,21 @@ public class ShoppingCartRestController {
             return String.valueOf(subTotal);
         } catch (CustomerNotFoundException e) {
             return "You must login to change quantity of product.";
-        } catch (ShoppingCartException e) {
-            return e.getMessage();
-        } catch (RuntimeException e) {
+        } catch (ShoppingCartException | RuntimeException e) {
             return "Error while updating quantity of product.";
         }
     }
 
+    @DeleteMapping("/remove/{productId}")
+    public String removeProduct(@PathVariable(name = "productId") Integer productId, HttpServletRequest request) {
+        try {
+            Customer customer = customerService.getAuthenticatedCustomer(request);
+            shoppingCartService.removeProduct(productId, customer);
+            return "Removed product from shopping cart.";
+        } catch (CustomerNotFoundException e) {
+            return "You must login to remove product.";
+        } catch (ShoppingCartException e) {
+            return "Error while updating quantity of product.";
+        }
+    }
 }

@@ -8,6 +8,11 @@ $(document).ready(function () {
         e.preventDefault();
         increaseQuantity($(this));
     });
+
+    $(".link-remove").on("click", function (e) {
+        e.preventDefault();
+        removeProduct($(this))
+    });
 });
 
 function increaseQuantity(link) {
@@ -71,4 +76,22 @@ function updateTotal() {
     $("#estimatedTotal").data('number', total);
     let formattedTotal = $.number(total, 2, '.', ',');
     $("#estimatedTotal").find("span.h4").text(formattedTotal);
+}
+
+function removeProduct(link) {
+    let url = link.attr("href");
+    fetch(url, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            [csrfHeaderName]: csrfHeaderValue
+        }
+    })
+        .then(response => response.text())
+        .then(data => {
+            console.log("success: ", data);
+        })
+        .catch(err => {
+            showModalDialog("Shopping Cart", err);
+        });
 }

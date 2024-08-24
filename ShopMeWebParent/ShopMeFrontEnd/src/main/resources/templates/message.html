@@ -2,11 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <th:block th:replace="fragments/page_structure :: page_header(${pageTitle})"></th:block>
 <body>
-    <div class="container-fluid">
+    <div class="container">
         <th:block th:replace="fragments/navigation :: header_nav"></th:block>
-        <div class="row m-4 text-center">
+        <div class="hero-title">
             <div th:if="${title != null}">
-                <h3>[[${title}]]</h3>
+                <h2>[[${title}]]</h2>
             </div>
             <div th:if="${message != null}" class="alert alert-success">
                 [[${message}]]

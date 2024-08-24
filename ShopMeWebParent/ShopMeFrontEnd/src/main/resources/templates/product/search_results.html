@@ -2,10 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <th:block th:replace="fragments/page_structure :: page_header(${pageTitle})"></th:block>
 <body>
-    <div class="container-fluid">
+    <div class="container">
         <th:block th:replace="fragments/navigation :: header_nav"></th:block>
         <th:block th:replace="fragments/navigation :: search_nav"></th:block>
-        <div th:if="${total > 0}">
+        <div class="hero-title" th:if="${total > 0}">
             <h2>Search Results for '[[${keyword}]]'</h2>
         </div>
         <div class="row m-4">

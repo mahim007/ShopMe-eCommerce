@@ -54,4 +54,9 @@ public class ShoppingCartService {
         return productOptional.map(product -> product.getDiscountPrice() * quantity)
                 .orElseThrow(() -> new ShoppingCartException("Product with id " + productId + " not found"));
     }
+
+    @Transactional
+    public void removeProduct(Integer productId, Customer customer) throws ShoppingCartException {
+        cartItemRepository.deleteByCustomerAndProduct(customer.getId(), productId);
+    }
 }

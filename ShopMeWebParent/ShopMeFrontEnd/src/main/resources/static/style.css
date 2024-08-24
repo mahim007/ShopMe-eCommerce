@@ -1,0 +1,33 @@
+*.icon-white { color: white }
+*.icon-silver { color: silver }
+*.icon-green { color: green }
+*.icon-blue { color: blue }
+*.icon-dark { color: gray }
+*.icon-lightblue { color: #45a6d0 }
+*.icon-danger { color: #c72828 }
+
+@media (min-width: 1366px) {
+    .container {
+        max-width: 1320px;
+        background: white;
+    }
+    body {
+        background: #f2f4f8;
+    }
+}
+
+@media (min-width: 1600px) {
+    .container {
+        max-width: 1560px;
+        background: white;
+    }
+    body {
+        background: #f2f4f8;
+    }
+}
+
+.hero-title {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 25px;
+}
