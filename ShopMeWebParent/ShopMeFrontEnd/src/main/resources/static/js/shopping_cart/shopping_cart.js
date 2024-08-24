@@ -45,7 +45,8 @@ function updateQuantity(productId, quantity) {
             "Content-Type": "application/json",
             [csrfHeaderName]: csrfHeaderValue
         }
-    }).then(response => response.text())
+    })
+        .then(response => response.text())
         .then(data => {
             updateSubTotal(productId, data);
             updateTotal();
@@ -56,16 +57,18 @@ function updateQuantity(productId, quantity) {
 }
 
 function updateSubTotal(productId, updatedSubtotal) {
-    const formattedSubTotal = parseFloat(updatedSubtotal).toFixed(2);
+    const formattedSubTotal = $.number(updatedSubtotal, 2);
+    $("#subtotal-" + productId).data('number', updatedSubtotal);
     $("#subtotal-" + productId).find("span.h4").text(formattedSubTotal);
 }
 
 function updateTotal() {
     let total = 0.0;
     $("div.subtotal").each((index, item) => {
-        console.log($(item).find("span.h4").text() + " -> " + parseFloat($(item).find("span.h4").text()));
-        total += parseFloat($(item).find("span.h4").text());
+        total += parseFloat($(item).data('number'));
     });
 
-    $("#estimatedTotal").find("span.h4").text(total.toFixed(2));
+    $("#estimatedTotal").data('number', total);
+    let formattedTotal = $.number(total, 2, '.', ',');
+    $("#estimatedTotal").find("span.h4").text(formattedTotal);
 }
