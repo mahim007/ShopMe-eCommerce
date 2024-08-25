@@ -1,3 +1,6 @@
+const decimalSeparator = decimalPointType === 'COMMA' ? ',' : '.';
+const thousandsSeparator = thousandsPointType === 'COMMA' ? ',' : '.';
+
 $(document).ready(function () {
     $(".link-minus").on("click", function (e) {
         e.preventDefault();
@@ -62,9 +65,8 @@ function updateQuantity(productId, quantity) {
 }
 
 function updateSubTotal(productId, updatedSubtotal) {
-    const formattedSubTotal = $.number(updatedSubtotal, 2);
     $("#subtotal-" + productId).data('number', updatedSubtotal);
-    $("#subtotal-" + productId).find("span.h4").text(formattedSubTotal);
+    $("#subtotal-" + productId).find("span.h4").text(formatCurrency(updatedSubtotal));
 }
 
 function showEmptyShoppingCart() {
@@ -87,8 +89,7 @@ function updateTotal() {
     }
 
     $("#estimatedTotal").data('number', total);
-    let formattedTotal = $.number(total, 2, '.', ',');
-    $("#estimatedTotal").find("span.h4").text(formattedTotal);
+    $("#estimatedTotal").find("span.h4").text(formatCurrency(total));
 }
 
 function removeProduct(link) {
@@ -121,4 +122,8 @@ function updateCountNumber() {
     $(".divCount").each((index, item) => {
         item.innerHTML = "" + (index + 1);
     });
+}
+
+function formatCurrency(amount) {
+    return $.number(amount, decimalDigits, decimalSeparator, thousandsSeparator);
 }
