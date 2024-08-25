@@ -65,8 +65,15 @@
 						</li>
 					</th:block>
 					<th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson')">
-						<li class="nav-item">
-							<a class="nav-link" th:href="@{/shipping}">Shipping</a>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
+							   aria-expanded="false" th:href="@{/shipping}">Shipping</a>
+							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<li sec:authorize="hasAnyAuthority('Admin', 'Salesperson')">
+									<a class="dropdown-item" th:href="@{/shipping/new}">Create New</a>
+								</li>
+								<li><a class="dropdown-item" th:href="@{/shipping}">View All</a></li>
+							</ul>
 						</li>
 					</th:block>
 					<th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson', 'Shipper')">
