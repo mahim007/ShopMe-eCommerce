@@ -5,7 +5,6 @@ import com.mahim.shopme.admin.brand.exception.BrandNotFoundRestException;
 import com.mahim.shopme.admin.brand.service.BrandService;
 import com.mahim.shopme.common.dto.CategoryDTO;
 import com.mahim.shopme.common.entity.Brand;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +20,8 @@ public class BrandRestController {
     }
 
     @PostMapping("/check_unique")
-    public String checkUnique(@Param("id") Integer id, @Param("name") String name) {
+    public String checkUnique(@RequestParam("id") Integer id,
+                              @RequestParam("name") String name) {
         return brandService.checkUnique(id, name);
     }
 
