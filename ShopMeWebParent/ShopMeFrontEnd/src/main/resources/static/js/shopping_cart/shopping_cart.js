@@ -67,11 +67,24 @@ function updateSubTotal(productId, updatedSubtotal) {
     $("#subtotal-" + productId).find("span.h4").text(formattedSubTotal);
 }
 
+function showEmptyShoppingCart() {
+    $("#sectionTotal").hide();
+    $("#emptyCartMsg").removeClass('d-none');
+}
+
 function updateTotal() {
     let total = 0.0;
+    let productCount = 0;
+
     $("div.subtotal").each((index, item) => {
         total += parseFloat($(item).data('number'));
+        productCount++;
     });
+
+    if (productCount === 0) {
+        showEmptyShoppingCart();
+        return;
+    }
 
     $("#estimatedTotal").data('number', total);
     let formattedTotal = $.number(total, 2, '.', ',');
@@ -89,9 +102,23 @@ function removeProduct(link) {
     })
         .then(response => response.text())
         .then(data => {
-            console.log("success: ", data);
+            removeProductHTML(link.attr("rowNumber"));
+            showModalDialog("Shopping Cart", data);
+            updateCountNumber();
+            updateTotal();
         })
         .catch(err => {
             showModalDialog("Shopping Cart", err);
         });
+}
+
+function removeProductHTML(rowNumber) {
+    $('#row' + rowNumber).remove();
+    $('#blankline' + rowNumber).remove();
+}
+
+function updateCountNumber() {
+    $(".divCount").each((index, item) => {
+        item.innerHTML = "" + (index + 1);
+    });
 }

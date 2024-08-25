@@ -48,15 +48,9 @@ public class ShoppingCartRestController {
     }
 
     @DeleteMapping("/remove/{productId}")
-    public String removeProduct(@PathVariable(name = "productId") Integer productId, HttpServletRequest request) {
-        try {
-            Customer customer = customerService.getAuthenticatedCustomer(request);
-            shoppingCartService.removeProduct(productId, customer);
-            return "Removed product from shopping cart.";
-        } catch (CustomerNotFoundException e) {
-            return "You must login to remove product.";
-        } catch (ShoppingCartException e) {
-            return "Error while updating quantity of product.";
-        }
+    public String removeProduct(@PathVariable(name = "productId") Integer productId, HttpServletRequest request) throws CustomerNotFoundException, ShoppingCartException {
+        Customer customer = customerService.getAuthenticatedCustomer(request);
+        shoppingCartService.removeProduct(productId, customer);
+        return "Removed product from shopping cart.";
     }
 }
