@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Controller
@@ -37,15 +39,21 @@ public class ShippingRateController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute("shippingRate") ShippingRate shippingRate, RedirectAttributes ra) {
+    public String save(ShippingRate shippingRate, RedirectAttributes ra) {
+        boolean isNew = shippingRate.getId() == null;
         ShippingRate saved = shippingRateService.save(shippingRate);
-        if (shippingRate.getId() == null) ra.addFlashAttribute("message", "New shipping rate added.");
-        else ra.addFlashAttribute("message", "Shipping rate updated.");
+
+        if (isNew) {
+            ra.addFlashAttribute("message", "New shipping rate added.");
+        } else {
+            ra.addFlashAttribute("message", "Shipping rate updated.");
+        }
+
         return getRedirectUrlForAffectedShippingRate(saved);
     }
 
     private String getRedirectUrlForAffectedShippingRate(ShippingRate shippingRate) {
-        return "redirect:/shipping/page/1?sortField=id&sortDir=asc&keyword=" + shippingRate.getCountry().getName() + " " + shippingRate.getState();
+        return "redirect:/shipping/page/1?sortField=id&sortDir=asc&keyword=" + URLEncoder.encode(shippingRate.getCountry().getName() + " " + shippingRate.getState(), StandardCharsets.UTF_8);
     }
 
     @GetMapping("/new")

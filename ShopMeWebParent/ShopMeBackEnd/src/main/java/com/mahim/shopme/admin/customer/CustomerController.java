@@ -13,8 +13,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
-import static com.mahim.shopme.admin.customer.CustomerService.CUSTOMERS_PER_PAGE;
-
 @Controller
 @RequestMapping("/customers")
 public class CustomerController {

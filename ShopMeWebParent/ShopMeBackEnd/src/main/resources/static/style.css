@@ -28,3 +28,11 @@
     div.less-details {display: none}
     .hideable-column {display: table-cell}
 }
+
+.alert-success {
+    margin-top: 1rem;
+}
+
+.alert-danger {
+    margin-top: 1rem;
+}
