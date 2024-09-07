@@ -1,7 +1,7 @@
 $(document).ready(function () {
     let userDefaultImage = $("#thumbnail").attr("src");
 
-    $("#cancelUserCreate").on("click", function () {
+    $("#cancelForm").on("click", function () {
         window.location = moduleURL;
     });
 

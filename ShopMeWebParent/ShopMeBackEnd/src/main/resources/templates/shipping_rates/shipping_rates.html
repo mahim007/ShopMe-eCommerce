@@ -47,12 +47,7 @@
                 <td th:id="'shipping-' + ${shippingRate.id} + '-state'" th:text="${shippingRate.state}"></td>
                 <td class="hideable-column" th:text="${shippingRate.rate}"></td>
                 <td class="hideable-column" th:text="${shippingRate.days}"></td>
-                <td>
-                    <a th:if="${shippingRate.codSupported == true}" th:href="@{${moduleURL} + '/' + ${shippingRate.id} + '/cod/' + ${true}}"><i
-                            class="fas fa-hand-holding-usd fa-2x icon-green"></i></a>
-                    <a th:if="${shippingRate.codSupported == false}" th:href="@{${moduleURL} + '/' + ${shippingRate.id} + '/cod/' + ${false}}"><i
-                            class="fas fa-hand-holding-usd fa-2x icon-dark"></i></a>
-                </td>
+                <th:block th:replace="shipping_rates/shipping_rates_cod_fragment::content('none')"  ></th:block>
                 <td>
                     <a th:href="@{${moduleURL} + '/edit/' + ${shippingRate.id}}"
                        title="Edit this Shipping rate"
@@ -77,13 +72,8 @@
                 <div th:id="'shipping-' + ${shippingRate.id} + '-country'">[[${shippingRate.country.name}]]</div>
                 <div th:id="'shipping-' + ${shippingRate.id} + '-state'">[[${shippingRate.state}]]</div>
                 <div class="mt-2">
-                    <th:block>
-                        <a th:if="${shippingRate.codSupported == true}" th:href="@{${moduleURL} + '/' + ${shippingRate.id} + '/cod/' + ${true}}"><i
-                                class="fas fa-hand-holding-usd fa-2x icon-green"></i></a>
-                        <a th:if="${shippingRate.codSupported == false}" th:href="@{${moduleURL} + '/' + ${shippingRate.id} + '/cod/' + ${false}}"><i
-                                class="fas fa-hand-holding-usd fa-2x icon-dark"></i></a>
-                        &nbsp;
-                    </th:block>
+                    <th:block th:replace="shipping_rates/shipping_rates_cod_fragment::content('tag')"  ></th:block>
+                    &nbsp;
                     <th:block>
                         <a th:href="@{${moduleURL} + '/edit/' + ${shippingRate.id}}"
                            title="Edit this shipping rate"
@@ -129,7 +119,7 @@
     });
 
     function clearFilter() {
-        window.location = "[[@{/shipping}]]";
+        window.location = "[[@{/shipping_rates}]]";
     }
 </script>
 <script th:src="@{/js/common.js}"></script>

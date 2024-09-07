@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<td th:fragment="content(removeTag)"  th:remove="${removeTag}">
+    <a th:if="${shippingRate.codSupported == true}" th:href="@{${moduleURL} + '/cod/' + ${shippingRate.id} + '/enabled/' + ${true}}"><i
+            class="fas fa-hand-holding-usd fa-2x icon-green"></i></a>
+    <a th:if="${shippingRate.codSupported == false}" th:href="@{${moduleURL} + '/cod/' + ${shippingRate.id} + '/enabled/' + ${false}}"><i
+            class="fas fa-hand-holding-usd fa-2x icon-dark"></i></a>
+</td>
+</body>
+</html>

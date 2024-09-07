@@ -9,7 +9,7 @@
     </div>
     <div class="container">
         <div class="border border-secondary rounded p-3">
-            <form th:action="@{/shipping/save}" method="post" th:object="${shippingRate}"
+            <form th:action="@{/shipping_rates/save}" method="post" th:object="${shippingRate}"
                   class="needs-validation"
                   onsubmit="return checkUnique(this)"
                   style="max-width: 1000px; margin: 0 auto">
@@ -54,7 +54,7 @@
                 </div>
                 <div class="text-center">
                     <input type="submit" value="Save" class="btn btn-primary m-3"/>
-                    <input type="button" value="Cancel" class="btn btn-secondary" id="cancelUserCreate"/>
+                    <input type="button" value="Cancel" class="btn btn-secondary" id="cancelForm"/>
                 </div>
             </form>
         </div>
@@ -64,12 +64,12 @@
 </div>
 <script type="text/javascript">
     const contextPath = "[[@{/}]]";
-    moduleURL = "[[@{/shipping}]]";
+    moduleURL = "[[@{/shipping_rates}]]";
     const csrfHeaderName = "[[${_csrf.headerName}]]";
     const csrfHeaderValue = "[[${_csrf.token}]]";
 
     function checkUnique(form) {
-        let url = "[[@{/shipping/check_unique}]]";
+        let url = "[[@{/shipping_rates/check_unique}]]";
         let shippingId = $("#id").val();
         let countryName = $("#country").val();
         let stateName = $("#state").val();

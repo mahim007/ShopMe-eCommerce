@@ -1,8 +1,8 @@
-package com.mahim.shopme.admin.shipping.controller;
+package com.mahim.shopme.admin.shippingrate.controller;
 
 import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
 import com.mahim.shopme.admin.paging.PagingAndSortingParam;
-import com.mahim.shopme.admin.shipping.service.ShippingRateService;
+import com.mahim.shopme.admin.shippingrate.service.ShippingRateService;
 import com.mahim.shopme.common.entity.Country;
 import com.mahim.shopme.common.entity.ShippingRate;
 import com.mahim.shopme.common.exception.ShippingRateNotFoundException;
@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Controller
-@RequestMapping("/shipping")
+@RequestMapping("/shipping_rates")
 public class ShippingRateController {
     private final ShippingRateService shippingRateService;
 
@@ -27,15 +27,15 @@ public class ShippingRateController {
 
     @GetMapping("")
     public String listAll() {
-        return "redirect:/shipping/page/1";
+        return "redirect:/shipping_rates/page/1";
     }
 
     @GetMapping("/page/{pageNo}")
     public String listByPage(@PathVariable("pageNo") int pageNo,
-                             @PagingAndSortingParam(listName = "shippingRates", moduleURL = "/shipping") PagingAndSortingHelper helper) {
+                             @PagingAndSortingParam(listName = "shippingRates", moduleURL = "/shipping_rates") PagingAndSortingHelper helper) {
         Page<ShippingRate> shippingRates = shippingRateService.listByKeyword(pageNo, helper);
         helper.updateModelAttributes(pageNo, shippingRates);
-        return "shipping/shipping_rates";
+        return "shipping_rates/shipping_rates";
     }
 
     @PostMapping("/save")
@@ -53,7 +53,7 @@ public class ShippingRateController {
     }
 
     private String getRedirectUrlForAffectedShippingRate(ShippingRate shippingRate) {
-        return "redirect:/shipping/page/1?sortField=id&sortDir=asc&keyword=" + URLEncoder.encode(shippingRate.getCountry().getName() + " " + shippingRate.getState(), StandardCharsets.UTF_8);
+        return "redirect:/shipping_rates/page/1?sortField=id&sortDir=asc&keyword=" + URLEncoder.encode(shippingRate.getCountry().getName() + " " + shippingRate.getState(), StandardCharsets.UTF_8);
     }
 
     @GetMapping("/new")
@@ -66,7 +66,7 @@ public class ShippingRateController {
         model.addAttribute("shippingRate", shippingRate);
         model.addAttribute("countries", countries);
         model.addAttribute("pageTitle", "Create new Shipping Rate");
-        return "shipping/shipping_rate_form";
+        return "shipping_rates/shipping_rate_form";
     }
 
     @GetMapping("/edit/{id}")
@@ -78,7 +78,7 @@ public class ShippingRateController {
             model.addAttribute("shippingRate", shippingRate);
             model.addAttribute("countries", countries);
             model.addAttribute("pageTitle", "Edit Shipping Rate (Id: " + id + " )");
-            return "shipping/shipping_rate_form";
+            return "shipping_rates/shipping_rate_form";
         } catch (ShippingRateNotFoundException ex) {
             ra.addFlashAttribute("exceptionMessage", ex.getMessage());
             return listAll();
@@ -98,7 +98,7 @@ public class ShippingRateController {
         return listAll();
     }
 
-    @GetMapping("/{id}/cod/{enabled}")
+    @GetMapping("cod/{id}/enabled/{enabled}")
     public String updateCODStatus(@PathVariable("id") Integer id,
                                   @PathVariable("enabled") boolean enabled,
                                   RedirectAttributes ra) {

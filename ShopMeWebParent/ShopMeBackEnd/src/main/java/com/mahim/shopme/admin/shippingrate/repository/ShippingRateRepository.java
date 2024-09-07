@@ -1,4 +1,4 @@
-package com.mahim.shopme.admin.shipping.repository;
+package com.mahim.shopme.admin.shippingrate.repository;
 
 import com.mahim.shopme.admin.paging.SearchRepository;
 import com.mahim.shopme.common.entity.ShippingRate;

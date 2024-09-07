@@ -1,8 +1,8 @@
-package com.mahim.shopme.admin.shipping.service;
+package com.mahim.shopme.admin.shippingrate.service;
 
 import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
 import com.mahim.shopme.admin.setting.country.CountryRepository;
-import com.mahim.shopme.admin.shipping.repository.ShippingRateRepository;
+import com.mahim.shopme.admin.shippingrate.repository.ShippingRateRepository;
 import com.mahim.shopme.common.entity.Country;
 import com.mahim.shopme.common.entity.ShippingRate;
 import com.mahim.shopme.common.exception.ShippingRateNotFoundException;
