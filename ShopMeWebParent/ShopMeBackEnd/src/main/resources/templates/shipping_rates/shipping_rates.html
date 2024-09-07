@@ -28,7 +28,8 @@
                     <th class="hideable-column">
                         <th:block th:replace="fragments/column_element::column_link('id', 'ID', 'tag')" />
                     </th>
-                    <th:block th:replace="fragments/column_element::column_link('country', 'Country', 'none')"/>
+<!--                    country.name because we want to sort the country by it's actual name, not country code-->
+                    <th:block th:replace="fragments/column_element::column_link('country.name', 'Country', 'none')"/>
                     <th:block th:replace="fragments/column_element::column_link('state', 'State', 'none')"/>
                     <th class="hideable-column">
                         <th:block th:replace="fragments/column_element::column_link('rate', 'Rate', 'tag')"/>
