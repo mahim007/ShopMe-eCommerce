@@ -8,7 +8,39 @@
     <div class="hero-title">
         <h2>Your Address Book</h2>
     </div>
+    <div class="row m-1">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col">
+                            <b>Your primary address</b>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    [[${customer.address}]]
+                </div>
+            </div>
+        </div>
 
+        <th:block th:each="address, status : ${addresses}">
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col">
+                                <b>Address [[${status.count}]]</b>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        [[${address}]]
+                    </div>
+                </div>
+            </div>
+        </th:block>
+    </div>
     <th:block th:replace="fragments/navigation :: footer_nav"></th:block>
 </div>
 </body>
