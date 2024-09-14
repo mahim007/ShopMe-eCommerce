@@ -116,6 +116,11 @@ public class CustomerController {
         customerService.update(customer);
         ra.addFlashAttribute("message", "Your account details have been updated");
         updateNameForAuthenticatedCustomer(customer, request);
+
+        String optionalRedirect = request.getParameter("redirect");
+        if (optionalRedirect != null && optionalRedirect.equals("address_book")) {
+            return "redirect:/address_book";
+        }
         return "redirect:/account_details";
     }
 

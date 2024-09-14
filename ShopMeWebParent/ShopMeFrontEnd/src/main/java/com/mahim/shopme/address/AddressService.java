@@ -65,9 +65,9 @@ public class AddressService {
         return addressRepository.save(addressToBeSaved);
     }
 
-    public void delete(Integer id ) throws AddressNotFoundException {
-        Address address = findById(id);
-        addressRepository.delete(address);
+    public void deleteByIdAndCustomer(Integer id, Customer customer) throws AddressNotFoundException {
+        Address address = findByIdAndCustomer(id, customer);
+        addressRepository.deleteByIdAndCustomer(address.getId(), customer);
     }
 
     public Address getAddress(Integer id) throws AddressNotFoundException {
@@ -83,15 +83,10 @@ public class AddressService {
         }
 
         return new CustomerAddressDTO(customer).getAddress();
-
     }
 
     public void setDefaultShippingAddress(Integer id, Customer customer) throws AddressNotFoundException {
-        List<Address> addresses = listAddressBook(customer);
-        for (Address address : addresses) {
-            addressRepository.setDefaultShippingAddress(address.getId(), false);
-        }
-
+        addressRepository.setNonDefaultShippingAddress(id, customer.getId());
         Optional<Address> optionalAddress = addressRepository.findByIdAndCustomer(id, customer);
         if (optionalAddress.isPresent()) {
             Address address = optionalAddress.get();

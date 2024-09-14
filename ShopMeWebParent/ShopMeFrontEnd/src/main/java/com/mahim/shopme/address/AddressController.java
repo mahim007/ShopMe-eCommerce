@@ -99,25 +99,32 @@ public class AddressController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteAddress(@PathVariable("id") Integer id, RedirectAttributes ra, Model model) {
+    public String deleteAddress(@PathVariable("id") Integer id, HttpServletRequest request, RedirectAttributes ra) {
         try {
-            addressService.delete(id);
-            model.addAttribute("moduleURL", moduleURL);
+            Customer customer = customerService.getAuthenticatedCustomer(request);
+            addressService.deleteByIdAndCustomer(id, customer);
+
             ra.addFlashAttribute("message", "Address deleted successfully");
         } catch (AddressNotFoundException e) {
-            ra.addFlashAttribute("exceptionMessage", "Address could not be deleted");
+            ra.addFlashAttribute("exceptionMessage", "Address not found for id " + id);
+        } catch (CustomerNotFoundException e) {
+            ra.addFlashAttribute("exceptionMessage", "Customer not logged in");
         }
 
         return "redirect:/address_book";
     }
 
-    @GetMapping("/update_default/{id}")
-    public String updateDefaultAddress(@PathVariable(name = "id") String id,HttpServletRequest request,  RedirectAttributes ra, Model model) {
+    @GetMapping("/default/{id}")
+    public String updateDefaultAddress(@PathVariable(name = "id") String id,HttpServletRequest request,  RedirectAttributes ra) {
         try {
             Customer customer = customerService.getAuthenticatedCustomer(request);
-            addressService.setDefaultShippingAddress(id.equals("primary") ? null : Integer.valueOf(id), customer);
-            model.addAttribute("moduleURL", moduleURL);
-            ra.addFlashAttribute("message", "Address with id: " + id + " set to default.");
+            addressService.setDefaultShippingAddress(id.equals("primary") ? Integer.valueOf(-1) : Integer.valueOf(id), customer);
+
+            if (id.equals("primary")) {
+                ra.addFlashAttribute("message", "Primary address set to default for shipping");
+            } else {
+                ra.addFlashAttribute("message", "Address with id: " + id + " set to default for shipping");
+            }
         } catch (AddressNotFoundException e) {
             ra.addFlashAttribute("exceptionMessage", "Address not found with id " + id);
         } catch (CustomerNotFoundException e) {
