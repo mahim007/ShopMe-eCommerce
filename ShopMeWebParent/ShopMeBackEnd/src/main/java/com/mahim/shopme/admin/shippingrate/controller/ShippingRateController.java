@@ -39,7 +39,7 @@ public class ShippingRateController {
     }
 
     @PostMapping("/save")
-    public String save(ShippingRate shippingRate, RedirectAttributes ra) {
+    public String save(ShippingRate shippingRate, RedirectAttributes ra) throws ShippingRateNotFoundException {
         boolean isNew = shippingRate.getId() == null;
         ShippingRate saved = shippingRateService.save(shippingRate);
 

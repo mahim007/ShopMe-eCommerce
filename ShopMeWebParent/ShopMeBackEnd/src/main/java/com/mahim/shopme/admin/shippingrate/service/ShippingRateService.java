@@ -32,12 +32,12 @@ public class ShippingRateService {
         return (Page<ShippingRate>) helper.listEntities(pageNum, SHIPPING_RATE_PER_PAGE, shippingRateRepository);
     }
 
-    public ShippingRate save(ShippingRate shippingRateInForm) {
+    public ShippingRate save(ShippingRate shippingRateInForm) throws ShippingRateNotFoundException {
         boolean isUpdating = shippingRateInForm.getId() != null;
         ShippingRate shippingRateToBeSaved;
 
         if (isUpdating) {
-            shippingRateToBeSaved = shippingRateRepository.findById(shippingRateInForm.getId()).get();
+            shippingRateToBeSaved = findById(shippingRateInForm.getId());
             shippingRateToBeSaved.setRate(shippingRateInForm.getRate());
             shippingRateToBeSaved.setDays(shippingRateInForm.getDays());
             shippingRateToBeSaved.setCodSupported(shippingRateInForm.isCodSupported());

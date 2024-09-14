@@ -104,6 +104,7 @@ public class CustomerController {
             Customer customer = customerOptional.get();
             model.addAttribute("customer", customer);
             model.addAttribute("countries", customerService.listAllCountries());
+            model.addAttribute("pageTitle", "Your Account Details");
         }
         return "customer/account_form";
     }

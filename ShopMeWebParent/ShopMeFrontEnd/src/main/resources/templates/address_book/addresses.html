@@ -7,14 +7,28 @@
     <th:block th:replace="fragments/navigation :: search_nav"></th:block>
     <div class="hero-title">
         <h2>Your Address Book</h2>
+        <h3><a th:href="@{${moduleURL} + '/new'}">Add New Address</a></h3>
+        <div th:if="${message != null}" class="alert alert-success text-center">
+            [[${message}]]
+        </div>
+        <div th:if="${exceptionMessage != null}" class="alert alert-danger text-center">
+            [[${exceptionMessage}]]
+        </div>
     </div>
     <div class="row m-1">
-        <div class="col-sm-6">
+        <div class="col-sm-6 mt-3">
             <div class="card" th:classappend="${usePrimaryAddressAsDefault ? 'bg-warning' : ''}">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col">
+                        <div class="col-10">
                             <b>Your primary address</b>
+                            <a th:if="${usePrimaryAddressAsDefault}" th:href="@{'#'}">[Default]</a>
+                            <a th:if="${!usePrimaryAddressAsDefault}" th:href="@{${moduleURL} + '/update_default/primary'}">[Set as Default]</a>
+                        </div>
+                        <div class="col-2 text-end">
+                            <a th:href="@{/account_details}" title="Edit address">
+                                <i class="fas fa-edit icon-lightblue"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -25,12 +39,26 @@
         </div>
 
         <th:block th:each="address, status : ${addresses}">
-            <div class="col-sm-6">
+            <div class="col-sm-6 mt-3">
                 <div class="card" th:classappend="${address.isDefaultForShipping() ? 'bg-warning' : ''}">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col">
+                            <div class="col-10">
                                 <b>Address [[${status.count}]]</b>
+                                <a th:if="${address.defaultForShipping}" th:href="@{'#'}">[Default]</a>
+                                <a th:if="${!address.defaultForShipping}" th:href="@{${moduleURL} + '/update_default/' + ${address.id}}">[Set as Default]</a>
+                            </div>
+                            <div class="col-2 text-end">
+                                <a th:href="@{${moduleURL} + '/edit/' +  ${address.id}}" title="Edit address">
+                                    <i class="fas fa-edit icon-lightblue"></i>
+                                </a>
+                                &nbsp;&nbsp;
+                                <a th:href="@{${moduleURL} + '/delete/' +  ${address.id}}"
+                                   class="address-delete"
+                                   title="Delete this address"
+                                >
+                                    <i class="fas fa-trash icon-danger"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -43,6 +71,21 @@
         <div>&nbsp;</div>
     </div>
     <th:block th:replace="fragments/navigation :: footer_nav"></th:block>
+    <th:block th:replace="fragments/modal :: confirmDeleteModal"></th:block>
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".address-delete").on("click", function (e) {
+            e.preventDefault();
+            let deleteUrl = $(e.currentTarget).attr("href");
+            let splitUrl = deleteUrl.split("/");
+            let id = splitUrl[splitUrl.length - 1];
+
+            $("#modalYesBtn").attr("href", deleteUrl);
+            showModalDialog("Delete Confirmation", "Are you sure to delete address <br> (ID: " + id + ")?");
+        });
+    });
+</script>
+<script type="text/javascript" th:src="@{/js/common_modal.js}"></script>
 </body>
 </html>
