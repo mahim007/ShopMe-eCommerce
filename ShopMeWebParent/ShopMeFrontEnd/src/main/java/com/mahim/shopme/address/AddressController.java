@@ -30,8 +30,18 @@ public class AddressController {
         try {
             Customer customer = customerService.getAuthenticatedCustomer(request);
             List<Address> addresses = addressService.listAddressBook(customer);
+
+            boolean usePrimaryAddressAsDefault = true;
+            for (Address address : addresses) {
+                if (address.isDefaultForShipping()) {
+                    usePrimaryAddressAsDefault = false;
+                    break;
+                }
+            }
+
             model.addAttribute("addresses", addresses);
             model.addAttribute("customer", customer);
+            model.addAttribute("usePrimaryAddressAsDefault", usePrimaryAddressAsDefault);
         } catch (CustomerNotFoundException e) {
             ra.addFlashAttribute("exceptionMessage", "Customer not found");
         }

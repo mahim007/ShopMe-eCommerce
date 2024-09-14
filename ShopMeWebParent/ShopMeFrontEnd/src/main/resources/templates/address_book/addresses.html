@@ -10,7 +10,7 @@
     </div>
     <div class="row m-1">
         <div class="col-sm-6">
-            <div class="card">
+            <div class="card" th:classappend="${usePrimaryAddressAsDefault ? 'bg-warning' : ''}">
                 <div class="card-header">
                     <div class="row">
                         <div class="col">
@@ -26,7 +26,7 @@
 
         <th:block th:each="address, status : ${addresses}">
             <div class="col-sm-6">
-                <div class="card">
+                <div class="card" th:classappend="${address.isDefaultForShipping() ? 'bg-warning' : ''}">
                     <div class="card-header">
                         <div class="row">
                             <div class="col">
@@ -40,6 +40,7 @@
                 </div>
             </div>
         </th:block>
+        <div>&nbsp;</div>
     </div>
     <th:block th:replace="fragments/navigation :: footer_nav"></th:block>
 </div>
