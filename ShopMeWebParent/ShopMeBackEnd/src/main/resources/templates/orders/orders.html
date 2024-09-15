@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/page_structure :: page_header('Orders - Shopme Admin')"></head>
+<body>
+<div class="container-fluid">
+    <div th:replace="fragments/navigation :: page_nav"></div>
+    <div>
+        <h2>Manage Orders</h2>
+        &nbsp;|&nbsp;
+        <a th:href="@{${moduleURL} + '/export/csv'}" class="fas fa-file-csv fa-2x icon-dark mr-2"></a>
+        &nbsp;|&nbsp;
+        <a th:href="@{${moduleURL} + '/export/excel'}" class="fas fa-file-excel fa-2x icon-dark mr-2"></a>
+        &nbsp;|&nbsp;
+        <a th:href="@{${moduleURL} + '/export/pdf'}" class="fas fa-file-pdf fa-2x icon-dark mr-2"></a>
+    </div>
+    <div th:if="${message != null}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
+    <div th:if="${exceptionMessage != null}" class="alert alert-danger text-center">
+        [[${exceptionMessage}]]
+    </div>
+    <div th:replace="fragments/search_form :: search_form"></div>
+    <div class="full-details">
+        <table class="table table-striped table-hover table-bordered text-center">
+            <thead class="table-dark">
+            <tr>
+                <th:block th:replace="fragments/column_element::column_link('id', 'ID', 'none')" />
+                <th:block th:replace="fragments/column_element::column_link('customer', 'Customer', 'none')"/>
+                <th:block th:replace="fragments/column_element::column_link('total', 'Total', 'none')"/>
+                <th:block th:replace="fragments/column_element::column_link('orderTime', 'Order Time', 'none')"/>
+                <th:block th:replace="fragments/column_element::column_link('destination', 'Destination', 'none')"/>
+                <th:block th:replace="fragments/column_element::column_link('paymentMethod', 'Payment Method', 'none')"/>
+                <th:block th:replace="fragments/column_element::column_link('status', 'Status', 'none')"/>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.id}"></td>
+                <td>
+                    <a class="link-detail" th:href="@{'/customers/details/' + ${order.customer.id}}">[[${order.customer.fullName}]]</a>
+                </td>
+                <td>
+                    <th:block th:replace="orders/currency_formatter :: format_currency_span(${order.total})"></th:block>
+                </td>
+                <td>
+                    <th:block th:replace="orders/datetime_formatter :: format_time(${order.orderTime})"></th:block>
+                </td>
+
+                <td th:text="${order.destination}"></td>
+                <td th:text="${order.paymentMethod}"></td>
+                <td th:text="${order.status}"></td>
+                <td>
+                    <a class="link-detail" th:href="@{${moduleURL} + '/details/' + ${order.id}}"
+                       title="View Order details"
+                    >
+                        <i class="fas fa-file-alt fa-2x icon-blue"></i>
+                    </a>
+                    &nbsp;
+                    <a th:href="@{${moduleURL} + '/edit/' + ${order.id}}"
+                       title="Edit this order"
+                    >
+                        <i class="fas fa-edit fa-2x icon-lightblue"></i>
+                    </a>
+                    &nbsp;
+                    <a th:href="@{${moduleURL} + '/delete/' + ${order.id}}"
+                       class="order-delete"
+                       title="Delete this order"
+                    >
+                        <i class="fas fa-trash fa-2x icon-danger"></i>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="less-details">
+        <div class="row m-1" th:each="order : ${orders}">
+            <div class="col-4">
+                <div class="mt-2">
+                    <b>[[${order.customer.fullName}]]</b>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="mt-2">
+                    <div><th:block th:replace="orders/currency_formatter :: format_currency_span(${order.total})"></th:block></div>
+                    <div>[[${order.orderTime}]]</div>
+                    <div>[[${order.destination}]]</div>
+                    <div>[[${order.paymentMethod}]]</div>
+                    <div>[[${order.status}]]</div>
+                    <th:block>
+                        <a class="link-detail" th:href="@{${moduleURL} + '/details/' + ${order.id}}"
+                           title="View Order details"
+                        >
+                            <i class="fas fa-file-alt fa-2x icon-blue"></i>
+                        </a>
+                        &nbsp;
+                        <a th:href="@{${moduleURL} + '/edit/' + ${order.id}}"
+                           title="Edit this order"
+                        >
+                            <i class="fas fa-edit fa-2x icon-lightblue"></i>
+                        </a>
+                        &nbsp;
+                        <a th:href="@{${moduleURL} + '/delete/' + ${order.id}}"
+                           class="order-delete"
+                           title="Delete this order"
+                        >
+                            <i class="fas fa-trash fa-2x icon-danger"></i>
+                        </a>
+                    </th:block>
+                </div>
+            </div>
+            <div>&nbsp;</div>
+        </div>
+    </div>
+    <div class="text-center m-1" th:if="${total > 0}">
+        <span>Showing orders # [[${startNo}]] to [[${endNo}]] of [[${total}]]</span>
+        <nav th:replace="fragments/pagination::pagination_fragment"></nav>
+    </div>
+    <div class="text-center m-1" th:unless="${total > 0}">
+        <h2>No orders found</h2>
+    </div>
+    <div th:replace="fragments/modal::confirmDeleteModal"></div>
+    <div class="modal fade text-center" tabindex="-1" id="customerDetailModal" aria-labelledby="customerDetailModal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+    <div th:replace="fragments/page_structure :: page_footer"></div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".order-delete").on("click", function (e) {
+            e.preventDefault();
+            let deleteUrl = $(e.currentTarget).attr("href");
+            let splitUrl = deleteUrl.split("/");
+            let id = splitUrl[splitUrl.length - 1];
+
+            $("#modalYesBtn").attr("href", deleteUrl);
+            showModalDialog("Delete Confirmation", "Are you sure to delete order <br> (ID: " + id + ")?");
+        });
+
+        $(".link-detail").on("click", function (e) {
+            e.preventDefault();
+            let linkDetailURL = $(this).attr("href");
+            $("#customerDetailModal").modal("show").find(".modal-content").load(linkDetailURL);
+        });
+    });
+
+    function clearFilter() {
+        window.location = "[[@{/orders}]]";
+    }
+</script>
+<script th:src="@{/js/common.js}"></script>
+</body>
+</html>

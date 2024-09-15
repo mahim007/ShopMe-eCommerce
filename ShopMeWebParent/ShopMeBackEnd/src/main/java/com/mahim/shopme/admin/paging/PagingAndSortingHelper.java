@@ -54,6 +54,9 @@ public class PagingAndSortingHelper {
 
     public Page<?> listEntities(int pageNum, int pageSize, SearchRepository<?, Integer> repository) {
         Sort sort = Sort.by(this.getSortField());
+        if (this.getSortField().equals("destination")) {
+            sort = Sort.by("country").and(Sort.by("state")).and(Sort.by("city"));
+        }
         sort = StringUtils.equals(this.getSortDir(), "asc") ? sort.ascending() : sort.descending();
         PageRequest pageRequest = PageRequest.of(pageNum - 1, pageSize, sort);
         if (this.getKeyword() != null) {

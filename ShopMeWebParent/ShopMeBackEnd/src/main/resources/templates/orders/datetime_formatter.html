@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<div th:fragment="format_time(dateTime)" th:remove="tag">
+    <span th:text="${#dates.format(dateTime, 'yyyy-MM-dd HH:mm:ss')}">2024-09-16 12:12:12</span>
+</div>
+</body>
+</html>

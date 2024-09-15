@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="format_currency_span(price)" th:remove="tag">
+    <span th:if="${CURRENCY_SYMBOL_POSITION == 'before'}">[[${CURRENCY_SYMBOL}]]<span>[[${#numbers.formatDecimal(price, 2,  THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]</span></span>
+    <span th:if="${CURRENCY_SYMBOL_POSITION == 'after'}"><span>[[${#numbers.formatDecimal(price, 1,  THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]</span>[[${CURRENCY_SYMBOL}]]</span>
+</div>
+
+<div th:fragment="format_currency_input(price)" th:remove="tag">
+    <th:block th:if="${CURRENCY_SYMBOL_POSITION == 'before'}"><input class="form-control" type="text" th:value="${CURRENCY_SYMBOL + '' + #numbers.formatDecimal(price, 2,  THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}" readonly /></th:block>
+    <th:block th:if="${CURRENCY_SYMBOL_POSITION == 'after'}"><input class="form-control" type="text" th:value="${#numbers.formatDecimal(price, 1,  THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE) + '' + CURRENCY_SYMBOL}" readonly /></th:block>
+</div>
+</body>
+</html>

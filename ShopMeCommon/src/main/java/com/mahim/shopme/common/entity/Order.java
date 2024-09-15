@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -72,4 +73,13 @@ public class Order {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderDetail> orderDetails = new HashSet<>();
+
+    @Transient
+    public String getDestination() {
+        String destination = "";
+        destination += StringUtils.hasText(city) ? city + ", " : "";
+        destination += StringUtils.hasText(state) ? state + ", " : "";
+        destination += StringUtils.hasText(country) ? country : "";
+        return destination;
+    }
 }

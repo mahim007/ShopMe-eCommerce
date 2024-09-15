@@ -36,6 +36,7 @@ public interface ProductRepository extends SearchRepository<Product, Integer> {
     @Query("SELECT p FROM Product p WHERE (p.category.id = ?1 "
             + "OR p.category.allParentIDs LIKE %?2%)"
             + "AND (p.name LIKE %?3%"
+            + "OR p.alias LIKE %?3%"
             + " OR p.shortDescription LIKE %?3%"
             + " OR p.fullDescription LIKE %?3%"
             + " OR p.brand.name LIKE %?3%"
