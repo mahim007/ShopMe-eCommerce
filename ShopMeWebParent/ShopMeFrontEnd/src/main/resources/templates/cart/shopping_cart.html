@@ -59,7 +59,20 @@
             <th:block th:replace="fragments/product_fragment :: simple_price(${estimatedTotal})"></th:block>
          </div>
          <div class="mt-2">
-            <button class="btn btn-danger p-3 mt-2">Check Out</button>
+            <th:block th:if="${shippingSupported}">
+               <button class="btn btn-danger p-3 mt-2">Check Out</button>
+            </th:block>
+            <th:block th:unless="${shippingSupported}">
+               <div>
+                  <span class="h5 text-warning">No shipping available for your location</span>
+                  <div th:if="${usePrimaryAddressAsDefault}">
+                     <a class="h6" th:href="@{/account_details(redirect=cart)}">Update your address</a>
+                  </div>
+                  <div th:unless="${usePrimaryAddressAsDefault}">
+                     <a class="h6" th:href="@{/address_book(redirect=cart)}">Use another shipping address</a>
+                  </div>
+               </div>
+            </th:block>
          </div>
       </div>
    </div>

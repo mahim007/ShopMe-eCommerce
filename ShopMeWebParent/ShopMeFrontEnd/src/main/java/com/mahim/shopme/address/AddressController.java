@@ -116,6 +116,8 @@ public class AddressController {
 
     @GetMapping("/default/{id}")
     public String updateDefaultAddress(@PathVariable(name = "id") String id,HttpServletRequest request,  RedirectAttributes ra) {
+        String redirectURL = "redirect:/address_book";
+
         try {
             Customer customer = customerService.getAuthenticatedCustomer(request);
             addressService.setDefaultShippingAddress(id.equals("primary") ? Integer.valueOf(-1) : Integer.valueOf(id), customer);
@@ -125,13 +127,18 @@ public class AddressController {
             } else {
                 ra.addFlashAttribute("message", "Address with id: " + id + " set to default for shipping");
             }
+
+            String redirectOption = request.getParameter("redirect");
+            if ("cart".equals(redirectOption)) {
+                redirectURL = "redirect:/cart";
+            }
         } catch (AddressNotFoundException e) {
             ra.addFlashAttribute("exceptionMessage", "Address not found with id " + id);
         } catch (CustomerNotFoundException e) {
             ra.addFlashAttribute("exceptionMessage", "Customer not found");
         }
 
-        return "redirect:/address_book";
+        return redirectURL;
     }
 
 }

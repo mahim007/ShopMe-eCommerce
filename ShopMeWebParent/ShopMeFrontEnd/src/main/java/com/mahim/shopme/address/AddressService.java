@@ -75,14 +75,7 @@ public class AddressService {
     }
 
     public Address getDefaultShippingAddress(Customer customer) {
-        List<Address> addresses = listAddressBook(customer);
-        for (Address address : addresses) {
-            if (address.isDefaultForShipping()) {
-                return address;
-            }
-        }
-
-        return new CustomerAddressDTO(customer).getAddress();
+        return addressRepository.findDefaultByCustomer(customer.getId());
     }
 
     public void setDefaultShippingAddress(Integer id, Customer customer) throws AddressNotFoundException {

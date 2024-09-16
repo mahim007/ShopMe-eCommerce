@@ -13,11 +13,9 @@ public interface AddressRepository extends CrudRepository<Address, Integer> {
 
     List<Address> findByCustomer(Customer customer);
 
-//    @Query("SELECT a FROM Address a where a.id = ?1 AND a.customer.id = :customer.id")
     Optional<Address> findByIdAndCustomer(Integer id, Customer customer);
 
     @Modifying
-//    @Query("DELETE FROM Address a WHERE a.id = :id AND a.customer = :customer")
     void deleteByIdAndCustomer(Integer id, Customer customer);
 
     @Modifying
@@ -27,4 +25,7 @@ public interface AddressRepository extends CrudRepository<Address, Integer> {
     @Modifying
     @Query("UPDATE Address a SET a.defaultForShipping = false WHERE a.id != :id AND a.customer.id = :customerId")
     void setNonDefaultShippingAddress(Integer id, Integer customerId);
+
+    @Query("SELECT a FROM Address a WHERE a.customer.id = :customerId and a.defaultForShipping = true")
+    Address findDefaultByCustomer(Integer customerId);
 }

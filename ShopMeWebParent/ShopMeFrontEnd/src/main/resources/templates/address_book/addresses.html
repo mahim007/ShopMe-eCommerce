@@ -23,7 +23,16 @@
                         <div class="col-10">
                             <b>Your primary address</b>
                             <a class="text-danger" th:if="${usePrimaryAddressAsDefault}" th:href="@{'#'}">[Default]</a>
-                            <a class="text-success" th:if="${!usePrimaryAddressAsDefault}" th:href="@{${moduleURL} + '/default/primary'}">[Set as Default]</a>
+                            <th:block th:unless="${usePrimaryAddressAsDefault}">
+                                <a class="text-success" th:if="${param.redirect}"
+                                   th:href="@{${moduleURL} + '/default/primary?redirect=' + ${param.redirect}}">
+                                    [Set as Default]
+                                </a>
+                                <a class="text-success" th:unless="${param.redirect}"
+                                   th:href="@{${moduleURL} + '/default/primary'}">
+                                    [Set as Default]
+                                </a>
+                            </th:block>
                         </div>
                         <div class="col-2 text-end">
                             <a th:href="@{/account_details(redirect=address_book)}" title="Edit address">
@@ -46,7 +55,16 @@
                             <div class="col-10">
                                 <b>Address [[${status.count}]]</b>
                                 <a class="text-danger" th:if="${address.defaultForShipping}" th:href="@{'#'}">[Default]</a>
-                                <a class="text-success" th:if="${!address.defaultForShipping}" th:href="@{${moduleURL} + '/default/' + ${address.id}}">[Set as Default]</a>
+                                <th:block th:unless="${address.defaultForShipping}">
+                                    <a class="text-success" th:if="${param.redirect}"
+                                       th:href="@{${moduleURL} + '/default/' + ${address.id} + '?redirect=' + ${param.redirect}}">
+                                        [Set as Default]
+                                    </a>
+                                    <a class="text-success" th:unless="${param.redirect}"
+                                       th:href="@{${moduleURL} + '/default/' + ${address.id}}">
+                                        [Set as Default]
+                                    </a>
+                                </th:block>
                             </div>
                             <div class="col-2 text-end">
                                 <a th:href="@{${moduleURL} + '/edit/' +  ${address.id}}" title="Edit address">
