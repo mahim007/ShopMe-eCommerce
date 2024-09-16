@@ -1,23 +1,16 @@
 package com.mahim.shopme.common.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name = "countries")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Country {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
+public class Country extends ParentEntity {
 
     @Column(nullable = false, length = 45)
     private String name;

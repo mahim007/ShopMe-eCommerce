@@ -12,11 +12,7 @@ import java.util.Objects;
 @Table(name = "product_images")
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
-public class ProductImage {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class ProductImage extends ParentEntity {
 
     @Column(nullable = false)
     private String name;
@@ -25,7 +21,8 @@ public class ProductImage {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public ProductImage(String name, Product product) {
+    public ProductImage(Integer id, String name, Product product) {
+        super(id);
         this.name = name;
         this.product = product;
     }

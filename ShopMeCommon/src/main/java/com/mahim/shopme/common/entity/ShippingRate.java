@@ -10,11 +10,7 @@ import java.util.Objects;
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
 @ToString
-public class ShippingRate {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class ShippingRate extends ParentEntity {
 
     @Column(nullable = false)
     private float rate;

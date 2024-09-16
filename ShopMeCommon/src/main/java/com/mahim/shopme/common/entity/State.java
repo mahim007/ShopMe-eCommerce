@@ -6,13 +6,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "states")
 @Getter @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class State {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+@AllArgsConstructor @NoArgsConstructor
+public class State extends ParentEntity {
 
     @Column(nullable = false, length = 45)
     private String name;
@@ -20,9 +15,4 @@ public class State {
     @ManyToOne
     @JoinColumn(name = "country_id")
     private Country country;
-
-    public State(String name, Country country) {
-        this.name = name;
-        this.country = country;
-    }
 }

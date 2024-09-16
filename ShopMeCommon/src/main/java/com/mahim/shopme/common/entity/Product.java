@@ -14,10 +14,7 @@ import java.util.Set;
 @Table(name = "products")
 @Getter @Setter @NoArgsConstructor
 @ToString
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class Product extends ParentEntity {
 
     @Column(unique = true, length = 256, nullable = false)
     private String name;

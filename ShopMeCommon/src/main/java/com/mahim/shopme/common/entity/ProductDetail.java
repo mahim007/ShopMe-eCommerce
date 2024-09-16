@@ -11,11 +11,7 @@ import javax.persistence.*;
 @Table(name = "product_details")
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
-public class ProductDetail {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class ProductDetail extends ParentEntity {
 
     @Column(nullable = false)
     private String name;
@@ -27,7 +23,8 @@ public class ProductDetail {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public ProductDetail(String name, String value, Product product) {
+    public ProductDetail(Integer id, String name, String value, Product product) {
+        super(id);
         this.name = name;
         this.value = value;
         this.product = product;
