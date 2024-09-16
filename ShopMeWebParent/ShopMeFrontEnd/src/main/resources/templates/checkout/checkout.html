@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments/page_structure :: page_header('Shopping cart')"></th:block>
+<body>
+<div class="container">
+   <th:block th:replace="fragments/navigation :: header_nav"></th:block>
+   <th:block th:replace="fragments/navigation :: search_nav"></th:block>
+   <div class="hero-title">
+      <h2>Checkout</h2>
+      <div th:if="${message != null}" class="alert alert-success text-center">
+         [[${message}]]
+      </div>
+      <div th:if="${exceptionMessage != null}" class="alert alert-danger text-center">
+         [[${exceptionMessage}]]
+      </div>
+   </div>
+   <div class="row m-1">
+      <div class="col-sm-7">
+         <div class="card">
+            <div class="card-header"><h5>Shipping Information</h5></div>
+            <div class="card-body">
+               <p>
+                  <b>Ship to: </b>[[${shippingAddress}]]
+                  <br>
+                  <a th:href="@{/address_book}">[Ship to another address]</a>
+               </p>
+               <p>
+                  <b>Days to deliver: </b>[[${checkoutInfo.deliverDays}]] day(s)
+               </p>
+               <p>
+                  <b>Expected Deliver date: </b>[[${#dates.format(checkoutInfo.deliverDate, 'E, dd MMM yyyy')}]]
+               </p>
+            </div>
+         </div>
+
+         <div class="card mt-3 mb-3">
+            <div class="card-header"><h5>Payment Method</h5></div>
+            <div class="card-body">
+               <div th:if="${checkoutInfo.codSupported}">
+                  <p>
+                     <input type="radio" /> Cash on Delivery (COD)
+                     &nbsp;
+                     <button class="btn btn-primary">Place your order with COD</button>
+                  </p>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="col-sm-5">
+         <div class="card">
+            <div class="card-header"><h5>Order Summary</h5></div>
+            <div class="card-body">
+               <div>
+                  <table>
+                     <th:block th:each="item : ${cartItems}">
+                        <tr th:with="product = ${item.product}">
+                           <td>[[${item.quantity}]] X </td>
+                           <td width="70%">
+                              <a th:href="@{'/p/' + ${product.alias}}" target="_blank">[[${product.shortName}]]</a>
+                              <br>
+                              <small>Ship: <th:block th:replace="fragments/currency_formatter :: format_currency_span(${item.shippingCost})"></th:block>  </small>
+                           </td>
+                           <td>
+                              <th:block th:replace="fragments/currency_formatter :: format_currency_span(${item.subTotal})"></th:block>
+                           </td>
+                        </tr>
+                     </th:block>
+                     <tr><td colspan="3"><hr/></td></tr>
+                  </table>
+               </div>
+
+               <div class="row m-2">
+                  <div class="col">Product Total: </div>
+                  <div class="col"><th:block th:replace="fragments/currency_formatter :: format_currency_span(${checkoutInfo.productTotal})"></th:block></div>
+               </div>
+
+               <div class="row m-2">
+                  <div class="col">ShippingCost Total: </div>
+                  <div class="col"><th:block th:replace="fragments/currency_formatter :: format_currency_span(${checkoutInfo.shippingCostTotal})"></th:block></div>
+               </div>
+
+               <div class="row m-2">
+                  <div class="col">Payment Total: </div>
+                  <div class="col"><b><th:block th:replace="fragments/currency_formatter :: format_currency_span(${checkoutInfo.paymentTotal})"></th:block></b></div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <th:block th:replace="fragments/navigation :: footer_nav"></th:block>
+   <th:block th:replace="fragments/modal :: shopmeModal"></th:block>
+</div>
+<script type="text/javascript">
+   const contextPath = "[[@{/}]]";
+   const csrfHeaderName = "[[${_csrf.headerName}]]";
+   const csrfHeaderValue = "[[${_csrf.token}]]";
+   const decimalDigits = [[${DECIMAL_DIGITS}]];
+   const decimalPointType = "[[${DECIMAL_POINT_TYPE}]]";
+   const thousandsPointType = "[[${THOUSANDS_POINT_TYPE}]]";
+</script>
+<script type="text/javascript" th:src="@{/library/jquery.number.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/common_modal.js}"></script>
+<script type="text/javascript" th:src="@{/js/shopping_cart/shopping_cart.js}"></script>
+</body>
+</html>

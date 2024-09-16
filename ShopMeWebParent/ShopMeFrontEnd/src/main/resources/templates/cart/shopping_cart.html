@@ -60,7 +60,9 @@
          </div>
          <div class="mt-2">
             <th:block th:if="${shippingSupported}">
-               <button class="btn btn-danger p-3 mt-2">Check Out</button>
+               <form th:action="@{/checkout}">
+                  <button type="submit" class="btn btn-danger p-3 mt-2">Check Out</button>
+               </form>
             </th:block>
             <th:block th:unless="${shippingSupported}">
                <div>

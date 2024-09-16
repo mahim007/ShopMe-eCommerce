@@ -10,8 +10,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "cart_items")
 @Getter @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor @AllArgsConstructor
 public class CartItem extends ParentEntity {
 
     @ManyToOne
@@ -24,6 +23,9 @@ public class CartItem extends ParentEntity {
 
     private Integer quantity;
 
+    @Transient
+    private float shippingCost;
+
     @Override
     public String toString() {
         return "CartItem{" +
@@ -34,7 +36,6 @@ public class CartItem extends ParentEntity {
                 '}';
     }
 
-    @Transient
     public float getSubTotal() {
         return product.getDiscountPrice() * quantity;
     }
