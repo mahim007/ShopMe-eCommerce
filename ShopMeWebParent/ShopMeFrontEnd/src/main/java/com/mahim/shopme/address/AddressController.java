@@ -66,19 +66,26 @@ public class AddressController {
 
     @PostMapping("/create_address")
     public String createAddress(@ModelAttribute("address") Address address, HttpServletRequest request, RedirectAttributes ra) {
-
+        String redirectURL = "redirect:/address_book";
         try {
             Customer customer = customerService.getAuthenticatedCustomer(request);
             address.setCustomer(customer);
             addressService.save(address);
             ra.addFlashAttribute("message", "Address saved successfully");
+
+            String redirectOption = request.getParameter("redirect");
+            if ("cart".equals(redirectOption)) {
+                redirectURL += "?redirect=cart";
+            } else if ("checkout".equals(redirectOption)) {
+                redirectURL += "?redirect=checkout";
+            }
         } catch (AddressNotFoundException e) {
             ra.addFlashAttribute("exceptionMessage", "Address could not be updated");
         } catch (CustomerNotFoundException e) {
             ra.addFlashAttribute("exceptionMessage", "Customer not found");
         }
 
-        return "redirect:/address_book";
+        return redirectURL;
     }
 
     @GetMapping("/edit/{id}")
@@ -131,6 +138,8 @@ public class AddressController {
             String redirectOption = request.getParameter("redirect");
             if ("cart".equals(redirectOption)) {
                 redirectURL = "redirect:/cart";
+            } else if ("checkout".equals(redirectOption)) {
+                redirectURL = "redirect:/checkout";
             }
         } catch (AddressNotFoundException e) {
             ra.addFlashAttribute("exceptionMessage", "Address not found with id " + id);
