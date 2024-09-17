@@ -53,7 +53,7 @@
                         <th:block th:replace="settings/mail_templates/mail_templates :: content"></th:block>
                     </div>
                     <div class="tab-pane fade p-3" id="payment" role="tabpanel" aria-labelledby="payment-tab" tabindex="0">
-                        <h2>Payment</h2>
+                        <th:block th:replace="settings/payment :: content"></th:block>
                     </div>
                 </div>
         </div>
@@ -76,6 +76,7 @@
 
     $(document).ready(function () {
         $("textarea[name='CUSTOMER_VERIFY_CONTENT']").richText();
+        $("textarea[name='ORDER_CONFIRMATION_CONTENT']").richText();
     });
 </script>
 <script th:src="@{/js/common.js}"></script>

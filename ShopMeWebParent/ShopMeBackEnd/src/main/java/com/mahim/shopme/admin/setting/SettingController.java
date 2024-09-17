@@ -121,4 +121,12 @@ public class SettingController {
         ra.addFlashAttribute("message", "Mail template settings have been saved.");
         return "redirect:/settings";
     }
+
+    @PostMapping("/save_payment")
+    public String savePaymentSettings(HttpServletRequest request, RedirectAttributes ra) {
+        List<Setting> paymentSettings = settingService.getPaymentSettings();
+        updateSettingValuesFromForm(request, paymentSettings);
+        ra.addFlashAttribute("message", "Payment settings have been saved.");
+        return "redirect:/settings";
+    }
 }
