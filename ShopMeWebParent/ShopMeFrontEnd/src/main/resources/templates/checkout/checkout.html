@@ -37,11 +37,13 @@
             <div class="card-header"><h5>Payment Method</h5></div>
             <div class="card-body">
                <div th:if="${checkoutInfo.codSupported}">
-                  <p>
-                     <input type="radio" /> Cash on Delivery (COD)
-                     &nbsp;
-                     <button class="btn btn-primary">Place your order with COD</button>
-                  </p>
+                  <form th:action="@{/checkout/place_order}" method="post">
+                     <p>
+                        <input type="radio" id="radioCOD" name="paymentMethod" value="COD" /> Cash on Delivery (COD)
+                        &nbsp;
+                        <button class="btn btn-primary d-none" type="submit" id="codSubmit">Place your order with COD</button>
+                     </p>
+                  </form>
                </div>
             </div>
          </div>
@@ -97,6 +99,12 @@
    const decimalDigits = [[${DECIMAL_DIGITS}]];
    const decimalPointType = "[[${DECIMAL_POINT_TYPE}]]";
    const thousandsPointType = "[[${THOUSANDS_POINT_TYPE}]]";
+
+   $(document).ready(function () {
+      $("#radioCOD").click(function () {
+         $("#codSubmit").removeClass('d-none');
+      });
+   });
 </script>
 <script type="text/javascript" th:src="@{/library/jquery.number.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/common_modal.js}"></script>

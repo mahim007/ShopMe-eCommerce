@@ -1,5 +1,6 @@
 package com.mahim.shopme.common.entity;
 
+import com.mahim.shopme.common.dto.CustomerAddressDTO;
 import com.mahim.shopme.common.enums.OrderStatus;
 import com.mahim.shopme.common.enums.PaymentMethod;
 import lombok.AllArgsConstructor;
@@ -53,5 +54,22 @@ public class Order extends AbstractAddress {
         destination += StringUtils.hasText(state) ? state + ", " : "";
         destination += StringUtils.hasText(country) ? country : "";
         return destination;
+    }
+
+    public void copyAddressFromCustomer() {
+        CustomerAddressDTO customerAddressDTO = new CustomerAddressDTO(customer);
+        copyAddressFrom(customerAddressDTO.getAddress());
+    }
+
+    public void copyAddressFrom(Address address) {
+        setFirstName(address.getFirstName());
+        setLastName(address.getLastName());
+        setPhoneNumber(address.getPhoneNumber());
+        setAddressLine1(address.getAddressLine1());
+        setAddressLine2(address.getAddressLine2());
+        setCity(address.getCity());
+        setCountry(address.getCountry().getName());
+        setPostalCode(address.getPostalCode());
+        setState(address.getState());
     }
 }

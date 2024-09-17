@@ -7,7 +7,6 @@ import com.mahim.shopme.common.entity.Customer;
 import com.mahim.shopme.common.entity.ShippingRate;
 import com.mahim.shopme.common.exception.CustomerNotFoundException;
 import com.mahim.shopme.customer.CustomerService;
-import com.mahim.shopme.shipping.ShippingRateRepository;
 import com.mahim.shopme.shipping.ShippingRateService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

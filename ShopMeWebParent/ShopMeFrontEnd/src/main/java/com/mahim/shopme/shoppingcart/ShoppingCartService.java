@@ -59,4 +59,9 @@ public class ShoppingCartService {
     public void removeProduct(Integer productId, Customer customer) throws ShoppingCartException {
         cartItemRepository.deleteByCustomerAndProduct(customer.getId(), productId);
     }
+
+    @Transactional
+    public void deleteByCustomer(Customer customer) {
+        cartItemRepository.deleteByCustomer(customer);
+    }
 }

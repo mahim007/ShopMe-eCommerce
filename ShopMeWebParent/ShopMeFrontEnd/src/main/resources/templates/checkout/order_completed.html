@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments/page_structure :: page_header('Shopping cart')"></th:block>
+<body>
+<div class="container">
+   <th:block th:replace="fragments/navigation :: header_nav"></th:block>
+   <th:block th:replace="fragments/navigation :: search_nav"></th:block>
+   <div class="hero-title">
+      <h2>Your Order has been completed.</h2>
+      <div th:if="${message != null}" class="alert alert-success text-center">
+         [[${message}]]
+      </div>
+      <div th:if="${exceptionMessage != null}" class="alert alert-danger text-center">
+         [[${exceptionMessage}]]
+      </div>
+   </div>
+   <div class="row m-1">
+
+   </div>
+   <th:block th:replace="fragments/navigation :: footer_nav"></th:block>
+</div>
+</body>
+</html>
