@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SettingRepository extends CrudRepository<Setting, String> {
@@ -15,4 +16,6 @@ public interface SettingRepository extends CrudRepository<Setting, String> {
 
     @Query("SELECT s from Setting s where s.category = ?1 OR s.category = ?2")
     List<Setting> findByTwoCategories(SettingCategory cat1, SettingCategory cat2);
+
+    Optional<Setting> findByKey(String key);
 }

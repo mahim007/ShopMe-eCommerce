@@ -8,6 +8,7 @@ import com.mahim.shopme.customer.CustomerService;
 import com.mahim.shopme.order.OrderService;
 import com.mahim.shopme.setting.CurrencySettingBag;
 import com.mahim.shopme.setting.EmailSettingBag;
+import com.mahim.shopme.setting.PaymentSettingBag;
 import com.mahim.shopme.setting.SettingService;
 import com.mahim.shopme.shipping.ShippingRateService;
 import com.mahim.shopme.shoppingcart.ShoppingCartService;
@@ -75,9 +76,15 @@ public class CheckoutController {
 
             List<CartItem> cartItems = shoppingCartService.listCartItems(customer);
             CheckoutInfo checkoutInfo = checkoutService.prepareCheckout(cartItems, shippingRate);
+            String currencyCode = settingService.getCurrencyCode();
+            PaymentSettingBag paymentSettings = settingService.getPaymentSettings();
+            String paypalClientID = paymentSettings.getClientID();
 
+            model.addAttribute("customer", customer);
             model.addAttribute("checkoutInfo", checkoutInfo);
             model.addAttribute("cartItems", cartItems);
+            model.addAttribute("currencyCode", currencyCode);
+            model.addAttribute("paypalClientID", paypalClientID);
 
         } catch (CustomerNotFoundException e) {
             ra.addFlashAttribute("exceptionMessage", "Customer not found");

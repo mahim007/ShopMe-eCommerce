@@ -13,7 +13,7 @@ import java.util.List;
 public class SettingBag {
     private List<Setting> settings;
 
-    public Setting get(String key) {
+    private Setting get(String key) {
         int index = settings.indexOf(new Setting(key));
         return index >= 0 ? settings.get(index) : null;
     }

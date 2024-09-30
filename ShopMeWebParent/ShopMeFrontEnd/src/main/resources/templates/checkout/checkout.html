@@ -45,6 +45,9 @@
                      </p>
                   </form>
                </div>
+               <div id="paypal-button-container">
+
+               </div>
             </div>
          </div>
       </div>
@@ -92,6 +95,7 @@
    <th:block th:replace="fragments/navigation :: footer_nav"></th:block>
    <th:block th:replace="fragments/modal :: shopmeModal"></th:block>
 </div>
+<script th:src="@{https://www.paypal.com/sdk/js(client-id=${paypalClientID},currency=${currencyCode})}"></script>
 <script type="text/javascript">
    const contextPath = "[[@{/}]]";
    const csrfHeaderName = "[[${_csrf.headerName}]]";
@@ -104,6 +108,8 @@
       $("#radioCOD").click(function () {
          $("#codSubmit").removeClass('d-none');
       });
+
+      paypal.Buttons({}).render("#paypal-button-container");
    });
 </script>
 <script type="text/javascript" th:src="@{/library/jquery.number.min.js}"></script>
