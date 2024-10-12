@@ -2,13 +2,17 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <th:block th:replace="fragments/page_structure :: page_header('Your address Book')"></th:block>
 <body>
-<div class="container">
+<div class="container"
+     th:with="redirectedFromCheckoutPage = ${param.redirect != null && param.redirect[0] == 'checkout'},
+     redirectedFromCartPage = ${param.redirect != null && param.redirect[0] == 'cart'}">
+
     <th:block th:replace="fragments/navigation :: header_nav"></th:block>
     <th:block th:replace="fragments/navigation :: search_nav"></th:block>
+
     <div class="hero-title">
-        <h2 th:text="${param.redirect != null && param.redirect[0] == 'checkout' ? 'Choose a shipping address' : 'Your Address Book'}"></h2>
-        <h3 th:if="${param.redirect != null && param.redirect[0] == 'cart'}"><a th:href="@{${moduleURL} + '/new(redirect=cart)'}">Add New Address</a></h3>
-        <h3 th:if="${param.redirect != null && param.redirect[0] == 'checkout'}"><a th:href="@{${moduleURL} + '/new(redirect=checkout)'}">Add New Address</a></h3>
+        <h2 th:text="${redirectedFromCheckoutPage ? 'Choose a shipping address' : 'Your Address Book'}"></h2>
+        <h3 th:if="${redirectedFromCartPage}"><a th:href="@{${moduleURL} + '/new(redirect=cart)'}">Add New Address</a></h3>
+        <h3 th:if="${redirectedFromCheckoutPage}"><a th:href="@{${moduleURL} + '/new(redirect=checkout)'}">Add New Address</a></h3>
         <h3 th:unless="${param.redirect}"><a th:href="@{${moduleURL} + '/new'}">Add New Address</a></h3>
         <div th:if="${message != null}" class="alert alert-success text-center">
             [[${message}]]
@@ -25,14 +29,14 @@
                         <div class="col-10">
                             <b>Your primary address</b>
                             <th:block th:if="${usePrimaryAddressAsDefault}">
-                                <a class="text-danger" th:text="${param.redirect != null && param.redirect[0] == 'checkout' ? '[Currently Selected]' : '[Default]'}" th:href="@{'#'}"></a>
+                                <a class="text-danger" th:text="${redirectedFromCheckoutPage ? '[Currently Selected]' : '[Default]'}" th:href="@{'#'}"></a>
                             </th:block>
                             <th:block th:unless="${usePrimaryAddressAsDefault}">
-                                <a class="text-success" th:if="${param.redirect != null && param.redirect[0] == 'cart'}"
+                                <a class="text-success" th:if="${redirectedFromCartPage}"
                                    th:href="@{${moduleURL} + '/default/primary?redirect=cart'}">
                                     [Set as Default]
                                 </a>
-                                <a class="text-success" th:if="${param.redirect != null && param.redirect[0] == 'checkout'}"
+                                <a class="text-success" th:if="${redirectedFromCheckoutPage}"
                                    th:href="@{${moduleURL} + '/default/primary?redirect=checkout'}">
                                     [Choose]
                                 </a>
@@ -43,10 +47,10 @@
                             </th:block>
                         </div>
                         <div class="col-2 text-end">
-                            <a th:if="${param.redirect != null && param.redirect[0] == 'cart'}" th:href="@{/account_details(redirect=cart)}" title="Edit address">
+                            <a th:if="${redirectedFromCartPage}" th:href="@{/account_details(redirect=cart)}" title="Edit address">
                                 <i class="fas fa-edit icon-lightblue"></i>
                             </a>
-                            <a th:if="${param.redirect != null && param.redirect[0] == 'checkout'}" th:href="@{/account_details(redirect=checkout)}" title="Edit address">
+                            <a th:if="${redirectedFromCheckoutPage}" th:href="@{/account_details(redirect=checkout)}" title="Edit address">
                                 <i class="fas fa-edit icon-lightblue"></i>
                             </a>
                             <a th:unless="${param.redirect}" th:href="@{/account_details(redirect=address_book)}" title="Edit address">
@@ -69,14 +73,14 @@
                             <div class="col-10">
                                 <b>Address [[${status.count}]]</b>
                                 <th:block th:if="${address.defaultForShipping}">
-                                    <a class="text-danger" th:text="${param.redirect != null && param.redirect[0] == 'checkout' ? '[Currently Selected]' : '[Default]'}" th:href="@{'#'}"></a>
+                                    <a class="text-danger" th:text="${redirectedFromCheckoutPage ? '[Currently Selected]' : '[Default]'}" th:href="@{'#'}"></a>
                                 </th:block>
                                 <th:block th:unless="${address.defaultForShipping}">
-                                    <a class="text-success" th:if="${param.redirect != null && param.redirect[0] == 'cart'}"
+                                    <a class="text-success" th:if="${redirectedFromCartPage}"
                                        th:href="@{${moduleURL} + '/default/' + ${address.id} + '?redirect=cart'}">
                                         [Set as Default]
                                     </a>
-                                    <a class="text-success" th:if="${param.redirect != null && param.redirect[0] == 'checkout'}"
+                                    <a class="text-success" th:if="${redirectedFromCheckoutPage}"
                                        th:href="@{${moduleURL} + '/default/' + ${address.id} + '?redirect=checkout'}">
                                         [Choose]
                                     </a>
@@ -90,10 +94,10 @@
                                 <a th:unless="${param.redirect}" th:href="@{${moduleURL} + '/edit/' +  ${address.id}}" title="Edit address">
                                     <i class="fas fa-edit icon-lightblue"></i>
                                 </a>
-                                <a th:if="${param.redirect != null && param.redirect[0] == 'checkout'}" th:href="@{${moduleURL} + '/edit/' +  ${address.id} + '?redirect=checkout'}" title="Edit address">
+                                <a th:if="${redirectedFromCheckoutPage}" th:href="@{${moduleURL} + '/edit/' +  ${address.id} + '?redirect=checkout'}" title="Edit address">
                                     <i class="fas fa-edit icon-lightblue"></i>
                                 </a>
-                                <a th:if="${param.redirect != null && param.redirect[0] == 'cart'}" th:href="@{${moduleURL} + '/edit/' +  ${address.id} + '?redirect=cart'}" title="Edit address">
+                                <a th:if="${redirectedFromCartPage}" th:href="@{${moduleURL} + '/edit/' +  ${address.id} + '?redirect=cart'}" title="Edit address">
                                     <i class="fas fa-edit icon-lightblue"></i>
                                 </a>
                                 &nbsp;&nbsp;
