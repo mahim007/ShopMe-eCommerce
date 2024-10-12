@@ -1,9 +1,11 @@
 package com.mahim.shopme.checkout;
 
 import com.mahim.shopme.address.AddressService;
+import com.mahim.shopme.checkout.paypal.PayPalService;
 import com.mahim.shopme.common.entity.*;
 import com.mahim.shopme.common.enums.PaymentMethod;
 import com.mahim.shopme.common.exception.CustomerNotFoundException;
+import com.mahim.shopme.common.exception.PayPalApiException;
 import com.mahim.shopme.customer.CustomerService;
 import com.mahim.shopme.order.OrderService;
 import com.mahim.shopme.setting.CurrencySettingBag;
@@ -41,10 +43,11 @@ public class CheckoutController {
     private final ShoppingCartService shoppingCartService;
     private final OrderService orderService;
     private final SettingService settingService;
+    private final PayPalService payPalService;
 
     public CheckoutController(CheckoutService checkoutService, CustomerService customerService, AddressService addressService,
                               ShippingRateService shippingRateService, ShoppingCartService shoppingCartService,
-                              OrderService orderService, SettingService settingService) {
+                              OrderService orderService, SettingService settingService, PayPalService payPalService) {
         this.checkoutService = checkoutService;
         this.customerService = customerService;
         this.addressService = addressService;
@@ -52,6 +55,7 @@ public class CheckoutController {
         this.shoppingCartService = shoppingCartService;
         this.orderService = orderService;
         this.settingService = settingService;
+        this.payPalService = payPalService;
     }
 
     @GetMapping("")
@@ -94,7 +98,7 @@ public class CheckoutController {
     }
 
     @PostMapping("/place_order")
-    public String placeOrder(HttpServletRequest request, Model model, RedirectAttributes ra) {
+    public String placeOrder(HttpServletRequest request, RedirectAttributes ra) {
         try {
             String paymentType = request.getParameter("paymentMethod");
             PaymentMethod paymentMethod = PaymentMethod.valueOf(paymentType);
@@ -132,6 +136,27 @@ public class CheckoutController {
         }
 
         return "checkout/order_completed";
+    }
+
+    @PostMapping("/process_paypal_order")
+    public String processPayPalOrder(HttpServletRequest request, Model model, RedirectAttributes ra) {
+        try {
+            String orderId = request.getParameter("orderId");
+            if (payPalService.validateOrder(orderId)) {
+                return placeOrder(request, ra);
+            } else {
+                ra.addFlashAttribute("exceptionMessage", "Invalid order id: " + orderId);
+                model.addAttribute("pageTitle", "Checkout Failure");
+                model.addAttribute("title", "Checkout Failure");
+                model.addAttribute("exceptionMessage", "ERROR: Transaction could not be completed because order information is invalid");
+            }
+        } catch (PayPalApiException e) {
+            model.addAttribute("pageTitle", "Checkout Failure");
+            model.addAttribute("title", "Checkout Failure");
+            model.addAttribute("exceptionMessage", "ERROR: Transaction failed due to error: "  + e.getMessage());
+        }
+
+        return "message";
     }
 
     private void sendOrderConfirmationEmail(Order order, HttpServletRequest request) throws MessagingException, UnsupportedEncodingException {
