@@ -46,6 +46,7 @@ public class Order extends AbstractAddress {
     private Set<OrderDetail> orderDetails = new HashSet<>();
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OrderBy("updatedTime asc")
     private List<OrderTrack> orderTracks = new ArrayList<>();
 
     @Transient
