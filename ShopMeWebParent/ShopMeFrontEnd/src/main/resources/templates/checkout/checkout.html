@@ -109,7 +109,61 @@
          $("#codSubmit").removeClass('d-none');
       });
 
-      paypal.Buttons({}).render("#paypal-button-container");
+      paypal.Buttons({
+         enableStandardCardFields: true,
+         createOrder: function (data, actions) {
+            // setup a transaction
+            return actions.order.create({
+               intent: 'CAPTURE',
+               payer: {
+                  name: {
+                     given_name: '[[${customer.firstName}]]',
+                     surname: '[[${customer.lastName}]]'
+                  },
+                  address: {
+                     address_line_1: '[[${customer.addressLine1}]]',
+                     address_line_2: '[[${customer.addressLine2}]]',
+                     admin_area_1: '[[${customer.state}]]',
+                     admin_area_2: '[[${customer.city}]]',
+                     postal_code: '[[${customer.postalCode}]]',
+                     country_code: '[[${customer.country.code}]]',
+                  },
+                  email: '[[${customer.email}]]',
+                  phone: {
+                     phone_type: 'MOBILE',
+                     phone_number: {
+                        national_number: '[[${customer.phoneNumber}]]'
+                     }
+                  },
+               },
+               purchase_units: [{
+                  amount: {
+                     value: '[[${checkoutInfo.paymentTotal4PayPal}]]',
+                     currency_code: '[[${currencyCode}]]'
+                  }
+               }],
+               application_context: {
+                  shipping_preference: 'NO_SHIPPING'
+               }
+            });
+         },
+         onApprove: function (data, actions) {
+            // buyer approves payment
+            return actions.order.capture()
+                    .then(function (details) {
+                       console.log(details);
+                       let orderId = details.id;
+                       let totalAmount = details.purchase_units[0].amount.value;
+                       console.log("transaction completed, order id: " + orderId + " amount: " + totalAmount);
+                    })
+         },
+         onCancel: function (data, actions) {
+            // buyer cancelled the payment
+         },
+         onerror: function (data, actions) {
+            // error
+         }
+      }).render("#paypal-button-container");
    });
 </script>
 <script type="text/javascript" th:src="@{/library/jquery.number.min.js}"></script>
