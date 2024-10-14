@@ -1,5 +1,6 @@
 package com.mahim.shopme.admin.order;
 
+import com.mahim.shopme.admin.customer.CustomerService;
 import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
 import com.mahim.shopme.admin.paging.PagingAndSortingParam;
 import com.mahim.shopme.admin.setting.SettingService;
@@ -23,10 +24,12 @@ public class OrderController {
 
     private final OrderService orderService;
     private final SettingService settingService;
+    private final CustomerService customerService;
 
-    public OrderController(OrderService orderService, SettingService settingService) {
+    public OrderController(OrderService orderService, SettingService settingService, CustomerService customerService) {
         this.orderService = orderService;
         this.settingService = settingService;
+        this.customerService = customerService;
     }
 
     @GetMapping("")
@@ -77,5 +80,20 @@ public class OrderController {
         }
 
         return listAll();
+    }
+
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable("id") Integer id, Model model, RedirectAttributes ra) {
+        try {
+            Order order = orderService.findById(id);
+            model.addAttribute("order", order);
+            model.addAttribute("countries", customerService.listAllCountry());
+            model.addAttribute("pageTitle", "Edit Order");
+        } catch (OrderNotFoundException ex) {
+            ra.addFlashAttribute("exceptionMessage", "Order not found with ID: " + id);
+            return listAll();
+        }
+
+        return "orders/order_form";
     }
 }

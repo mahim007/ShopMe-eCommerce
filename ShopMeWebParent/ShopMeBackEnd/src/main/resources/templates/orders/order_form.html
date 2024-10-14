@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/page_structure :: page_header_with_richtext(${pageTitle})"></head>
+<body>
+<div class="container-fluid">
+	<div th:replace="fragments/navigation :: page_nav"></div>
+	<div class="text-center">
+		<h2>Manage Order | [[${pageTitle}]]</h2>
+	</div>
+	<div class="container">
+		<div class="border border-secondary rounded p-3">
+			<form th:action="@{/orders/save}" method="post" th:object="${order}"
+				  enctype="multipart/form-data"
+				  style="max-width: 1000px; margin: 0 auto">
+				<input type="hidden" th:field="*{id}"/>
+				<div>
+					<ul class="nav nav-tabs" id="orderDetailTab" role="tablist">
+						<li class="nav-item" role="presentation">
+							<button class="nav-link active" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab">Overview</button>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button class="nav-link" data-bs-toggle="tab" data-bs-target="#products" type="button" role="tab">Products</button>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button class="nav-link" data-bs-toggle="tab" data-bs-target="#shipping" type="button" role="tab">Shipping</button>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button class="nav-link" data-bs-toggle="tab" data-bs-target="#track" type="button" role="tab">Track</button>
+						</li>
+					</ul>
+					<div class="tab-content" id="orderDetailContent">
+						<div class="tab-pane fade show active p-3" id="overview" role="tabpanel" aria-labelledby="overview-tab" tabindex="0">
+							<div class="border border-secondary rounded p-3 text-start">
+								<div class="row mb-3">
+									<label class="col-form-label col-sm-3">Order Id</label>
+									<div class="col-sm-9">
+										<input class="form-control" type="text" th:field="*{id}" readonly />
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label class="col-form-label col-sm-3">Customer</label>
+									<div class="col-sm-9">
+										<input class="form-control" type="text" th:field="*{customer.fullName}" readonly />
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label class="col-form-label col-sm-3">Product Cost</label>
+									<div class="col-sm-9">
+										<input class="form-control" type="number" th:field="*{productCost}" required />
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label class="col-form-label col-sm-3">Subtotal</label>
+									<div class="col-sm-9">
+										<input class="form-control" type="number" th:field="*{subtotal}" required />
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label class="col-form-label col-sm-3">Shipping Cost</label>
+									<div class="col-sm-9">
+										<input class="form-control" type="number" th:field="*{shippingCost}" required />
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label class="col-form-label col-sm-3">Tax</label>
+									<div class="col-sm-9">
+										<input class="form-control" type="number" th:field="*{tax}" required />
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label class="col-form-label col-sm-3">Total</label>
+									<div class="col-sm-9">
+										<input class="form-control" type="number" th:field="*{total}" required />
+										<span>Total = Subtotal + Shipping Cost + Tax</span>
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label class="col-form-label col-sm-3">Payment Method</label>
+									<div class="col-12 col-sm-5 col-md-5 col-lg-3 col-xl-2">
+										<select class="form-select" th:field="*{paymentMethod}" required >
+											<th:block th:each="option : ${T(com.mahim.shopme.common.enums.PaymentMethod).values()}">
+												<option th:value="${option}">[[${option}]]</option>
+											</th:block>
+										</select>
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label class="col-form-label col-sm-3">Status</label>
+									<div class="col-12 col-sm-5 col-md-5 col-lg-3 col-xl-2">
+										<select class="form-select" th:field="*{status}" required >
+											<th:block th:each="option : ${T(com.mahim.shopme.common.enums.OrderStatus).values()}">
+												<option th:value="${option}">[[${option}]]</option>
+											</th:block>
+										</select>
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label class="col-form-label col-sm-3">Order Date</label>
+									<div class="col-12 col-sm-5 col-md-5 col-lg-3 col-xl-2">
+										<span th:text="${#dates.format(order.orderTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane fade p-3" id="products" role="tabpanel" aria-labelledby="products-tab" tabindex="1">
+							<div class="border border-secondary rounded p-3 text-start">
+								<th:block th:each="item, status : ${order.orderDetails}">
+									<div class="row border rounded p-1" th:with="product = ${item.product}" th:id="'row' + ${status.count}">
+										<div class="col-1 col-md-1 col-lg-1">
+											<div class="divCount">[[${status.count}]]</div>
+										</div>
+										<div class="col-6 col-md-4 col-lg-3">
+											<img th:src="@{${item.product.mainImagePath}}" class="img-fluid"/>
+										</div>
+										<div class="col-10 col-md-7 col-lg-8">
+											<div>
+												<a th:href="@{'/products/page/1??sortField=id&sortDir=asc&categoryId=' + ${item.product.category.id} + '&keyword=' + ${item.product.alias}}"
+												   target="_blank" th:title="${product.name}">
+													<b>[[${item.product.shortName}]]</b>
+												</a>
+											</div>
+											<div>
+												<span>Product Cost: </span>
+												<th:block th:replace="orders/currency_formatter :: format_currency_span(${item.productCost})"></th:block>
+											</div>
+											<div>
+												<span>Subtotal: [[${item.quantity}]] X </span>
+												<th:block th:replace="orders/currency_formatter :: format_currency_span(${item.unitPrice})"></th:block>
+												<span> = </span>
+												<th:block th:replace="orders/currency_formatter :: format_currency_span(${item.quantity *  item.unitPrice})"></th:block>
+											</div>
+											<div>
+												<span>Shipping Cost: </span>
+												<th:block th:replace="orders/currency_formatter :: format_currency_span(${item.shippingCost})"></th:block>
+											</div>
+										</div>
+									</div>
+									<div class="row m-1" th:id="'blankline' + ${status.count}">&nbsp;</div>
+								</th:block>
+							</div>
+						</div>
+						<div class="tab-pane fade p-3" id="shipping" role="tabpanel" aria-labelledby="shipping-tab" tabindex="2">
+							<div class="border border-secondary rounded p-3 text-start">
+								<div class="row mb-3">
+									<label class="col-form-label col-sm-3">Deliver Days</label>
+									<div class="col-sm-9">
+										<input class="form-control" type="number" th:field="*{deliverDays}" required />
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label class="col-form-label col-sm-3">Expected Deliver Date</label>
+									<div class="col-12 col-sm-5 col-md-5 col-lg-3 col-xl-2">
+										<input class="form-control" type="date" th:field="*{deliverDateOnForm}" required />
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label class="col-form-label col-sm-3">First Name</label>
+									<div class="col-sm-9">
+										<input class="form-control" type="text" th:field="*{firstName}" required />
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label class="col-form-label col-sm-3">Last Name</label>
+									<div class="col-sm-9">
+										<input class="form-control" type="text" th:field="*{lastName}" required />
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label class="col-form-label col-sm-3">Phone Number</label>
+									<div class="col-sm-9">
+										<input class="form-control" type="text" th:field="*{phoneNumber}" required />
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label class="col-form-label col-sm-3">Address Line 1</label>
+									<div class="col-sm-9">
+										<input class="form-control" type="text" th:field="*{addressLine1}" required />
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label class="col-form-label col-sm-3">Address Line 2</label>
+									<div class="col-sm-9">
+										<input class="form-control" type="text" th:field="*{addressLine2}" required />
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label class="col-form-label col-sm-3">City</label>
+									<div class="col-sm-9">
+										<input class="form-control" type="text" th:field="*{city}" required />
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label class="col-form-label col-sm-3">State</label>
+									<div class="col-sm-9">
+										<input class="form-control" type="text" th:field="*{state}" required list="listStates" />
+										<datalist id="listStates"></datalist>
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label class="col-form-label col-sm-3">Country</label>
+									<div class="col-sm-9">
+										<select class="form-select" th:field="*{country}" required >
+											<th:block th:each="country : ${countries}">
+												<option th:value="${country.id}" th:selected="${country.name == order.country}">[[${country.name}]]</option>
+											</th:block>
+										</select>
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label class="col-form-label col-sm-3">Postal Code</label>
+									<div class="col-sm-9">
+										<input class="form-control" type="text" th:field="*{postalCode}" required />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane fade p-3" id="track" role="tabpanel" aria-labelledby="track-tab" tabindex="3">
+							<div class="border border-secondary rounded p-3">
+								<div>
+									<table class="table table-striped table-bordered table-hover">
+										<thead class="table-dark">
+										<tr>
+											<th>Time</th>
+											<th>Status</th>
+											<th>Notes</th>
+										</tr>
+										</thead>
+										<tbody>
+										<th:block th:each="track : ${order.orderTracks}">
+											<tr>
+												<td>[[${#dates.format(updatedTime, 'yyyy-MM-dd HH:mm:ss')}]]</td>
+												<td>[[${track.status}]]</td>
+												<td>[[${track.notes}]]</td>
+											</tr>
+										</th:block>
+										</tbody>
+									</table>
+								</div>
+								<div class="less-details">
+									<th:block th:each="track : ${order.orderTracks}">
+										<div class="row p-1">
+											<span>[[${#dates.format(updatedTime, 'yyyy-MM-dd HH:mm:ss')}]]</span>
+										</div>
+										<div class="row p-1 ml-3">
+											<span>&nbsp;&nbsp;</span>
+											<b>[[${track.status}]]</b>: <i>[[${track.notes}]]</i>
+										</div>
+										<div class="row">&nbsp;</div>
+									</th:block>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div th:replace="fragments/modal::shopmeModal"></div>
+	<div th:replace="fragments/page_structure :: page_footer"></div>
+</div>
+<script type="text/javascript">
+	moduleURL = "[[@{/orders}]]";
+</script>
+<script th:src="@{/js/common_form.js}"></script>
+<script th:src="@{/js/shipping/shipping_form.js}"></script>
+</body>
+</html>

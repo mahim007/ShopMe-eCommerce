@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Entity
@@ -86,5 +87,10 @@ public class Order extends AbstractAddress {
         if (postalCode != null && !postalCode.isEmpty()) address += ", Postal Code: " + postalCode;
         if (phoneNumber != null && !phoneNumber.isEmpty()) address += ", Phone Number: " + phoneNumber;
         return address;
+    }
+
+    public String getDeliverDateOnForm() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        return formatter.format(deliverDate);
     }
 }
