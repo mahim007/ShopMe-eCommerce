@@ -19,9 +19,12 @@ public interface ShippingRateRepository extends SearchRepository<ShippingRate, I
     Page<ShippingRate> findAllByKeyword(String keyword, Pageable pageable);
 
     @Query("SELECT s FROM ShippingRate s WHERE s.country.code = ?1 AND s.state = ?2")
-    Optional<ShippingRate> findByCountryAndState(String countryCode, String state);
+    Optional<ShippingRate> findByCountryCodeAndState(String countryCode, String state);
 
     @Modifying
     @Query("UPDATE ShippingRate s SET s.codSupported = ?2 WHERE s.id = ?1")
     void updateCODSupport(Integer id, boolean enabled);
+
+    @Query("SELECT s FROM ShippingRate s WHERE s.country.code = :countryId AND s.state = :state")
+    Optional<ShippingRate> findByCountryIdAndState(Integer countryId, String state);
 }

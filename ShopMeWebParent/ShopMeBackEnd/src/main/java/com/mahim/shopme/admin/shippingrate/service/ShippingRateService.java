@@ -1,10 +1,13 @@
 package com.mahim.shopme.admin.shippingrate.service;
 
 import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
+import com.mahim.shopme.admin.product.repository.ProductRepository;
 import com.mahim.shopme.admin.setting.country.CountryRepository;
 import com.mahim.shopme.admin.shippingrate.repository.ShippingRateRepository;
 import com.mahim.shopme.common.entity.Country;
+import com.mahim.shopme.common.entity.Product;
 import com.mahim.shopme.common.entity.ShippingRate;
+import com.mahim.shopme.common.exception.ProductNotFoundException;
 import com.mahim.shopme.common.exception.ShippingRateNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -15,13 +18,17 @@ import java.util.Optional;
 @Service
 public class ShippingRateService {
     public static final int SHIPPING_RATE_PER_PAGE = 10;
+    private static final int DIM_DIVISOR = 139;
 
     private final ShippingRateRepository shippingRateRepository;
     private final CountryRepository countryRepository;
+    private final ProductRepository productRepository;
 
-    public ShippingRateService(ShippingRateRepository shippingRateRepository, CountryRepository countryRepository) {
+    public ShippingRateService(ShippingRateRepository shippingRateRepository, CountryRepository countryRepository,
+                               ProductRepository productRepository) {
         this.shippingRateRepository = shippingRateRepository;
         this.countryRepository = countryRepository;
+        this.productRepository = productRepository;
     }
 
     public List<ShippingRate> listAll() {
@@ -64,9 +71,9 @@ public class ShippingRateService {
         shippingRateRepository.delete(toBeDeleted);
     }
 
-    public String checkUnique(Integer id, String country, String state) throws ShippingRateNotFoundException {
+    public String checkUnique(Integer id, String countryCode, String state) throws ShippingRateNotFoundException {
         Optional<ShippingRate> optionalById = shippingRateRepository.findById(id);
-        Optional<ShippingRate> optionalByCountryAndState = shippingRateRepository.findByCountryAndState(country, state);
+        Optional<ShippingRate> optionalByCountryAndState = shippingRateRepository.findByCountryCodeAndState(countryCode, state);
 
         if (optionalById.isPresent() && optionalByCountryAndState.isPresent()) {
             ShippingRate byId = optionalById.get();
@@ -75,13 +82,13 @@ public class ShippingRateService {
             if (byId.getId() == byCountryAndState.getId()) {
                 return "OK";
             } else {
-                return "Duplicate: " + country + "/" + state;
+                return "Duplicate: " + countryCode + "/" + state;
             }
 
         } else if (optionalById.isPresent()){
             return "OK";
         } else if (optionalByCountryAndState.isPresent()) {
-            return "Duplicate: " + country + "/" + state;
+            return "Duplicate: " + countryCode + "/" + state;
         } else {
             return "OK";
         }
@@ -94,5 +101,28 @@ public class ShippingRateService {
 
     public List<Country> listAllCountry() {
         return countryRepository.findAllByOrderByNameAsc();
+    }
+
+    public float calculateShippingCost(Integer productId, Integer countryId, String state)
+            throws ShippingRateNotFoundException, ProductNotFoundException {
+
+        Optional<ShippingRate> shippingRateOptional = shippingRateRepository.findByCountryIdAndState(countryId, state);
+        Optional<Product> productOptional = productRepository.findById(productId);
+        float finalWeight = 0.0f;
+
+        if (shippingRateOptional.isPresent() && productOptional.isPresent()) {
+            ShippingRate shippingRate = shippingRateOptional.get();
+            Product product = productOptional.get();
+
+            float dimWeight = (product.getLength() * product.getWidth() * product.getHeight()) / DIM_DIVISOR;
+            finalWeight = Math.max(product.getWeight(), dimWeight);
+            return finalWeight * shippingRate.getRate();
+        } else if (shippingRateOptional.isEmpty()){
+            throw new ShippingRateNotFoundException("No shipping rate found for given destination. " +
+                    "You have to enter shipping cost manually");
+        } else {
+            throw new ProductNotFoundException("No shipping rate found for given destination. " +
+                    "You have to enter shipping cost manually");
+        }
     }
 }
