@@ -83,12 +83,13 @@ public class OrderController {
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Integer id, Model model, RedirectAttributes ra) {
+    public String edit(@PathVariable("id") Integer id, HttpServletRequest request, Model model, RedirectAttributes ra) {
         try {
             Order order = orderService.findById(id);
             model.addAttribute("order", order);
             model.addAttribute("countries", customerService.listAllCountry());
             model.addAttribute("pageTitle", "Edit Order");
+            loadCurrencySetting(request);
         } catch (OrderNotFoundException ex) {
             ra.addFlashAttribute("exceptionMessage", "Order not found with ID: " + id);
             return listAll();

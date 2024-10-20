@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="content" class="border border-secondary rounded p-3 text-start">
+    <div class="row mb-3">
+        <label class="col-form-label col-sm-3">Order Id</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" th:field="*{id}" readonly />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-form-label col-sm-3">Customer</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" th:field="*{customer.fullName}" readonly />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-form-label col-sm-3">Product Cost</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" th:field="*{productCost}" required />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-form-label col-sm-3">Subtotal</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" th:field="*{subtotal}" required />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-form-label col-sm-3">Shipping Cost</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" th:field="*{shippingCost}" required />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-form-label col-sm-3">Tax</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" th:field="*{tax}" required />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-form-label col-sm-3">Total</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" th:field="*{total}" required />
+            <span>Total = Subtotal + Shipping Cost + Tax</span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-form-label col-sm-3">Payment Method</label>
+        <div class="col-12 col-sm-5 col-md-5 col-lg-3 col-xl-2">
+            <select class="form-select" th:field="*{paymentMethod}" required >
+                <th:block th:each="option : ${T(com.mahim.shopme.common.enums.PaymentMethod).values()}">
+                    <option th:value="${option}">[[${option}]]</option>
+                </th:block>
+            </select>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-form-label col-sm-3">Status</label>
+        <div class="col-12 col-sm-5 col-md-5 col-lg-3 col-xl-2">
+            <select class="form-select" th:field="*{status}" required >
+                <th:block th:each="option : ${T(com.mahim.shopme.common.enums.OrderStatus).values()}">
+                    <option th:value="${option}">[[${option}]]</option>
+                </th:block>
+            </select>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-form-label col-sm-3">Order Date</label>
+        <div class="col-12 col-sm-5 col-md-5 col-lg-3 col-xl-2">
+            <span th:text="${#dates.format(order.orderTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+        </div>
+    </div>
+</div>
+</body>
+</html>

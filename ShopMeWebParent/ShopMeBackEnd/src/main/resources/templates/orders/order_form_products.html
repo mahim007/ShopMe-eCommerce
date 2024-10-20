@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="content" class="border border-secondary rounded p-3 text-start">
+    <div id="productList">
+        <th:block th:each="item, status : ${order.orderDetails}">
+            <div class="border rounded p-1">
+                <div class="row" th:with="product = ${item.product}" th:id="'row' + ${status.count}">
+                    <div class="col-1 col-md-1 col-lg-1">
+                        <div class="divCount">[[${status.count}]]</div>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <img th:src="@{${item.product.mainImagePath}}" class="img-fluid"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-10 col-md-7 col-lg-8">
+                        <div>
+                            <a th:href="@{'/products/page/1??sortField=id&sortDir=asc&categoryId=' + ${item.product.category.id} + '&keyword=' + ${item.product.alias}}"
+                               target="_blank" th:title="${item.product.name}">
+                                <b>[[${item.product.shortName}]]</b>
+                            </a>
+                        </div>
+                        <table>
+                            <tr>
+                                <td>Product Cost: </td>
+                                <td>
+                                    <input type="text" required class="form-control m-1 cost-input"
+                                           th:rowNumber="${status.count}"
+                                           th:id="'cost-' + ${status.count}"
+                                           th:value="${item.productCost}" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Quantity: </td>
+                                <td>
+                                    <input type="number" min="0" max="5" step="1" required class="form-control m-1 quantity-input"
+                                           th:rowNumber="${status.count}"
+                                           th:id="'quantity-' + ${status.count}"
+                                           th:value="${item.quantity}"
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Unit price: </td>
+                                <td>
+                                    <input type="text" required class="form-control m-1 price-input"
+                                           th:rowNumber="${status.count}"
+                                           th:id="'price-' + ${status.count}"
+                                           th:value="${item.unitPrice}"
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Subtotal: </td>
+                                <td>
+                                    <input type="text" required class="form-control m-1 subtotal-output"
+                                           th:rowNumber="${status.count}"
+                                           th:id="'subtotal-' + ${status.count}"
+                                           th:value="${item.subtotal}"
+                                           disabled />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Shipping Cost: </td>
+                                <td>
+                                    <input type="text" required class="form-control m-1 ship-input"
+                                           th:rowNumber="${status.count}"
+                                           th:id="'ship-' + ${status.count}"
+                                           th:value="${item.shippingCost}" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-1" th:id="'blankline' + ${status.count}">&nbsp;</div>
+        </th:block>
+    </div>
+</div>
+</body>
+</html>
