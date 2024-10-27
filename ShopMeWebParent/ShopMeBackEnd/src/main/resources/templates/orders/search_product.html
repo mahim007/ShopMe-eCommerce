@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/page_structure :: page_header_with_richtext(${pageTitle})"></head>
+<body>
+<div class="container" style="min-width: 1000px">
+    <div class="text-center">
+        <h2>Manage Order | [[${pageTitle}]]</h2>
+    </div>
+    <div class="border border-secondary rounded p-3">
+        <form class="form-inline my-2" th:action="@{/orders/search_product}" method="post">
+            <div class="row">
+                <div class="col-auto">
+                    <input type="search" required class="form-control mr-sm-2" name="keyword" placeholder="Product Name" />
+                </div>
+                <div class="col-auto">
+                    <input type="submit" class="btn btn-outline-success" value="Search" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div th:replace="fragments/modal::shopmeModal"></div>
+    <div th:replace="orders/add_product_modal :: content"></div>
+    <div th:replace="fragments/page_structure :: page_footer"></div>
+</div>
+<script type="text/javascript">
+    moduleURL = "[[@{/orders}]]";
+</script>
+<script th:src="@{/js/common_form.js}"></script>
+<script th:src="@{/js/shipping/shipping_form.js}"></script>
+<script th:src="@{/library/jquery.number.min.js}"></script>
+<script th:src="@{/js/order/overview_products.js}"></script>
+<script th:src="@{/js/order/add_products.js}"></script>
+</body>
+</html>

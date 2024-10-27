@@ -47,6 +47,15 @@ public class ProductService {
                                 productRepository.findAll(pageable);
     }
 
+    public void searchProducts(int pageNum, PagingAndSortingHelper helper) {
+        Sort sort = Sort.by(helper.getSortField());
+        sort = StringUtils.equals(helper.getSortDir(), "asc") ? sort.ascending() : sort.descending();
+        Pageable pageable = PageRequest.of(pageNum - 1, PRODUCTS_PER_PAGE, sort);
+
+        Page<Product> productPage = productRepository.searchProductsByName(helper.getKeyword(), pageable);
+        helper.updateModelAttributes(pageNum, productPage);
+    }
+
     private static boolean isValidCategoryId(Integer categoryId) {
         return categoryId != null && categoryId > 0;
     }

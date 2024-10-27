@@ -43,4 +43,6 @@ public interface ProductRepository extends SearchRepository<Product, Integer> {
             + " OR p.category.name LIKE %?3%)"
     )
     Page<Product> searchInCategory(Integer categoryId, String categoryIdMatch, String keyword, Pageable pageable);
+
+    Page<Product> searchProductsByName(String name, Pageable pageable);
 }

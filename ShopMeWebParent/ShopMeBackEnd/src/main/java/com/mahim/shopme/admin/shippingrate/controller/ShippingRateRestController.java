@@ -28,12 +28,9 @@ public class ShippingRateRestController {
             @RequestParam(name = "productId", defaultValue = "-1") Integer productId,
             @RequestParam(name = "countryId", defaultValue = "") Integer countryId,
             @RequestParam(name = "state", defaultValue = "") String state
-    ) {
-        try {
-            float shippingCost = shippingRateService.calculateShippingCost(productId, countryId, state);
-            return String.valueOf(shippingCost);
-        } catch (ShippingRateNotFoundException | ProductNotFoundException e) {
-            return e.getMessage();
-        }
+    ) throws ShippingRateNotFoundException, ProductNotFoundException {
+
+        float shippingCost = shippingRateService.calculateShippingCost(productId, countryId, state);
+        return String.valueOf(shippingCost);
     }
 }
