@@ -2,11 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/page_structure :: page_header_with_richtext(${pageTitle})"></head>
 <body>
-<div class="container" style="min-width: 1000px">
-    <div class="text-center">
-        <h2>Manage Order | [[${pageTitle}]]</h2>
-    </div>
-    <div class="border border-secondary rounded p-3">
+<div class="container">
+    <div class="p-1">
         <form class="form-inline my-2" th:action="@{/orders/search_product}" method="post">
             <div class="row">
                 <div class="col-auto">
@@ -17,17 +14,32 @@
                 </div>
             </div>
         </form>
+
+        <div class="row my-2">
+            <th:block th:each="product : ${products}">
+                <div class="col">
+                    <div>
+                        <a href="">
+                            <img th:src="@{${product.mainImagePath}}" height="150" />
+                        </a>
+                        <br>
+                        <b>[[${product.shortName}]]</b>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+        <div class="text-center m-1" th:if="${total > 0}">
+            <span>Showing categories # [[${startNo}]] to [[${endNo}]] of [[${total}]]</span>
+            <nav th:replace="fragments/pagination::pagination_fragment"></nav>
+        </div>
+        <div class="text-center m-1" th:unless="${total > 0}">
+            <p>No product found</p>
+        </div>
     </div>
-    <div th:replace="fragments/modal::shopmeModal"></div>
-    <div th:replace="orders/add_product_modal :: content"></div>
-    <div th:replace="fragments/page_structure :: page_footer"></div>
 </div>
 <script type="text/javascript">
     moduleURL = "[[@{/orders}]]";
 </script>
-<script th:src="@{/js/common_form.js}"></script>
-<script th:src="@{/js/shipping/shipping_form.js}"></script>
-<script th:src="@{/library/jquery.number.min.js}"></script>
 <script th:src="@{/js/order/overview_products.js}"></script>
 <script th:src="@{/js/order/add_products.js}"></script>
 </body>
