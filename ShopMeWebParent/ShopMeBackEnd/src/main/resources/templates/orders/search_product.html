@@ -7,7 +7,7 @@
         <form class="form-inline my-2" th:action="@{/orders/search_product}" method="post">
             <div class="row">
                 <div class="col-auto">
-                    <input type="search" required class="form-control mr-sm-2" name="keyword" placeholder="Product Name" />
+                    <input type="search" th:value="${keyword}" required class="form-control mr-sm-2" name="keyword" placeholder="Product Name" />
                 </div>
                 <div class="col-auto">
                     <input type="submit" class="btn btn-outline-success" value="Search" />
@@ -17,13 +17,13 @@
 
         <div class="row my-2">
             <th:block th:each="product : ${products}">
-                <div class="col">
+                <div class="col-3">
                     <div>
-                        <a href="">
+                        <a href="" class="linkProduct" th:pid="${product.id}">
                             <img th:src="@{${product.mainImagePath}}" height="150" />
+                            <br>
+                            <b th:id="'pname-' + ${product.id}">[[${product.shortName}]]</b>
                         </a>
-                        <br>
-                        <b>[[${product.shortName}]]</b>
                     </div>
                 </div>
             </th:block>
@@ -39,8 +39,20 @@
 </div>
 <script type="text/javascript">
     moduleURL = "[[@{/orders}]]";
+
+    function handleLinkProduct() {
+        $(".linkProduct").click(function (e) {
+            e.preventDefault();
+            let productId = $(this).attr("pid");
+            let productName = $("#pname-" + productId).text();
+            console.log(`selected product-id: ${productId} and product name: ${productName}`);
+        });
+    }
+
+    $(document).ready(function () {
+        handleLinkProduct();
+    });
 </script>
-<script th:src="@{/js/order/overview_products.js}"></script>
 <script th:src="@{/js/order/add_products.js}"></script>
 </body>
 </html>
