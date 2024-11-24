@@ -25,6 +25,6 @@ public interface ShippingRateRepository extends SearchRepository<ShippingRate, I
     @Query("UPDATE ShippingRate s SET s.codSupported = ?2 WHERE s.id = ?1")
     void updateCODSupport(Integer id, boolean enabled);
 
-    @Query("SELECT s FROM ShippingRate s WHERE s.country.code = :countryId AND s.state = :state")
+    @Query("SELECT s FROM ShippingRate s WHERE s.country.id = :countryId AND s.state = :state")
     Optional<ShippingRate> findByCountryIdAndState(Integer countryId, String state);
 }

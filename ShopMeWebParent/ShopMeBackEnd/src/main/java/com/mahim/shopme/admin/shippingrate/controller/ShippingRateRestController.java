@@ -3,6 +3,8 @@ package com.mahim.shopme.admin.shippingrate.controller;
 import com.mahim.shopme.admin.shippingrate.service.ShippingRateService;
 import com.mahim.shopme.common.exception.ProductNotFoundException;
 import com.mahim.shopme.common.exception.ShippingRateNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,13 +26,16 @@ public class ShippingRateRestController {
     }
 
     @GetMapping("/shipping_cost")
-    public String getShippingCost(
+    public ResponseEntity<String> getShippingCost(
             @RequestParam(name = "productId", defaultValue = "-1") Integer productId,
             @RequestParam(name = "countryId", defaultValue = "") Integer countryId,
             @RequestParam(name = "state", defaultValue = "") String state
-    ) throws ShippingRateNotFoundException, ProductNotFoundException {
-
-        float shippingCost = shippingRateService.calculateShippingCost(productId, countryId, state);
-        return String.valueOf(shippingCost);
+    ) {
+        try {
+            float shippingCost = shippingRateService.calculateShippingCost(productId, countryId, state);
+            return new ResponseEntity<>(String.valueOf(shippingCost), HttpStatus.OK);
+        } catch (ShippingRateNotFoundException | ProductNotFoundException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 }

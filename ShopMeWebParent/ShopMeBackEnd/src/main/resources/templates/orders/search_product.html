@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/page_structure :: page_header_with_richtext(${pageTitle})"></head>
+<head th:replace="fragments/page_structure :: page_header('Orders - Shopme Admin')"></head>
 <body>
 <div class="container">
     <div class="p-1">
@@ -29,23 +29,27 @@
             </th:block>
         </div>
         <div class="text-center m-1" th:if="${total > 0}">
-            <span>Showing categories # [[${startNo}]] to [[${endNo}]] of [[${total}]]</span>
+            <span>Showing products # [[${startNo}]] to [[${endNo}]] of [[${total}]]</span>
             <nav th:replace="fragments/pagination::pagination_fragment"></nav>
         </div>
         <div class="text-center m-1" th:unless="${total > 0}">
             <p>No product found</p>
         </div>
     </div>
+    <div th:replace="fragments/modal::shopmeModal"></div>
 </div>
 <script type="text/javascript">
-    moduleURL = "[[@{/orders}]]";
-
     function handleLinkProduct() {
         $(".linkProduct").click(function (e) {
             e.preventDefault();
             let productId = $(this).attr("pid");
             let productName = $("#pname-" + productId).text();
-            console.log(`selected product-id: ${productId} and product name: ${productName}`);
+
+            if (window.parent.productAlreadyAdded(productId)) {
+                showModalDialog("Warning", "Product with name: <b>" + productName + "</b> has been added already.");
+            } else {
+                window.parent.addProduct(productId, productName);
+            }
         });
     }
 
@@ -53,6 +57,6 @@
         handleLinkProduct();
     });
 </script>
-<script th:src="@{/js/order/add_products.js}"></script>
+<script th:src="@{/js/common_form.js}"></script>
 </body>
 </html>
