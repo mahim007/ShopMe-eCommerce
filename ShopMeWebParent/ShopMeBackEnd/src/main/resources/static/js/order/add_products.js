@@ -101,11 +101,12 @@ function generateProductCode(productId, productName, mainImagePath, productCost,
     let blankLineId = "blankline-" + nextCount;
 
     return `
-        <div class="border rounded p-1">
+        <div class="border rounded p-1" id="row-${nextCount}">
             <div class="row">
                 <input class="hiddenProductId" type="hidden" name="productId" value="${productId}" />
                 <div class="col-1 col-md-1 col-lg-1">
                     <div class="divCount">${nextCount}</div>
+                    <div><a class="fas fa-trash icon-danger linkRemove" href="" rowNumber="${nextCount}"></a></div>
                 </div>
                 <div class="col-6 col-md-4 col-lg-3">
                     <img src="${mainImagePath}" class="img-fluid"/>

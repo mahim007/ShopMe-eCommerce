@@ -8,11 +8,12 @@
 <div th:fragment="content" class="border border-secondary rounded p-3 text-start">
     <div id="productList">
         <th:block th:each="item, status : ${order.orderDetails}">
-            <div class="border rounded p-1">
-                <div class="row" th:with="product = ${item.product}" th:id="'row' + ${status.count}">
+            <div class="border rounded p-1" th:id="'row-' + ${status.count}">
+                <div class="row" th:with="product = ${item.product}">
                     <input class="hiddenProductId" type="hidden" name="productId" th:value="${product.id}" />
                     <div class="col-1 col-md-1 col-lg-1">
                         <div class="divCount">[[${status.count}]]</div>
+                        <div><a class="fas fa-trash icon-danger linkRemove" href="" th:rowNumber="${status.count}"></a></div>
                     </div>
                     <div class="col-6 col-md-4 col-lg-3">
                         <img th:src="@{${item.product.mainImagePath}}" class="img-fluid"/>
