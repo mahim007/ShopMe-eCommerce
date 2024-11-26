@@ -54,18 +54,18 @@ function getShippingCost(productId) {
         })
         .then(data => {
             console.log("success: ", data);
-            getProductInfo(productId);
+            getProductInfo(productId, data);
         })
         .catch(error => {
             showModalDialog("Warning", error.message);
-            getProductInfo(productId);
+            getProductInfo(productId, 0.0);
         })
         .finally(() => {
             $("#addProductModal").modal("hide");
         })
 }
 
-function getProductInfo(productId) {
+function getProductInfo(productId, shippingCost) {
     let requestUrl = contextPath + "products/get/" + productId;
     fetch(requestUrl, {
         method: 'GET',
@@ -80,6 +80,95 @@ function getProductInfo(productId) {
             }
             throw new Error("Product not found");
         })
-        .then(data => console.log("success: ", data))
+        .then(data => {
+            let productName = data.name;
+            let mainImagePath = contextPath.substring(0, contextPath.length - 1) + data.imagePath;
+            let productCost = $.number(data.cost, 2);
+            let productPrice = $.number(data.price, 2);
+            let htmlCode = generateProductCode(productId, productName, mainImagePath, productCost, productPrice, shippingCost);
+            $("#productList").append(htmlCode);
+        })
         .catch(error => showModalDialog("Warning", error.message));
+}
+
+function generateProductCode(productId, productName, mainImagePath, productCost, productPrice, shippingCost) {
+    let nextCount = $(".hiddenProductId").length + 1;
+    let quantityId = "quantity-" + nextCount;
+    let costId = "cost-" + nextCount;
+    let priceId = "price-" + nextCount;
+    let subtotalId = "subtotal-" + nextCount;
+    let shipId = "ship-" + nextCount;
+    let blankLineId = "blankline-" + nextCount;
+
+    return `
+        <div class="border rounded p-1">
+            <div class="row">
+                <input class="hiddenProductId" type="hidden" name="productId" value="${productId}" />
+                <div class="col-1 col-md-1 col-lg-1">
+                    <div class="divCount">${nextCount}</div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <img src="${mainImagePath}" class="img-fluid"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-10 col-md-7 col-lg-8">
+                    <div>
+                        <b>${productName}</b>
+                    </div>
+                    <table>
+                        <tr>
+                            <td>Product Cost: </td>
+                            <td>
+                                <input type="text" required class="form-control m-1 cost-input"
+                                       rowNumber="${nextCount}"
+                                       id="${costId}"
+                                       value="${productCost}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Quantity: </td>
+                            <td>
+                                <input type="number" min="0" max="5" step="1" required class="form-control m-1 quantity-input"
+                                       rowNumber="${nextCount}"
+                                       id="${quantityId}"
+                                       value="1"
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Unit price: </td>
+                            <td>
+                                <input type="text" required class="form-control m-1 price-input"
+                                       rowNumber="${nextCount}"
+                                       id="${priceId}"
+                                       value="${productPrice}"
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Subtotal: </td>
+                            <td>
+                                <input type="text" required class="form-control m-1 subtotal-output"
+                                       rowNumber="${nextCount}"
+                                       id="${subtotalId}"
+                                       value="${productPrice}"
+                                       disabled />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Shipping Cost: </td>
+                            <td>
+                                <input type="text" required class="form-control m-1 ship-input"
+                                       rowNumber="${nextCount}"
+                                       id="${shipId}"
+                                       value="${shippingCost}" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row m-1" th:id="${blankLineId}">&nbsp;</div>
+    `;
 }
