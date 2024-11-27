@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/page_structure :: page_header_with_richtext(${pageTitle})"></head>
 <body>
 <div class="container-fluid">
@@ -38,40 +38,7 @@
 							<th:block th:replace="orders/order_form_shipping :: content"></th:block>
 						</div>
 						<div class="tab-pane fade p-3" id="track" role="tabpanel" aria-labelledby="track-tab" tabindex="3">
-							<div class="border border-secondary rounded p-3">
-								<div>
-									<table class="table table-striped table-bordered table-hover">
-										<thead class="table-dark">
-										<tr>
-											<th>Time</th>
-											<th>Status</th>
-											<th>Notes</th>
-										</tr>
-										</thead>
-										<tbody>
-										<th:block th:each="track : ${order.orderTracks}">
-											<tr>
-												<td>[[${#dates.format(updatedTime, 'yyyy-MM-dd HH:mm:ss')}]]</td>
-												<td>[[${track.status}]]</td>
-												<td>[[${track.notes}]]</td>
-											</tr>
-										</th:block>
-										</tbody>
-									</table>
-								</div>
-								<div class="less-details">
-									<th:block th:each="track : ${order.orderTracks}">
-										<div class="row p-1">
-											<span>[[${#dates.format(updatedTime, 'yyyy-MM-dd HH:mm:ss')}]]</span>
-										</div>
-										<div class="row p-1 ml-3">
-											<span>&nbsp;&nbsp;</span>
-											<b>[[${track.status}]]</b>: <i>[[${track.notes}]]</i>
-										</div>
-										<div class="row">&nbsp;</div>
-									</th:block>
-								</div>
-							</div>
+							<th:block th:replace="orders/order_form_track :: content"></th:block>
 						</div>
 					</div>
 				</div>
@@ -98,5 +65,7 @@
 <script th:src="@{/js/order/overview_products.js}"></script>
 <script th:src="@{/js/order/add_products.js}"></script>
 <script th:src="@{/js/order/remove_products.js}"></script>
+<script th:src="@{/js/order/add_track.js}"></script>
+<script th:src="@{/js/order/remove_track.js}"></script>
 </body>
 </html>

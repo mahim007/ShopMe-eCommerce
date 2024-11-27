@@ -170,6 +170,6 @@ function generateProductCode(productId, productName, mainImagePath, productCost,
                 </div>
             </div>
         </div>
-        <div class="row m-1" th:id="${blankLineId}">&nbsp;</div>
+        <div class="row m-1" id="${blankLineId}">&nbsp;</div>
     `;
 }

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="content" class="border border-secondary rounded p-3 text-start">
+    <div id="trackList">
+        <th:block th:each="item, status : ${order.orderTracks}">
+            <div class="border rounded p-1" th:id="'row-' + ${status.count}">
+                <div class="row">
+                    <input class="hiddenTrackId" type="hidden" name="trackId" th:value="${item.id}" />
+                    <div class="col-1 col-md-1 col-lg-1">
+                        <div class="divCount">[[${status.count}]]</div>
+                        <div><a class="fas fa-trash icon-danger linkRemove" href="" th:rowNumber="${status.count}"></a></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-10 col-md-7 col-lg-8">
+                        <table>
+                            <tr>
+                                <td>Time: </td>
+                                <td>
+                                    <input type="datetime-local" required class="form-control m-1"
+                                           th:rowNumber="${status.count}"
+                                           th:id="'time-' + ${status.count}"
+                                           th:value="${#dates.format(item.updatedTime, 'yyyy-MM-dd HH:mm:ss')}" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Status: </td>
+                                <td>
+                                    <select class="form-select" th:value="${item.status}">
+                                        <th:block th:each="option : ${T(com.mahim.shopme.common.enums.OrderStatus).values()}">
+                                            <option th:value="${option}">[[${option}]]</option>
+                                        </th:block>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Notes: </td>
+                                <td>
+                                    <textarea class="form-control" th:value="${item.notes}" required rows="5"></textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-1" th:id="'blankline-' + ${status.count}">&nbsp;</div>
+        </th:block>
+    </div>
+    <div>
+        <a th:href="@{/}" id="linkAddTrack" class="btn btn-success">Add Track Record</a>
+    </div>
+</div>
+</body>
+</html>

@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
@@ -27,4 +29,16 @@ public class OrderTrack extends ParentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
+
+    public String getUpdatedTimeOnForm() {
+        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(updatedTime);
+    }
+
+    public void setUpdatedTimeOnForm(String dateString) {
+        try {
+            setUpdatedTime(new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss").parse(dateString));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
 }
