@@ -10,6 +10,7 @@
         <th:block th:each="item, status : ${order.orderDetails}">
             <div class="border rounded p-1" th:id="'row-' + ${status.count}">
                 <div class="row" th:with="product = ${item.product}">
+                    <input type="hidden" name="detailId" th:value="${item.id}" />
                     <input class="hiddenProductId" type="hidden" name="productId" th:value="${product.id}" />
                     <div class="col-1 col-md-1 col-lg-1">
                         <div class="divCount">[[${status.count}]]</div>
@@ -32,6 +33,7 @@
                                 <td>Product Cost: </td>
                                 <td>
                                     <input type="text" required class="form-control m-1 cost-input"
+                                           name="productDetailCost"
                                            th:rowNumber="${status.count}"
                                            th:id="'cost-' + ${status.count}"
                                            th:value="${item.productCost}" />
@@ -41,6 +43,7 @@
                                 <td>Quantity: </td>
                                 <td>
                                     <input type="number" min="0" max="5" step="1" required class="form-control m-1 quantity-input"
+                                           name="quantity"
                                            th:rowNumber="${status.count}"
                                            th:id="'quantity-' + ${status.count}"
                                            th:value="${item.quantity}"
@@ -51,6 +54,7 @@
                                 <td>Unit price: </td>
                                 <td>
                                     <input type="text" required class="form-control m-1 price-input"
+                                           name="productPrice"
                                            th:rowNumber="${status.count}"
                                            th:id="'price-' + ${status.count}"
                                            th:value="${item.unitPrice}"
@@ -61,16 +65,19 @@
                                 <td>Subtotal: </td>
                                 <td>
                                     <input type="text" required class="form-control m-1 subtotal-output"
+                                           name="productSubtotal"
                                            th:rowNumber="${status.count}"
                                            th:id="'subtotal-' + ${status.count}"
                                            th:value="${item.subtotal}"
-                                           disabled />
+                                           disabled
+                                    />
                                 </td>
                             </tr>
                             <tr>
                                 <td>Shipping Cost: </td>
                                 <td>
                                     <input type="text" required class="form-control m-1 ship-input"
+                                           name="productShipCost"
                                            th:rowNumber="${status.count}"
                                            th:id="'ship-' + ${status.count}"
                                            th:value="${item.shippingCost}" />

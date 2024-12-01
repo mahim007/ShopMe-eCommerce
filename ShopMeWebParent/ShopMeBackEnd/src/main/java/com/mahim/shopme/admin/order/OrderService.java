@@ -40,4 +40,12 @@ public class OrderService {
         Order order = findById(id);
         orderRepository.delete(order);
     }
+
+    public void save(Order orderInForm) {
+        Order orderInDb = orderRepository.findById(orderInForm.getId()).get();
+        orderInForm.setOrderTime(orderInDb.getOrderTime());
+        orderInForm.setCustomer(orderInDb.getCustomer());
+
+        orderRepository.save(orderInForm);
+    }
 }

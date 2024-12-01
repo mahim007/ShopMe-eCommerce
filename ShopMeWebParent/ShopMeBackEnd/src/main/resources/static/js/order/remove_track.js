@@ -1,9 +1,9 @@
 function removeTrack(link) {
     let rowNumber = link.attr("rowNumber");
-    $("#trackList #row-" + rowNumber).remove();
+    $("#trackList #rowTrack-" + rowNumber).remove();
     $("#trackList #blankline-" + rowNumber).remove();
 
-    $("#trackList.divCount").each(function (index, element) {
+    $("#trackList .divCount").each(function (index, element) {
         element.innerHTML = "" + (index + 1);
     });
 }
@@ -22,7 +22,5 @@ $(document).ready(function () {
             removeTrack($(this));
             updateOrderAmounts();
         }
-
-        console.log("could not return from scope");
     })
 });

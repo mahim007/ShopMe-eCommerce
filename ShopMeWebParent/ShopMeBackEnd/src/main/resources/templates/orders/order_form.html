@@ -9,9 +9,7 @@
 	</div>
 	<div class="container">
 		<div class="border border-secondary rounded p-3">
-			<form th:action="@{/orders/save}" method="post" th:object="${order}"
-				  enctype="multipart/form-data"
-				  style="max-width: 1000px; margin: 0 auto">
+			<form th:action="@{/orders/save}" method="post" th:object="${order}" onsubmit="return processFormBeforeSubmit();">
 				<div>
 					<ul class="nav nav-tabs" id="orderDetailTab" role="tablist">
 						<li class="nav-item" role="presentation">

@@ -103,6 +103,7 @@ function generateProductCode(productId, productName, mainImagePath, productCost,
     return `
         <div class="border rounded p-1" id="row-${nextCount}">
             <div class="row">
+                <input type="hidden" name="detailId" value="0" />
                 <input class="hiddenProductId" type="hidden" name="productId" value="${productId}" />
                 <div class="col-1 col-md-1 col-lg-1">
                     <div class="divCount">${nextCount}</div>
@@ -122,18 +123,20 @@ function generateProductCode(productId, productName, mainImagePath, productCost,
                             <td>Product Cost: </td>
                             <td>
                                 <input type="text" required class="form-control m-1 cost-input"
-                                       rowNumber="${nextCount}"
-                                       id="${costId}"
-                                       value="${productCost}" />
+                                    name="productDetailCost"
+                                    rowNumber="${nextCount}"
+                                    id="${costId}"
+                                    value="${productCost}" />
                             </td>
                         </tr>
                         <tr>
                             <td>Quantity: </td>
                             <td>
                                 <input type="number" min="0" max="5" step="1" required class="form-control m-1 quantity-input"
-                                       rowNumber="${nextCount}"
-                                       id="${quantityId}"
-                                       value="1"
+                                    name="quantity"
+                                    rowNumber="${nextCount}"
+                                    id="${quantityId}"
+                                    value="1"
                                 />
                             </td>
                         </tr>
@@ -141,9 +144,10 @@ function generateProductCode(productId, productName, mainImagePath, productCost,
                             <td>Unit price: </td>
                             <td>
                                 <input type="text" required class="form-control m-1 price-input"
-                                       rowNumber="${nextCount}"
-                                       id="${priceId}"
-                                       value="${productPrice}"
+                                    name="productPrice"
+                                    rowNumber="${nextCount}"
+                                    id="${priceId}"
+                                    value="${productPrice}"
                                 />
                             </td>
                         </tr>
@@ -151,19 +155,21 @@ function generateProductCode(productId, productName, mainImagePath, productCost,
                             <td>Subtotal: </td>
                             <td>
                                 <input type="text" required class="form-control m-1 subtotal-output"
-                                       rowNumber="${nextCount}"
-                                       id="${subtotalId}"
-                                       value="${productPrice}"
-                                       disabled />
+                                    name="productSubtotal"
+                                     rowNumber="${nextCount}"
+                                     id="${subtotalId}"
+                                     value="${productPrice}"
+                                     disabled />
                             </td>
                         </tr>
                         <tr>
                             <td>Shipping Cost: </td>
                             <td>
                                 <input type="text" required class="form-control m-1 ship-input"
-                                       rowNumber="${nextCount}"
-                                       id="${shipId}"
-                                       value="${shippingCost}" />
+                                    name="productShipCost"
+                                    rowNumber="${nextCount}"
+                                    id="${shipId}"
+                                    value="${shippingCost}" />
                             </td>
                         </tr>
                     </table>

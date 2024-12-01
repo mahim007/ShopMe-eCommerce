@@ -4,19 +4,20 @@ import com.mahim.shopme.admin.customer.CustomerService;
 import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
 import com.mahim.shopme.admin.paging.PagingAndSortingParam;
 import com.mahim.shopme.admin.setting.SettingService;
-import com.mahim.shopme.common.entity.Order;
-import com.mahim.shopme.common.entity.Setting;
+import com.mahim.shopme.common.entity.*;
+import com.mahim.shopme.common.enums.OrderStatus;
 import com.mahim.shopme.common.exception.OrderNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/orders")
@@ -96,5 +97,87 @@ public class OrderController {
         }
 
         return "orders/order_form";
+    }
+
+    @PostMapping("/save")
+    public String saveOrder(@ModelAttribute("order") Order order, HttpServletRequest request, RedirectAttributes ra) {
+        try {
+            order.setCountry(request.getParameter("countryName"));
+            updateProductDetails(order, request);
+            updateOrderTracks(order, request);
+            orderService.save(order);
+            ra.addFlashAttribute("message", "Order saved successfully");
+        } catch (RuntimeException ex) {
+            ra.addFlashAttribute("message", "Failed to update order.");
+        }
+
+        return listAll();
+    }
+
+    private void updateOrderTracks(Order order, HttpServletRequest request) {
+        String[] trackIds = request.getParameterValues("trackId");
+        if (trackIds == null) trackIds = new String[0];
+        String[] trackDates = request.getParameterValues("trackDate");
+        String[] trackStatuses = request.getParameterValues("trackStatus");
+        String[] trackNotes = request.getParameterValues("trackNotes");
+
+        List<OrderTrack> orderTracks = order.getOrderTracks();
+        for (int i = 0; i < trackIds.length; i++) {
+            int trackId = Integer.parseInt(trackIds[i]);
+            OrderTrack orderTrack = new OrderTrack();
+
+            if (trackId > 0) orderTrack.setId(trackId);
+            orderTrack.setUpdatedTimeOnForm(trackDates[i]);
+            orderTrack.setStatus(OrderStatus.valueOf(trackStatuses[i]));
+            orderTrack.setNotes(trackNotes[i]);
+
+            orderTracks.add(orderTrack);
+        }
+
+    }
+
+    private void updateProductDetails(Order order, HttpServletRequest request) {
+        String[] detailIds = request.getParameterValues("detailId");
+        String[] productIds = request.getParameterValues("productId");
+        String[] productDetailCosts = request.getParameterValues("productDetailCost");
+        String[] quantities = request.getParameterValues("quantity");
+        String[] productPrices = request.getParameterValues("productPrice");
+        String[] productSubtotals = request.getParameterValues("productSubtotal");
+        String[] productShipCosts = request.getParameterValues("productShipCost");
+
+        doSomething(detailIds);
+        doSomething(productIds);
+        doSomething(productDetailCosts);
+        doSomething(productSubtotals);
+        doSomething(productShipCosts);
+
+        Set<OrderDetail> orderDetails = order.getOrderDetails();
+
+        for (int i = 0; i < detailIds.length; i++) {
+            OrderDetail orderDetail = new OrderDetail();
+            int detailId = Integer.parseInt(detailIds[i]);
+            if (detailId > 0 ) {
+                orderDetail.setId(detailId);
+            }
+
+            orderDetail.setOrder(order);
+            orderDetail.setProduct(new Product(Integer.parseInt(productIds[i])));
+            orderDetail.setProductCost(Float.parseFloat(productDetailCosts[i]));
+            orderDetail.setQuantity(Integer.parseInt(quantities[i]));
+            orderDetail.setUnitPrice(Float.parseFloat(productPrices[i]));
+            orderDetail.setSubtotal(Float.parseFloat(productSubtotals[i]));
+            orderDetail.setShippingCost(Float.parseFloat(productShipCosts[i]));
+
+            orderDetails.add(orderDetail);
+        }
+
+
+    }
+
+    private void doSomething(String[] items) {
+        for (String item : items) {
+            System.out.println(item);
+        }
+
     }
 }
