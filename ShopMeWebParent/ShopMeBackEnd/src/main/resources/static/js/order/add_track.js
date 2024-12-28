@@ -1,5 +1,8 @@
+let trackRecordCount;
+
 $(document).ready(function(){
     let trackElm = $("#track");
+    trackRecordCount = $("#trackList .hiddenTrackId").length;
 
     trackElm.on("click", "#linkAddTrack", function(e){
         e.preventDefault();
@@ -22,7 +25,9 @@ function addTrack() {
 }
 
 function generateTrackCode() {
-    let nextCount = $("#trackList .hiddenTrackId").length + 1;
+    let nextCount = trackRecordCount + 1;
+    trackRecordCount++;
+
     let rowId = "rowTrack-" + nextCount;
     let trackNoteId = "trackNotes-" + nextCount;
     let blankLineId = "blankline-" + nextCount;
