@@ -102,4 +102,47 @@ public class Order extends AbstractAddress {
             e.printStackTrace();
         }
     }
+
+    public String getRecipientName() {
+        String recipientName = firstName;
+        if (lastName != null && !lastName.isEmpty()) recipientName += " " + lastName;
+        return recipientName;
+    }
+
+    public String getRecipientAddress() {
+        String address = addressLine1;
+        if (addressLine2 != null && !addressLine2.isEmpty()) address += ", " + addressLine2;
+        if (city != null && !city.isEmpty()) address += ", " + city;
+        if (state != null && !state.isEmpty()) address += ", " + state;
+        address += ", " + country;
+        if (postalCode != null && !postalCode.isEmpty()) address += ". " + postalCode;
+        return address;
+    }
+
+    public boolean isCOD() {
+        return paymentMethod.equals(PaymentMethod.COD);
+    }
+
+    public boolean isPicked() {
+        return hasStatus(OrderStatus.PICKED);
+    }
+
+    public boolean isShipping() {
+        return hasStatus(OrderStatus.SHIPPING);
+    }
+
+    public boolean isDelivered() {
+        return hasStatus(OrderStatus.DELIVERED);
+    }
+
+    public boolean isReturned() {
+        return hasStatus(OrderStatus.RETURNED);
+    }
+
+    public boolean hasStatus(OrderStatus status) {
+        for (OrderTrack track : orderTracks) {
+            if (track.getStatus().equals(status)) return true;
+        }
+        return false;
+    }
 }

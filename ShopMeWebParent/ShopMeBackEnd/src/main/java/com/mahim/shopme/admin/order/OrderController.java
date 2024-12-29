@@ -3,19 +3,19 @@ package com.mahim.shopme.admin.order;
 import com.mahim.shopme.admin.customer.CustomerService;
 import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
 import com.mahim.shopme.admin.paging.PagingAndSortingParam;
+import com.mahim.shopme.admin.security.ShopmeUserDetails;
 import com.mahim.shopme.admin.setting.SettingService;
 import com.mahim.shopme.common.entity.*;
 import com.mahim.shopme.common.enums.OrderStatus;
 import com.mahim.shopme.common.exception.OrderNotFoundException;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Set;
 
@@ -42,11 +42,15 @@ public class OrderController {
     public String listByPage(
             @PagingAndSortingParam(listName = "orders", moduleURL = "/orders") PagingAndSortingHelper helper,
             @PathVariable("pageNo") int pageNo,
-            HttpServletRequest request) {
+            HttpServletRequest request,
+            @AuthenticationPrincipal ShopmeUserDetails loggedInUser) {
 
         Page<Order> orders = orderService.listByKeyword(pageNo, helper);
         helper.updateModelAttributes(pageNo, orders);
         loadCurrencySetting(request);
+        if (!loggedInUser.hasRole("Admin") && !loggedInUser.hasRole("Salesperson") && loggedInUser.hasRole("Shipper")) {
+            return "orders/orders_shipper";
+        }
         return "orders/orders";
     }
 
@@ -130,6 +134,7 @@ public class OrderController {
             orderTrack.setUpdatedTimeOnForm(trackDates[i]);
             orderTrack.setStatus(OrderStatus.valueOf(trackStatuses[i]));
             orderTrack.setNotes(trackNotes[i]);
+            orderTrack.setOrder(order);
 
             orderTracks.add(orderTrack);
         }

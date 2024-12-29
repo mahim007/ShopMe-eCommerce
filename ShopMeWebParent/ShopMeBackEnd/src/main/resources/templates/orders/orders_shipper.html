@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/page_structure :: page_header('Orders - Shopme Admin')"></head>
+<body>
+<div class="container-fluid">
+    <div th:replace="fragments/navigation :: page_nav"></div>
+    <div>
+        <h2>Manage Orders (Shipper)</h2>
+    </div>
+    <div th:if="${message != null}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
+    <div th:if="${exceptionMessage != null}" class="alert alert-danger text-center">
+        [[${exceptionMessage}]]
+    </div>
+    <div th:replace="fragments/search_form :: search_form"></div>
+
+    <div class="less-details">
+        <div class="row mt-3 mb-3 mx-1 my-1" th:each="order : ${orders}">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col">
+                            <span>Order ID #[[${order.id}]]</span>
+                        </div>
+                        <div class="col">
+                            <div class="float-end">
+                                <a class="link-detail" th:href="@{${moduleURL} + '/details/' + ${order.id}}" title="View Order details">
+                                    <i class="fas fa-file-alt fa-2x icon-blue"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <i class="fas fa-user"></i>
+                        <b>[[${order.recipientName}]]</b>
+                    </div>
+                    <div>
+                        <i class="fas fa-home"></i>
+                        [[${order.recipientAddress}]]
+                    </div>
+                    <div>
+                        <i class="fas fa-phone-alt"></i>
+                        [[${order.phoneNumber}]]
+                    </div>
+                    <div th:if="${order.COD}">
+                        <span><b>COD</b> <th:block th:replace="orders/currency_formatter :: format_currency_span(${order.total})"></th:block></span>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <th:block th:if="${order.picked}">
+                                <i class="fas fa-people-carry fa-2x icon-green"></i>
+                            </th:block>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center m-1" th:if="${total > 0}">
+        <span>Showing orders # [[${startNo}]] to [[${endNo}]] of [[${total}]]</span>
+        <nav th:replace="fragments/pagination::pagination_fragment"></nav>
+    </div>
+    <div class="text-center m-1" th:unless="${total > 0}">
+        <h2>No orders found</h2>
+    </div>
+    <div class="modal fade text-center" tabindex="-1" id="customerDetailModal" aria-labelledby="customerDetailModal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+    <div th:replace="fragments/page_structure :: page_footer"></div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+    });
+
+    function clearFilter() {
+        window.location = "[[@{/orders}]]";
+    }
+
+    $(".link-detail").on("click", function (e) {
+        e.preventDefault();
+        let linkDetailURL = $(this).attr("href");
+        $("#customerDetailModal").modal("show").find(".modal-content").load(linkDetailURL);
+    });
+</script>
+<script th:src="@{/js/common.js}"></script>
+</body>
+</html>
