@@ -2,10 +2,13 @@ package com.mahim.shopme.admin.order;
 
 import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
 import com.mahim.shopme.common.entity.Order;
+import com.mahim.shopme.common.entity.OrderTrack;
+import com.mahim.shopme.common.enums.OrderStatus;
 import com.mahim.shopme.common.exception.OrderNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,5 +50,32 @@ public class OrderService {
         orderInForm.setCustomer(orderInDb.getCustomer());
 
         orderRepository.save(orderInForm);
+    }
+
+    public void updateStatus(Integer orderId, String status) throws OrderNotFoundException {
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        OrderStatus orderStatus = OrderStatus.valueOf(status);
+
+        System.out.println("order-id: " + orderId + " status: " + orderStatus);
+
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            if (!order.hasStatus(orderStatus)) {
+                List<OrderTrack> orderTracks = order.getOrderTracks();
+
+                OrderTrack newTrack = new OrderTrack();
+                newTrack.setStatus(orderStatus);
+                newTrack.setUpdatedTime(new Date());
+                newTrack.setNotes(orderStatus.defaultDescription());
+                newTrack.setOrder(order);
+
+                orderTracks.add(newTrack);
+
+                order.setStatus(OrderStatus.valueOf(status));
+                orderRepository.save(order);
+            }
+        } else {
+            throw new OrderNotFoundException("Order with id: " + orderId + " not found.");
+        }
     }
 }

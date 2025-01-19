@@ -40,5 +40,23 @@
 	</div>
 </div>
 
+<div th:fragment="infoModal" class="modal fade text-center" tabindex="-1" id="shopmeInfoModal" aria-labelledby="shopmeInfoModalTitle"
+	 aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="shopmeInfoModalTitle">Info</h4>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<span id="shopmeInfoModalBody"></span>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 </body>
 </html>

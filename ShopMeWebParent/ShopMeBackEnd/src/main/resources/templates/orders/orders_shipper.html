@@ -55,7 +55,7 @@
                                 <i class="fas fa-people-carry fa-2x icon-green"></i>
                             </th:block>
                             <th:block th:unless="${order.picked}">
-                                <i class="fas fa-people-carry fa-2x icon-dark"></i>
+                                <i th:value="${'PICKED--' + order.id}" class="fas fa-people-carry fa-2x icon-dark"></i>
                             </th:block>
                         </div>
                         <div class="col">
@@ -63,7 +63,7 @@
                                 <i class="fas fa-shipping-fast fa-2x icon-green"></i>
                             </th:block>
                             <th:block th:unless="${order.shipping}">
-                                <i class="fas fa-shipping-fast fa-2x icon-dark"></i>
+                                <i th:value="${'SHIPPING--' + order.id}" class="fas fa-shipping-fast fa-2x icon-dark"></i>
                             </th:block>
                         </div>
                         <div class="col">
@@ -71,7 +71,7 @@
                                 <i class="fas fa-box-open fa-2x icon-green"></i>
                             </th:block>
                             <th:block th:unless="${order.delivered}">
-                                <i class="fas fa-box-open fa-2x icon-dark"></i>
+                                <i th:value="${'DELIVERED--' + order.id}" class="fas fa-box-open fa-2x icon-dark"></i>
                             </th:block>
                         </div>
                         <div class="col">
@@ -79,7 +79,7 @@
                                 <i class="fas fa-undo fa-2x icon-green"></i>
                             </th:block>
                             <th:block th:unless="${order.returned}">
-                                <i class="fas fa-undo fa-2x icon-dark"></i>
+                                <i th:value="${'RETURNED--' + order.id}" class="fas fa-undo fa-2x icon-dark"></i>
                             </th:block>
                         </div>
                     </div>
@@ -100,9 +100,16 @@
             <div class="modal-content"></div>
         </div>
     </div>
+    <div th:replace="fragments/modal::confirmDeleteModal"></div>
+    <div th:replace="fragments/modal::infoModal"></div>
     <div th:replace="fragments/page_structure :: page_footer"></div>
 </div>
+<script th:src="@{/js/common.js}"></script>
 <script type="text/javascript">
+    const contextPath = "[[@{/}]]";
+    const csrfHeaderName = "[[${_csrf.headerName}]]";
+    const csrfHeaderValue = "[[${_csrf.token}]]";
+
     $(document).ready(function () {
         $("[name='keyword']").attr("placeholder", "Type #number to search by order id");
     });
@@ -116,7 +123,57 @@
         let linkDetailURL = $(this).attr("href");
         $("#customerDetailModal").modal("show").find(".modal-content").load(linkDetailURL);
     });
+
+    $(".icon-dark").on("click", function (e) {
+        console.log("icon clicked");
+        let data = $(this).attr("value");
+        let status = data.split("--")[0];
+        let orderId = data.split("--")[1];
+        let url = contextPath + `orders/update/${orderId}/${status}`;
+        console.log("orderId: ", orderId);
+        console.log("status: ", status);
+        let confirmModal = showModalDialog("Warning", "Do you want to update the status for this product?");
+        $("#modalYesBtn").click(function (e) {
+            updateStatus(url);
+            $("#shopmeModal").modal('hide');
+        });
+    });
+
+    function updateStatus(url) {
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                [csrfHeaderName]: csrfHeaderValue
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log("data: ", data);
+                showInfoModalDialog("Info", "Successfully updated the status.");
+
+            })
+            .catch(error => showInfoModalDialog("Info", "Failed to update the status."));
+    }
+
+    function showModalDialog(title, message) {
+        $("#shopmeModalTitle").text(title);
+        $("#shopmeModalBody").html(message);
+        let myModal = new bootstrap.Modal($("#shopmeModal"), {
+            keyboard: false
+        });
+        myModal.show();
+        return myModal;
+    }
+
+    function showInfoModalDialog(title, message) {
+        $("#shopmeInfoModalTitle").text(title);
+        $("#shopmeInfoModalBody").html(message);
+        let myModal = new bootstrap.Modal($("#shopmeInfoModal"), {
+            keyboard: false
+        });
+        myModal.show();
+    }
 </script>
-<script th:src="@{/js/common.js}"></script>
 </body>
 </html>
