@@ -62,11 +62,15 @@ public class OrderController {
     }
 
     @GetMapping("/details/{id}")
-    public String get(@PathVariable("id") Integer id,HttpServletRequest request, Model model, RedirectAttributes ra) {
+    public String get(@PathVariable("id") Integer id,HttpServletRequest request, Model model, RedirectAttributes ra,
+                      @AuthenticationPrincipal ShopmeUserDetails loggedInUser) {
         try {
             Order order = orderService.findById(id);
-            model.addAttribute("order", order);
             loadCurrencySetting(request);
+            boolean showLessInfo = !loggedInUser.hasRole("Admin") && !loggedInUser.hasRole("Salesperson") && loggedInUser.hasRole("Shipper");
+
+            model.addAttribute("order", order);
+            model.addAttribute("showLessInfo", showLessInfo);
             return "orders/order_details_modal";
         } catch (OrderNotFoundException e) {
             ra.addFlashAttribute("exceptionMessage", "Order not found with ID: " + id);

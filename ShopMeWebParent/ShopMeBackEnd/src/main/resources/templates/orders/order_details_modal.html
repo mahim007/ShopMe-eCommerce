@@ -27,31 +27,31 @@
 							<input class="form-control" type="text" th:value="${order.id}" readonly />
 						</div>
 					</div>
-					<div class="row mb-3">
+					<div th:class="'row mb-3' + ${showLessInfo ? ' d-none' : ''}">
 						<label class="col-form-label col-sm-3">Customer</label>
 						<div class="col-sm-9">
 							<input class="form-control" type="text" th:value="${order.customer.fullName}" readonly />
 						</div>
 					</div>
-					<div class="row mb-3">
+					<div th:class="'row mb-3' + ${showLessInfo ? ' d-none' : ''}">
 						<label class="col-form-label col-sm-3">Product Cost</label>
 						<div class="col-sm-9">
 							<th:block th:replace="orders/currency_formatter :: format_currency_input(${order.productCost})"></th:block>
 						</div>
 					</div>
-					<div class="row mb-3">
+					<div th:class="'row mb-3' + ${showLessInfo ? ' d-none' : ''}">
 						<label class="col-form-label col-sm-3">Subtotal</label>
 						<div class="col-sm-9">
 							<th:block th:replace="orders/currency_formatter :: format_currency_input(${order.subtotal})"></th:block>
 						</div>
 					</div>
-					<div class="row mb-3">
+					<div th:class="'row mb-3' + ${showLessInfo ? ' d-none' : ''}">
 						<label class="col-form-label col-sm-3">Shipping Cost</label>
 						<div class="col-sm-9">
 							<th:block th:replace="orders/currency_formatter :: format_currency_input(${order.shippingCost})"></th:block>
 						</div>
 					</div>
-					<div class="row mb-3">
+					<div th:class="'row mb-3' + ${showLessInfo ? ' d-none' : ''}">
 						<label class="col-form-label col-sm-3">Tax</label>
 						<div class="col-sm-9">
 							<th:block th:replace="orders/currency_formatter :: format_currency_input(${order.tax})"></th:block>
@@ -101,23 +101,25 @@
 										<b>[[${item.product.shortName}]]</b>
 									</a>
 								</div>
-								<div>
-									<span>Product Cost: </span>
-									<th:block th:replace="orders/currency_formatter :: format_currency_span(${item.productCost})"></th:block>
-								</div>
-								<div>
-									<span>Subtotal: [[${item.quantity}]] X </span>
-									<th:block th:replace="orders/currency_formatter :: format_currency_span(${item.unitPrice})"></th:block>
-									<span> = </span>
-									<th:block th:replace="orders/currency_formatter :: format_currency_span(${item.quantity *  item.unitPrice})"></th:block>
-								</div>
-								<div>
-									<span>Shipping Cost: </span>
-									<th:block th:replace="orders/currency_formatter :: format_currency_span(${item.shippingCost})"></th:block>
-								</div>
+								<th:block th:unless="${showLessInfo}">
+									<div>
+										<span>Product Cost: </span>
+										<th:block th:replace="orders/currency_formatter :: format_currency_span(${item.productCost})"></th:block>
+									</div>
+									<div>
+										<span>Subtotal: [[${item.quantity}]] X </span>
+										<th:block th:replace="orders/currency_formatter :: format_currency_span(${item.unitPrice})"></th:block>
+										<span> = </span>
+										<th:block th:replace="orders/currency_formatter :: format_currency_span(${item.quantity *  item.unitPrice})"></th:block>
+									</div>
+									<div>
+										<span>Shipping Cost: </span>
+										<th:block th:replace="orders/currency_formatter :: format_currency_span(${item.shippingCost})"></th:block>
+									</div>
+								</th:block>
 							</div>
 						</div>
-						<div class="row m-1" th:id="'blankline' + ${status.count}">&nbsp;</div>
+						<div th:unless="${status.last}" class="row m-1" th:id="'blankline' + ${status.count}"></div>
 					</th:block>
 				</div>
 			</div>

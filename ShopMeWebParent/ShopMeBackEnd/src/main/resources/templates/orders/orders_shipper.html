@@ -48,10 +48,38 @@
                     <div th:if="${order.COD}">
                         <span><b>COD</b> <th:block th:replace="orders/currency_formatter :: format_currency_span(${order.total})"></th:block></span>
                     </div>
+                    <div>&nbsp;</div>
                     <div class="row">
                         <div class="col">
                             <th:block th:if="${order.picked}">
                                 <i class="fas fa-people-carry fa-2x icon-green"></i>
+                            </th:block>
+                            <th:block th:unless="${order.picked}">
+                                <i class="fas fa-people-carry fa-2x icon-dark"></i>
+                            </th:block>
+                        </div>
+                        <div class="col">
+                            <th:block th:if="${order.shipping}">
+                                <i class="fas fa-shipping-fast fa-2x icon-green"></i>
+                            </th:block>
+                            <th:block th:unless="${order.shipping}">
+                                <i class="fas fa-shipping-fast fa-2x icon-dark"></i>
+                            </th:block>
+                        </div>
+                        <div class="col">
+                            <th:block th:if="${order.delivered}">
+                                <i class="fas fa-box-open fa-2x icon-green"></i>
+                            </th:block>
+                            <th:block th:unless="${order.delivered}">
+                                <i class="fas fa-box-open fa-2x icon-dark"></i>
+                            </th:block>
+                        </div>
+                        <div class="col">
+                            <th:block th:if="${order.returned}">
+                                <i class="fas fa-undo fa-2x icon-green"></i>
+                            </th:block>
+                            <th:block th:unless="${order.returned}">
+                                <i class="fas fa-undo fa-2x icon-dark"></i>
                             </th:block>
                         </div>
                     </div>
@@ -76,6 +104,7 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
+        $("[name='keyword']").attr("placeholder", "Type #number to search by order id");
     });
 
     function clearFilter() {
