@@ -4,6 +4,11 @@ import com.mahim.shopme.checkout.CheckoutInfo;
 import com.mahim.shopme.common.entity.*;
 import com.mahim.shopme.common.enums.OrderStatus;
 import com.mahim.shopme.common.enums.PaymentMethod;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -12,6 +17,8 @@ import java.util.Set;
 
 @Service
 public class OrderService {
+
+    public static final int ORDERS_PER_PAGE = 10;
 
     private final OrderRepository orderRepository;
 
@@ -71,5 +78,17 @@ public class OrderService {
         orderDetail.setSubtotal(cartItem.getSubTotal());
         orderDetail.setShippingCost(cartItem.getShippingCost());
         return orderDetail;
+    }
+
+    public Page<Order> listForCustomersByPage(Customer customer, int pageNum, String sortField, String sortDir, String keyword) {
+        Sort sort = Sort.by(sortField);
+        sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
+        Pageable pageRequest = PageRequest.of(pageNum - 1, ORDERS_PER_PAGE, sort);
+
+        if (StringUtils.isNotEmpty(keyword) && StringUtils.isNotBlank(keyword)) {
+            return orderRepository.searchAllOrders(keyword, customer.getId(), pageRequest);
+        }
+
+        return orderRepository.searchAllOrders(customer.getId(), pageRequest);
     }
 }

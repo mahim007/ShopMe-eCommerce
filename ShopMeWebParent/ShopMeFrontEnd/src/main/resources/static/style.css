@@ -6,7 +6,16 @@
 *.icon-lightblue { color: #45a6d0 }
 *.icon-danger { color: #c72828 }
 
-@media (min-width: 1366px) {
+@media screen and (max-width: 768px) {
+    div.full-details {
+        display: none;
+    }
+    div.less-details {
+        display: block;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
     .container {
         max-width: 1320px;
         background: white;
@@ -14,15 +23,30 @@
     body {
         background: #f2f4f8;
     }
+    div.full-details {
+        display: block;
+    }
+    div.less-details {
+        display: none;
+    }
+    .hideable-column {
+        display: none;
+    }
 }
 
-@media (min-width: 1600px) {
+@media screen and (min-width: 1024px) {
     .container {
         max-width: 1560px;
         background: white;
     }
     body {
         background: #f2f4f8;
+    }
+    div.less-details {
+        display: none;
+    }
+    .hideable-column {
+        display: table-cell;
     }
 }
 

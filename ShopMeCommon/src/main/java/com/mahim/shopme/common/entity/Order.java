@@ -139,10 +139,25 @@ public class Order extends AbstractAddress {
         return hasStatus(OrderStatus.RETURNED);
     }
 
+    public boolean isReturnRequested() {
+        return hasStatus(OrderStatus.RETURN_REQUESTED);
+    }
+
     public boolean hasStatus(OrderStatus status) {
         for (OrderTrack track : orderTracks) {
             if (track.getStatus().equals(status)) return true;
         }
         return false;
+    }
+
+    @Transient
+    public String getProductNames() {
+        StringBuilder productNames = new StringBuilder("<ul>");
+        for (OrderDetail orderDetail : orderDetails) {
+            productNames.append("<li>").append(orderDetail.getProduct().getShortName()).append("</li>");
+        }
+        productNames.append("</ul>");
+        return productNames.toString();
+
     }
 }
