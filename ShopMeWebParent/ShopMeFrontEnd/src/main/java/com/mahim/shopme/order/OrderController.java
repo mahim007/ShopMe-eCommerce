@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -35,22 +36,23 @@ public class OrderController {
 
     @GetMapping("/page/{pageNum}")
     public String listOrderByPage(Model model, HttpServletRequest request, @PathVariable(name = "pageNum") int pageNum,
-                                  String sortField, String sortDir, String keyword) {
+                                  String sortField, String sortDir, @RequestParam(name = "orderKeyword", defaultValue = "") String orderKeyword) {
         try {
             Customer customer = customerService.getAuthenticatedCustomer(request);
-            Page<Order> page = orderService.listForCustomersByPage(customer, pageNum, sortField, sortDir, keyword);
+            Page<Order> page = orderService.listForCustomersByPage(customer, pageNum, sortField, sortDir, orderKeyword);
             long totalItems = page.getTotalElements();
             List<Order> orders = page.getContent();
             int startNo = ((pageNum - 1) * PRODUCTS_PER_PAGE) + 1;
             int endNo = pageNum * PRODUCTS_PER_PAGE;
 
+            model.addAttribute("pageTitle", "My Orders");
             model.addAttribute("totalPage", page.getTotalPages());
             model.addAttribute("totalItems", totalItems);
-            model.addAttribute("currentPage", pageNum);
+            model.addAttribute("currentPageNo", pageNum);
             model.addAttribute("orders", orders);
             model.addAttribute("sortField", sortField);
             model.addAttribute("sortDir", sortDir);
-            model.addAttribute("orderKeyword", keyword);
+            model.addAttribute("orderKeyword", orderKeyword);
             model.addAttribute("moduleURL", "/orders");
             model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
             model.addAttribute("startNo", startNo);

@@ -24,20 +24,21 @@
                 <i class="fas fa-search"></i>
             </button>
             &nbsp;&nbsp;
-            <button type="button" class="btn btn-secondary" onclick="clearFiler()">
+            <button type="button" class="btn btn-secondary" onclick="clearFilter()">
                 <i class="fas fa-eraser"></i>
             </button>
         </form>
     </div>
     <div class="full-details">
         <table class="table table-bordered table-striped table-hover table-responsive-xl">
-            <thead class="thead-dark">
+            <thead class="table-dark">
             <tr>
                 <th th:replace="fragments/column_element :: column_link('id', 'ID', 'none')"></th>
                 <th th:replace="fragments/column_element :: column_link('orderTime', 'Order Time', 'none')"></th>
                 <th>Products</th>
                 <th th:replace="fragments/column_element :: column_link('total', 'Total', 'none')"></th>
                 <th th:replace="fragments/column_element :: column_link('status', 'Status', 'none')"></th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>

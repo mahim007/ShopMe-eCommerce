@@ -86,9 +86,11 @@ public class OrderService {
         Pageable pageRequest = PageRequest.of(pageNum - 1, ORDERS_PER_PAGE, sort);
 
         if (StringUtils.isNotEmpty(keyword) && StringUtils.isNotBlank(keyword)) {
+            System.out.println("cid: " + customer.getId() + " key: " + keyword);
             return orderRepository.searchAllOrders(keyword, customer.getId(), pageRequest);
         }
 
+        System.out.println("cid: " + customer.getId());
         return orderRepository.searchAllOrders(customer.getId(), pageRequest);
     }
 }
