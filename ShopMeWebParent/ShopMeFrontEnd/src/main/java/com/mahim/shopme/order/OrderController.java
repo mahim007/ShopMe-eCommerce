@@ -36,7 +36,9 @@ public class OrderController {
 
     @GetMapping("/page/{pageNum}")
     public String listOrderByPage(Model model, HttpServletRequest request, @PathVariable(name = "pageNum") int pageNum,
-                                  String sortField, String sortDir, @RequestParam(name = "orderKeyword", defaultValue = "") String orderKeyword) {
+                                  @RequestParam(name = "sortField", defaultValue = "orderTime") String sortField,
+                                  @RequestParam(name = "sortDir", defaultValue = "desc") String sortDir,
+                                  @RequestParam(name = "orderKeyword", defaultValue = "") String orderKeyword) {
         try {
             Customer customer = customerService.getAuthenticatedCustomer(request);
             Page<Order> page = orderService.listForCustomersByPage(customer, pageNum, sortField, sortDir, orderKeyword);
@@ -46,7 +48,7 @@ public class OrderController {
             int endNo = pageNum * PRODUCTS_PER_PAGE;
 
             model.addAttribute("pageTitle", "My Orders");
-            model.addAttribute("totalPage", page.getTotalPages());
+            model.addAttribute("totalPageNo", page.getTotalPages());
             model.addAttribute("totalItems", totalItems);
             model.addAttribute("currentPageNo", pageNum);
             model.addAttribute("orders", orders);

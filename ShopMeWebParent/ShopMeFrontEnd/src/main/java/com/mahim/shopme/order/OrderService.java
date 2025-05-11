@@ -85,7 +85,7 @@ public class OrderService {
         sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
         Pageable pageRequest = PageRequest.of(pageNum - 1, ORDERS_PER_PAGE, sort);
 
-        if (StringUtils.isNotEmpty(keyword) && StringUtils.isNotBlank(keyword)) {
+        if (StringUtils.isNotEmpty(keyword) && StringUtils.isNotBlank(keyword) && keyword.length() > 2) {
             System.out.println("cid: " + customer.getId() + " key: " + keyword);
             return orderRepository.searchAllOrders(keyword, customer.getId(), pageRequest);
         }

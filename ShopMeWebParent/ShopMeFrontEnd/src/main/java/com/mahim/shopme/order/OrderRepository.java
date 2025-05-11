@@ -14,10 +14,10 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, Integ
             "where o.customer.id = ?1")
     Page<Order> searchAllOrders(Integer customerId, Pageable pageable);
 
-    @Query("select o from Order o " +
+    @Query("select distinct o from Order o " +
             "join o.orderDetails od " +
             "join od.product p " +
             "where o.customer.id = ?2 " +
-            "and (p.name like %?1%)")
+            "and (p.name like %?1% or o.status like %?1%)")
     Page<Order> searchAllOrders(String keyword, Integer customerId, Pageable pageable);
 }
