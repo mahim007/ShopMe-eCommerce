@@ -48,11 +48,11 @@ public class OrderController {
         Page<Order> orders = orderService.listByKeyword(pageNo, helper);
         helper.updateModelAttributes(pageNo, orders);
         loadCurrencySetting(request);
-        return "orders/orders_shipper";
-//        if (!loggedInUser.hasRole("Admin") && !loggedInUser.hasRole("Salesperson") && loggedInUser.hasRole("Shipper")) {
-//            return "orders/orders_shipper";
-//        }
-//        return "orders/orders";
+
+        if (!loggedInUser.hasRole("Admin") && !loggedInUser.hasRole("Salesperson") && loggedInUser.hasRole("Shipper")) {
+            return "orders/orders_shipper";
+        }
+        return "orders/orders";
     }
 
     private void loadCurrencySetting(HttpServletRequest request) {
