@@ -1,11 +1,14 @@
 package com.mahim.shopme.order;
 
+import com.mahim.shopme.common.entity.Customer;
 import com.mahim.shopme.common.entity.Order;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends PagingAndSortingRepository<Order, Integer> {
@@ -20,4 +23,6 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, Integ
             "where o.customer.id = ?2 " +
             "and (p.name like %?1% or o.status like %?1%)")
     Page<Order> searchAllOrders(String keyword, Integer customerId, Pageable pageable);
+
+    Optional<Order> findByIdAndCustomer(Integer orderId, Customer customer);
 }

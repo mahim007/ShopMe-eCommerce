@@ -57,7 +57,7 @@
                     </td>
                     <td><span>[[${order.status}]]</span></td>
                     <td>
-                        <a class="fas fa-file-alt fa-2x icon-green" href="" title="View details of the order"></a>
+                        <a class="order-details fas fa-file-alt fa-2x icon-green" th:href="@{'/orders/details/' + ${order.id}}" title="View details of the order"></a>
                         <th:block th:unless="${order.returnRequested}">
                             &nbsp;&nbsp;&nbsp;
                             <a class="fas fa-undo fa-2x icon-dark" href="" title="Return this order"></a>
@@ -118,12 +118,25 @@
     </div>
     <th:block th:replace="fragments/navigation :: footer_nav"></th:block>
     <th:block th:replace="fragments/modal :: shopmeModal"></th:block>
+    <div class="modal fade text-center" tabindex="-1" id="orderDetailModal" aria-labelledby="orderDetailModal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content"></div>
+        </div>
+    </div>
     <script type="text/javascript">
         moduleURL = "[[@{/orders}]]"
 
         function clearFilter() {
             window.location = moduleURL;
         }
+
+        $(".order-details").click(function (e){
+            e.preventDefault();
+            let detailsURL = $(this).attr("href");
+            console.log("order-details click detected with detailsURL: ", detailsURL);
+            $("#orderDetailModal").modal("show").find(".modal-content").load(detailsURL);
+        });
     </script>
 </div>
 </body>

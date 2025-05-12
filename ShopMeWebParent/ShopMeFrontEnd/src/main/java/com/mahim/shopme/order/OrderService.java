@@ -4,6 +4,7 @@ import com.mahim.shopme.checkout.CheckoutInfo;
 import com.mahim.shopme.common.entity.*;
 import com.mahim.shopme.common.enums.OrderStatus;
 import com.mahim.shopme.common.enums.PaymentMethod;
+import com.mahim.shopme.common.exception.OrderNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -92,5 +94,11 @@ public class OrderService {
 
         System.out.println("cid: " + customer.getId());
         return orderRepository.searchAllOrders(customer.getId(), pageRequest);
+    }
+
+    public Order getOrder(Integer orderId, Customer customer) throws OrderNotFoundException {
+        Optional<Order> orderOptional = orderRepository.findByIdAndCustomer(orderId, customer);
+        orderOptional.orElseThrow(() -> new OrderNotFoundException("No Order found with id: " + orderId));
+        return orderOptional.get();
     }
 }

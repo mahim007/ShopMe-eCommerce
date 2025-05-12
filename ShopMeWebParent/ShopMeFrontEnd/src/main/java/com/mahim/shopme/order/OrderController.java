@@ -3,6 +3,7 @@ package com.mahim.shopme.order;
 import com.mahim.shopme.common.entity.Customer;
 import com.mahim.shopme.common.entity.Order;
 import com.mahim.shopme.common.exception.CustomerNotFoundException;
+import com.mahim.shopme.common.exception.OrderNotFoundException;
 import com.mahim.shopme.customer.CustomerService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -65,5 +67,25 @@ public class OrderController {
         } catch (CustomerNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @GetMapping("/details/{orderId}")
+    public String getDetails(
+            @PathVariable(name = "orderId", required = true) Integer orderId, HttpServletRequest request, Model model,
+            RedirectAttributes ra) {
+        try {
+            System.out.println("Order id received: " + orderId);
+            Customer customer = customerService.getAuthenticatedCustomer(request);
+            Order order = orderService.getOrder(orderId, customer);
+            model.addAttribute("order", order);
+            model.addAttribute("showLessInfo", false);
+            return "order/order_details_modal";
+        } catch (CustomerNotFoundException ex) {
+            ra.addFlashAttribute("exceptionMessage", "Customer is not logged in");
+        } catch (OrderNotFoundException e) {
+            ra.addFlashAttribute("exceptionMessage", "Order with ID: " + orderId + " not found.");
+        }
+
+        return listFirstPage(model, request);
     }
 }
