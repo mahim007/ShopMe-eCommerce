@@ -101,22 +101,12 @@
 										<b>[[${item.product.shortName}]]</b>
 									</a>
 								</div>
-								<th:block th:unless="${showLessInfo}">
-									<div>
-										<span>Product Cost: </span>
-										<th:block th:replace="fragments/currency_formatter :: format_currency_span(${item.productCost})"></th:block>
-									</div>
-									<div>
-										<span>Subtotal: [[${item.quantity}]] X </span>
-										<th:block th:replace="fragments/currency_formatter :: format_currency_span(${item.unitPrice})"></th:block>
-										<span> = </span>
-										<th:block th:replace="fragments/currency_formatter :: format_currency_span(${item.quantity *  item.unitPrice})"></th:block>
-									</div>
-									<div>
-										<span>Shipping Cost: </span>
-										<th:block th:replace="fragments/currency_formatter :: format_currency_span(${item.shippingCost})"></th:block>
-									</div>
-								</th:block>
+								<div>
+									<span>Subtotal: [[${item.quantity}]] X </span>
+									<th:block th:replace="fragments/currency_formatter :: format_currency_span(${item.unitPrice})"></th:block>
+									<span> = </span>
+									<th:block th:replace="fragments/currency_formatter :: format_currency_span(${item.quantity *  item.unitPrice})"></th:block>
+								</div>
 							</div>
 						</div>
 						<div th:unless="${status.last}" class="row m-1" th:id="'blankline' + ${status.count}"></div>
@@ -195,7 +185,16 @@
 			</div>
 			<div class="tab-pane fade p-3" id="track" role="tabpanel" aria-labelledby="track-tab" tabindex="3">
 				<div class="border border-secondary rounded p-3">
-					<div>
+					<div class="row text-center">
+						<div th:replace="order/order_status_fragment :: content(${order.processing}, 'fa-spinner', 'processing')"></div>
+						<div th:replace="order/order_status_fragment :: content(${order.picked}, 'fa-people-carry', 'picked')"></div>
+						<div th:replace="order/order_status_fragment :: content(${order.shipping}, 'fa-shipping-fast', 'shipping')"></div>
+						<div th:replace="order/order_status_fragment :: content(${order.delivered}, 'fa-box-open', 'delivered')"></div>
+						<th:block th:if="${order.returned}">
+							<div th:replace="order/order_status_fragment :: content(${order.returned}, 'fa-undo', 'returned')"></div>
+						</th:block>
+					</div>
+					<div class="full-details">
 						<table class="table table-striped table-bordered table-hover">
 							<thead class="table-dark">
 							<tr>
@@ -207,22 +206,21 @@
 							<tbody>
 							<th:block th:each="track : ${order.orderTracks}">
 								<tr>
-									<td>[[${#dates.format(updatedTime, 'yyyy-MM-dd HH:mm:ss')}]]</td>
+									<td>[[${#dates.format(track.updatedTime, 'yyyy-MM-dd HH:mm:ss')}]]</td>
 									<td>[[${track.status}]]</td>
-									<td>[[${track.notes}]]</td>
+									<td><i>[[${track.notes}]]</i></td>
 								</tr>
 							</th:block>
 							</tbody>
 						</table>
 					</div>
-					<div class="less-details">
+					<div class="less-details text-start">
 						<th:block th:each="track : ${order.orderTracks}">
 							<div class="row p-1">
-								<span>[[${#dates.format(updatedTime, 'yyyy-MM-dd HH:mm:ss')}]]</span>
+								<span>[[${#dates.format(track.updatedTime, 'yyyy-MM-dd HH:mm:ss')}]]</span>
 							</div>
 							<div class="row p-1 ml-3">
-								<span>&nbsp;&nbsp;</span>
-								<b>[[${track.status}]]</b>: <i>[[${track.notes}]]</i>
+								<span><b>[[${track.status}]]</b>: <i>[[${track.notes}]]</i></span>
 							</div>
 							<div class="row">&nbsp;</div>
 						</th:block>

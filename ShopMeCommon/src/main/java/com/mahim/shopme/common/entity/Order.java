@@ -143,6 +143,10 @@ public class Order extends AbstractAddress {
         return hasStatus(OrderStatus.RETURN_REQUESTED);
     }
 
+    public boolean isProcessing() {
+        return hasStatus(OrderStatus.PROCESSING);
+    }
+
     public boolean hasStatus(OrderStatus status) {
         for (OrderTrack track : orderTracks) {
             if (track.getStatus().equals(status)) return true;
