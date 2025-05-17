@@ -32,7 +32,6 @@ public class OrderController {
 
     @GetMapping("")
     public String listFirstPage(Model model, HttpServletRequest request) {
-        System.out.println("list first page from order controller.");
         return listOrderByPage(model, request, 1, "orderTime", "desc", null);
     }
 
@@ -74,7 +73,6 @@ public class OrderController {
             @PathVariable(name = "orderId", required = true) Integer orderId, HttpServletRequest request, Model model,
             RedirectAttributes ra) {
         try {
-            System.out.println("Order id received: " + orderId);
             Customer customer = customerService.getAuthenticatedCustomer(request);
             Order order = orderService.getOrder(orderId, customer);
             model.addAttribute("order", order);

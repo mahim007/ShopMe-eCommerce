@@ -88,11 +88,9 @@ public class OrderService {
         Pageable pageRequest = PageRequest.of(pageNum - 1, ORDERS_PER_PAGE, sort);
 
         if (StringUtils.isNotEmpty(keyword) && StringUtils.isNotBlank(keyword) && keyword.length() > 2) {
-            System.out.println("cid: " + customer.getId() + " key: " + keyword);
             return orderRepository.searchAllOrders(keyword, customer.getId(), pageRequest);
         }
 
-        System.out.println("cid: " + customer.getId());
         return orderRepository.searchAllOrders(customer.getId(), pageRequest);
     }
 
@@ -100,5 +98,29 @@ public class OrderService {
         Optional<Order> orderOptional = orderRepository.findByIdAndCustomer(orderId, customer);
         orderOptional.orElseThrow(() -> new OrderNotFoundException("No Order found with id: " + orderId));
         return orderOptional.get();
+    }
+
+    public void setOrderReturnRequested(OrderReturnRequest request, Customer customer) throws OrderNotFoundException {
+        Optional<Order> orderOptional = orderRepository.findByIdAndCustomer(request.getOrderId(), customer);
+        orderOptional.orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + request.getOrderId()));
+        Order order = orderOptional.get();
+
+        if (order.getStatus() == OrderStatus.RETURN_REQUESTED) return;
+
+        OrderTrack orderTrack = new OrderTrack();
+        orderTrack.setOrder(order);
+        orderTrack.setUpdatedTime(new Date());
+        orderTrack.setStatus(OrderStatus.RETURN_REQUESTED);
+
+        String notes = "Reason: " + request.getReason().substring(0, Math.min(request.getReason().length(), 256));
+        if (!request.getNote().isEmpty() && !request.getNote().isBlank()) {
+            notes += ". " + request.getNote();
+        }
+        orderTrack.setNotes(notes);
+
+        order.getOrderTracks().add(orderTrack);
+        order.setStatus(OrderStatus.RETURN_REQUESTED);
+
+        orderRepository.save(order);
     }
 }
