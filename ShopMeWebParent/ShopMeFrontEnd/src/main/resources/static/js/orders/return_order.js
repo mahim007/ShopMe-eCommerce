@@ -1,5 +1,10 @@
 var returnModal;
 var modalTitle;
+var fieldNote;
+var divReason;
+var divMessage;
+var firstButton;
+var secondButton;
 
 function handleReturnOrder(link) {
     const orderId = link.attr('orderId');
@@ -11,6 +16,17 @@ function handleReturnOrder(link) {
 $(document).ready(function(){
     returnModal = $('#returnOrderModal');
     modalTitle = $('#returnOrderModalTitle');
+    fieldNote = $('#returnNote');
+    divReason = $('#divReason');
+    divMessage = $('#divMessage');
+    firstButton = $('#firstButton');
+    secondButton = $('#secondButton');
+
+    divReason.show();
+    divMessage.hide();
+    firstButton.show();
+    secondButton.text("Cancel");
+    fieldNote.val("");
 
     $('.return-order').on('click', function(e) {
         e.preventDefault();
@@ -23,7 +39,6 @@ function submitReturnOrderForm() {
     const reason = $("input[name='returnReason']:checked").val();
     const note = $("#returnNote").val();
 
-    console.log(orderId, reason , note);
     if (orderId && reason && note) {
         postReturnRequested(orderId, reason, note);
     }
@@ -48,7 +63,21 @@ function postReturnRequested(orderId, reason, note) {
     })
         .then(res => res.json())
         .then(data => {
-            console.log(data);
+            showMessageModal("Return request has been sent");
+            updateStatusTextAndHideReturnButton(data.orderId);
         })
-        .catch(err => console.error(err));
+        .catch(err => showMessageModal(err));
+}
+
+function showMessageModal(message) {
+    divMessage.text(message);
+    divMessage.show();
+    divReason.hide();
+    firstButton.hide();
+    secondButton.text("Close");
+}
+
+function updateStatusTextAndHideReturnButton(orderId) {
+    $(".textOrderStatus-" + orderId).text("RETURN_REQUESTED");
+    $(".return-order-" + orderId).hide();
 }

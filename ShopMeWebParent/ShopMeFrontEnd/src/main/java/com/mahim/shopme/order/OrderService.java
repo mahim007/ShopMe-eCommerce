@@ -29,7 +29,6 @@ public class OrderService {
     }
 
     public Order createOrder(Customer customer, Address address, List<CartItem> cartItems, PaymentMethod paymentMethod, CheckoutInfo checkoutInfo) {
-
         Order order = getOrder(customer, paymentMethod, checkoutInfo);
 
         if (address == null) {
@@ -44,6 +43,8 @@ public class OrderService {
             orderDetails.add(orderDetail);
         }
 
+        // adding order track for new order. status is OrderStatus.NEW when it is newly created
+        order.getOrderTracks().add(new OrderTrack(OrderStatus.NEW.defaultDescription(), new Date(), OrderStatus.NEW, order));
         return orderRepository.save(order);
 
     }
@@ -56,6 +57,7 @@ public class OrderService {
         } else {
             order.setStatus(OrderStatus.NEW);
         }
+
         order.setCustomer(customer);
         order.setProductCost(checkoutInfo.getProductCost());
         order.setSubtotal(checkoutInfo.getProductTotal());
@@ -71,7 +73,6 @@ public class OrderService {
     private static OrderDetail getOrderDetail(CartItem cartItem, Order order) {
         Product product = cartItem.getProduct();
         OrderDetail orderDetail = new OrderDetail();
-
         orderDetail.setOrder(order);
         orderDetail.setProduct(product);
         orderDetail.setQuantity(cartItem.getQuantity());
@@ -116,11 +117,10 @@ public class OrderService {
         if (!request.getNote().isEmpty() && !request.getNote().isBlank()) {
             notes += ". " + request.getNote();
         }
-        orderTrack.setNotes(notes);
 
+        orderTrack.setNotes(notes);
         order.getOrderTracks().add(orderTrack);
         order.setStatus(OrderStatus.RETURN_REQUESTED);
-
         orderRepository.save(order);
     }
 }

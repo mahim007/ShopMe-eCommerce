@@ -55,12 +55,13 @@
                     <td>
                         <div th:replace="fragments/currency_formatter :: format_currency_span(${order.total})">Total</div>
                     </td>
-                    <td><span>[[${order.status}]]</span></td>
-                    <td>
+                    <td><span th:class="'textOrderStatus-' + ${order.id}">[[${order.status}]]</span></td>
+                    <td class="text-center">
                         <a class="order-details fas fa-file-alt fa-2x icon-green" th:href="@{'/orders/details/' + ${order.id}}" title="View details of the order"></a>
                         <th:block th:if="${order.returnRequested == false && order.delivered == true && order.returned == false}">
                             &nbsp;&nbsp;&nbsp;
-                            <a th:orderId="${order.id}" class="return-order fas fa-undo fa-2x icon-dark" title="Return this order"></a>
+                            <a th:orderId="${order.id}" class="return-order fas fa-undo fa-2x icon-dark"
+                               th:classappend="'return-order-' + ${order.id}" title="Return this order"></a>
                         </th:block>
                     </td>
                 </tr>
@@ -81,7 +82,8 @@
                                     <a class="order-details fas fa-file-alt fa-2x icon-green" th:href="@{'/orders/details/' + ${order.id}}"></a>
                                     <th:block th:if="${order.returnRequested == false && order.delivered == true && order.returned == false}">
                                         &nbsp;
-                                        <a th:orderId="${order.id}" class="return-order fas fa-undo fa-2x icon-dark" title="Return this order"></a>
+                                        <a th:orderId="${order.id}" class="return-order fas fa-undo fa-2x icon-dark"
+                                           th:classappend="'return-order-' + ${order.id}" title="Return this order"></a>
                                     </th:block>
                                 </div>
                             </div>
@@ -96,7 +98,7 @@
                                 <div th:replace="fragments/currency_formatter :: format_currency_span(${order.total})">Total</div>
                             </div>
                             <div class="col">
-                                <span>[[${order.status}]]</span>
+                                <span th:class="'textOrderStatus-' + ${order.id}">[[${order.status}]]</span>
                             </div>
                         </div>
                         <div>
