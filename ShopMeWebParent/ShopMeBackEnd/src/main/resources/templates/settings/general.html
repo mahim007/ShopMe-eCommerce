@@ -19,7 +19,7 @@
                 <label class="col-form-label col-sm-2">Site Logo</label>
                 <div class="col-sm-10">
                     <img id="thumbnail" alt="Site logo thumbnail" class="img-fluid" width="150" height="70"
-                         th:src="@{${SITE_LOGO}}"/>
+                         th:src="@{${S3_BASE_URI + SITE_LOGO}}"/>
                     <input type="file" class="m-2 form-check-inline" id="fileImage" name="SITE_LOGO"
                            accept="image/png, image/jpeg"/>
                 </div>

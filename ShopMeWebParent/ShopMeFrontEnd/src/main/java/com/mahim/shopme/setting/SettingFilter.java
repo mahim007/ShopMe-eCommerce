@@ -1,5 +1,6 @@
 package com.mahim.shopme.setting;
 
+import com.mahim.shopme.common.Constants;
 import com.mahim.shopme.common.entity.Setting;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +33,8 @@ public class SettingFilter implements Filter {
         for (Setting setting : settings) {
             servletRequest.setAttribute(setting.getKey(), setting.getValue());
         }
+
+        servletRequest.setAttribute("S3_BASE_URI", Constants.S3_BASE_URL);
 
         filterChain.doFilter(servletRequest, servletResponse);
     }

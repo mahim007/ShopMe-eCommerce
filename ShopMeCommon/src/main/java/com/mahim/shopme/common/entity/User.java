@@ -1,5 +1,6 @@
 package com.mahim.shopme.common.entity;
 
+import com.mahim.shopme.common.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -55,7 +56,7 @@ public class User extends ParentEntity {
     @Transient
     public String getImagePath() {
         if (this.id == null || this.photos == null) return "/images/default-user.png";
-        return "/user-photos/" + this.id + "/" + this.photos;
+        return Constants.S3_BASE_URL +  "/user-photos/" + this.id + "/" + this.photos;
     }
 
     @Transient

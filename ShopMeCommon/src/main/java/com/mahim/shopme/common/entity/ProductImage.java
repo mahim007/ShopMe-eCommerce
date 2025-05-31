@@ -1,5 +1,6 @@
 package com.mahim.shopme.common.entity;
 
+import com.mahim.shopme.common.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +30,7 @@ public class ProductImage extends ParentEntity {
 
     @Transient
     public String getImagePath() {
-        return "/product-photos/" + this.product.getId() + "/extras/" + this.name;
+        return Constants.S3_BASE_URL + "/product-photos/" + this.product.getId() + "/extras/" + this.name;
     }
 
     @Override

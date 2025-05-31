@@ -2,6 +2,7 @@ package com.mahim.shopme.admin.setting;
 
 import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.admin.currency.CurrencyRepository;
+import com.mahim.shopme.common.Constants;
 import com.mahim.shopme.common.entity.Currency;
 import com.mahim.shopme.common.entity.Setting;
 import org.springframework.stereotype.Controller;
@@ -46,6 +47,7 @@ public class SettingController {
             model.addAttribute(setting.getKey(), setting.getValue());
         }
         model.addAttribute("currencies", currencies);
+        model.addAttribute("S3_BASE_URI", Constants.S3_BASE_URL);
 
         return "settings/settings";
     }

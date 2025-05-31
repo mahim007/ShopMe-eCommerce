@@ -1,5 +1,6 @@
 package com.mahim.shopme.common.entity;
 
+import com.mahim.shopme.common.Constants;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -88,7 +89,7 @@ public class Product extends ParentEntity {
         if (id == null || mainImage == null) {
             return "/images/default-category.png";
         }
-        return "/product-photos/" + this.id + "/" + this.mainImage;
+        return Constants.S3_BASE_URL + "/product-photos/" + this.id + "/" + this.mainImage;
     }
 
     public boolean containsImageName(String fileName) {

@@ -1,5 +1,6 @@
 package com.mahim.shopme.common.entity;
 
+import com.mahim.shopme.common.Constants;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,7 +32,7 @@ public class Brand extends ParentEntity {
     @Transient
     public String getImagePath() {
         if (this.id == null || this.logo == null) return "/images/default-category.png";
-        return "/brand-photos/" + this.id + "/" + this.logo;
+        return Constants.S3_BASE_URL + "/brand-photos/" + this.id + "/" + this.logo;
     }
 
     public Brand() {
