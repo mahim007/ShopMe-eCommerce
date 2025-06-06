@@ -6,7 +6,6 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.ListObjectsRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 import software.amazon.awssdk.services.s3.model.S3Object;
 
 import java.io.FileInputStream;
@@ -56,23 +55,24 @@ public class AwsS3Util {
 
     private String getContentType(String fileName) {
         String extension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
-        return switch (extension) {
-            case "jpg", "jpeg" -> "image/jpeg";
-            case "png" -> "image/png";
-            case "gif" -> "image/gif";
-            case "bmp" -> "image/bmp";
-            case "svg" -> "image/svg+xml";
-            default -> "application/octet-stream";
-        };
+        return extension;
+//        return switch (extension) {
+//            case "jpg", "jpeg" -> "image/jpeg";
+//            case "png" -> "image/png";
+//            case "gif" -> "image/gif";
+//            case "bmp" -> "image/bmp";
+//            case "svg" -> "image/svg+xml";
+//            default -> "application/octet-stream";
+//        };
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        System.out.println(listFolder("product-photos/18"));
+        System.out.println(AwsS3Util.listFolder("product-photos/18"));
 
         String folderName = "test-upload";
         String fileName = "s3_test_2.jpg";
         String filePath = "C:\\Users\\mahim\\Pictures\\" + fileName;
         InputStream inputStream = new FileInputStream(filePath);
-        uploadFile(folderName, fileName, inputStream);
+        AwsS3Util.uploadFile(folderName, fileName, inputStream);
     }
 }
