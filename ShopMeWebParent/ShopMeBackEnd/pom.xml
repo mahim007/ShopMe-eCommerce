@@ -13,7 +13,7 @@
     <description>Shopme admin project</description>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
     </properties>
 
     <dependencyManagement>
