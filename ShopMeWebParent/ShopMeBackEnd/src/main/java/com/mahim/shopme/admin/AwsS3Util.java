@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.ListObjectsRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Object;
@@ -44,6 +45,7 @@ public class AwsS3Util {
             var putRequest = PutObjectRequest.builder()
                     .bucket(BUCKET_NAME)
                     .key(folderName + "/" + fileName)
+                    .contentType(getContentType(fileName))
                     .build();
             int contentLength = inputStream.available();
             var response = s3Client.putObject(putRequest, RequestBody.fromInputStream(inputStream, contentLength));
@@ -53,26 +55,45 @@ public class AwsS3Util {
         }
     }
 
-    private String getContentType(String fileName) {
+    public static void deleteFile(String fileName) {
+        try (S3Client s3Client = S3Client.builder().build()) {
+            var deleteRequest = DeleteObjectRequest.builder()
+                    .bucket(BUCKET_NAME)
+                    .key(fileName)
+                    .build();
+
+            s3Client.deleteObject(deleteRequest);
+        } catch (Exception e) {
+            LOG.error("Could not delete file: {} due to: ", fileName, e);
+        }
+    }
+
+    public static void removeFolder(String folderName) {
+        listFolder(folderName).forEach(AwsS3Util::deleteFile);
+    }
+
+    private static String getContentType(String fileName) {
         String extension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
-        return extension;
-//        return switch (extension) {
-//            case "jpg", "jpeg" -> "image/jpeg";
-//            case "png" -> "image/png";
-//            case "gif" -> "image/gif";
-//            case "bmp" -> "image/bmp";
-//            case "svg" -> "image/svg+xml";
-//            default -> "application/octet-stream";
-//        };
+        return switch (extension) {
+            case "jpg", "jpeg" -> "image/jpeg";
+            case "png" -> "image/png";
+            case "gif" -> "image/gif";
+            case "bmp" -> "image/bmp";
+            case "svg" -> "image/svg+xml";
+            default -> "application/octet-stream";
+        };
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        System.out.println(AwsS3Util.listFolder("product-photos/18"));
+        System.out.println(AwsS3Util.listFolder("test-upload"));
 
         String folderName = "test-upload";
         String fileName = "s3_test_2.jpg";
         String filePath = "C:\\Users\\mahim\\Pictures\\" + fileName;
         InputStream inputStream = new FileInputStream(filePath);
-        AwsS3Util.uploadFile(folderName, fileName, inputStream);
+//        AwsS3Util.uploadFile(folderName, fileName, inputStream);
+
+//        AwsS3Util.deleteFile("test-upload/aws_s3_test_image.png");
+        AwsS3Util.removeFolder("test-upload");
     }
 }
