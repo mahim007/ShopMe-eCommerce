@@ -1,5 +1,6 @@
 package com.mahim.shopme.admin.category.service;
 
+import com.mahim.shopme.admin.AwsS3Util;
 import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
 import com.mahim.shopme.common.exception.CategoryNotFoundException;
@@ -81,7 +82,7 @@ public class CategoryService {
         }
 
         categoryRepository.deleteById(id);
-        FileUploadUtil.removeDir(CATEGORY_UPLOAD_DIR + "/" + id);
+        AwsS3Util.removeFolder(CATEGORY_UPLOAD_DIR + "/" + id);
     }
 
     public void updateEnabledStatus(Integer id, boolean enabled) throws UserNotFoundException {

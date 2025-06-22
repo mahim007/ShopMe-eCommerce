@@ -1,5 +1,6 @@
 package com.mahim.shopme.admin.category.controller;
 
+import com.mahim.shopme.admin.AwsS3Util;
 import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
 import com.mahim.shopme.admin.paging.PagingAndSortingParam;
@@ -78,11 +79,11 @@ public class CategoryController {
         if (!multipartFile.isEmpty() && multipartFile.getOriginalFilename() != null) {
             String fileName = org.springframework.util.StringUtils.cleanPath(multipartFile.getOriginalFilename());
             category.setPhotos(fileName);
-
             categorySaved = categoryService.save(category);
-            FileUploadUtil.cleanDir(CATEGORY_UPLOAD_DIR + "/" + categorySaved.getId());
-            FileUploadUtil.saveFile(CATEGORY_UPLOAD_DIR + "/" + categorySaved.getId(),
-                    fileName, multipartFile);
+
+            String uploadDir = CATEGORY_UPLOAD_DIR +  "/" + categorySaved.getId();
+            AwsS3Util.removeFolder(uploadDir);
+            AwsS3Util.uploadFile(uploadDir, fileName, multipartFile.getInputStream());
         } else {
             categorySaved = categoryService.save(category);
         }
