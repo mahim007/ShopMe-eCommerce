@@ -1,5 +1,6 @@
 package com.mahim.shopme.admin.brand.service;
 
+import com.mahim.shopme.admin.AwsS3Util;
 import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.admin.brand.exception.BrandNotFoundException;
 import com.mahim.shopme.admin.brand.repository.BrandRepository;
@@ -73,7 +74,7 @@ public class BrandService {
         }
 
         brandRepository.deleteById(id);
-        FileUploadUtil.removeDir(BRAND_UPLOAD_DIR + "/" + id);
+        AwsS3Util.removeFolder(BRAND_UPLOAD_DIR + "/" + id);
     }
 
     public String checkUnique(Integer id, String name) {

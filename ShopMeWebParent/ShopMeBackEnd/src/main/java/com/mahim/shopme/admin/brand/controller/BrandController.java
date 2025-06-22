@@ -1,5 +1,6 @@
 package com.mahim.shopme.admin.brand.controller;
 
+import com.mahim.shopme.admin.AwsS3Util;
 import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.admin.brand.exception.BrandNotFoundException;
 import com.mahim.shopme.admin.brand.exporter.BrandCsvExporter;
@@ -83,8 +84,9 @@ public class BrandController {
             brand.setLogo(fileName);
 
             brandToBeSaved = brandService.save(brand);
-            FileUploadUtil.cleanDir(BRAND_UPLOAD_DIR + "/" + brandToBeSaved.getId());
-            FileUploadUtil.saveFile(BRAND_UPLOAD_DIR + "/" + brandToBeSaved.getId(), fileName, multipartFile);
+            String uploadDir = BRAND_UPLOAD_DIR + "/" + brandToBeSaved.getId();
+            AwsS3Util.removeFolder(uploadDir);
+            AwsS3Util.uploadFile(uploadDir, fileName, multipartFile.getInputStream());
         } else {
             brandToBeSaved = brandService.save(brand);
         }
