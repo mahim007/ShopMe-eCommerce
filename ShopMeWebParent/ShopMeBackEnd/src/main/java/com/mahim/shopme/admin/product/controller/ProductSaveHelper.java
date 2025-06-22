@@ -1,5 +1,6 @@
 package com.mahim.shopme.admin.product.controller;
 
+import com.mahim.shopme.admin.AwsS3Util;
 import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.common.entity.Product;
 import com.mahim.shopme.common.entity.ProductDetail;
@@ -26,17 +27,16 @@ public class ProductSaveHelper {
         Path dirPath = Paths.get(extraImagesDirectory);
 
         try {
-            Files.list(dirPath).forEach(file  -> {
-                String fileName = file.toFile().getName();
-                if (!product.containsImageName(fileName)) {
-                    try {
-                        Files.delete(file);
-                    } catch (IOException e) {
-                        LOGGER.error("Error occurred when deleting {} due to {}", fileName, e.getMessage());
+            AwsS3Util.listFolder(extraImagesDirectory).forEach(objectKey  -> {
+                int lastIndexOf = objectKey.lastIndexOf("/");
+                if (lastIndexOf != -1) {
+                    String fileName = objectKey.substring(lastIndexOf + 1);
+                    if (!product.containsImageName(fileName)) {
+                        AwsS3Util.deleteFile(objectKey);
                     }
                 }
             });
-        } catch (IOException e) {
+        } catch (Exception e) {
             LOGGER.error("Error occurred when traversing directory {} due to {}", dirPath.toString() , e.getMessage());
         }
     }
@@ -99,16 +99,22 @@ public class ProductSaveHelper {
 
         if (!mainImage.isEmpty() && mainImage.getOriginalFilename() != null) {
             String fileName = org.springframework.util.StringUtils.cleanPath(mainImage.getOriginalFilename());
-//            FileUploadUtil.cleanDir(PRODUCT_UPLOAD_DIR + "/" + product.getId());
-            FileUploadUtil.saveFile(PRODUCT_UPLOAD_DIR + "/" + product.getId(), fileName, mainImage);
+            String uploadDir =  PRODUCT_UPLOAD_DIR + "/" + product.getId();
+            AwsS3Util.listFolder(uploadDir + "/").forEach(objectKey  -> {
+                if (!objectKey.contains("/extras/")) {
+                    AwsS3Util.deleteFile(objectKey);
+                }
+            });
+            AwsS3Util.uploadFile(uploadDir, fileName, mainImage.getInputStream());
         }
 
         if (extraImages != null) {
-//            FileUploadUtil.cleanDir(PRODUCT_UPLOAD_DIR + "/" + product.getId() + "/extras");
+            String uploadDir = PRODUCT_UPLOAD_DIR + "/" + product.getId() + "/" + product.getId() + "/extras";
             for(MultipartFile extraImage : extraImages) {
                 if (!extraImage.isEmpty() && extraImage.getOriginalFilename() != null) {
                     String fileName = org.springframework.util.StringUtils.cleanPath(extraImage.getOriginalFilename());
-                    FileUploadUtil.saveFile(PRODUCT_UPLOAD_DIR + "/" + product.getId() + "/extras", fileName, extraImage);
+                    FileUploadUtil.saveFile(uploadDir, fileName, extraImage);
+                    AwsS3Util.uploadFile(uploadDir, fileName, extraImage.getInputStream());
                 }
             }
         }

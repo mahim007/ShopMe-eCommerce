@@ -14,22 +14,22 @@ import static com.mahim.shopme.common.util.StaticPathUtils.*;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        exposeDirectory(USER_UPLOAD_DIR, registry);
-        exposeDirectory(CATEGORY_UPLOAD_DIR, registry);
-        exposeDirectory(BRAND_UPLOAD_DIR, registry);
-        exposeDirectory(PRODUCT_UPLOAD_DIR, registry);
-        exposeDirectory(SITE_LOGO_DIR, registry);
-    }
-
-    private void exposeDirectory(String pathPattern, ResourceHandlerRegistry registry) {
-        Path path = Paths.get(pathPattern);
-        String absolutePath = path.toFile().getAbsolutePath();
-
-        registry.addResourceHandler("/" + pathPattern + "/**")
-                .addResourceLocations("file:///" + absolutePath + "/");
-    }
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        exposeDirectory(USER_UPLOAD_DIR, registry);
+//        exposeDirectory(CATEGORY_UPLOAD_DIR, registry);
+//        exposeDirectory(BRAND_UPLOAD_DIR, registry);
+//        exposeDirectory(PRODUCT_UPLOAD_DIR, registry);
+//        exposeDirectory(SITE_LOGO_DIR, registry);
+//    }
+//
+//    private void exposeDirectory(String pathPattern, ResourceHandlerRegistry registry) {
+//        Path path = Paths.get(pathPattern);
+//        String absolutePath = path.toFile().getAbsolutePath();
+//
+//        registry.addResourceHandler("/" + pathPattern + "/**")
+//                .addResourceLocations("file:///" + absolutePath + "/");
+//    }
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {

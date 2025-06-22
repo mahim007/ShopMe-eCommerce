@@ -28,7 +28,7 @@ public class AwsS3Util {
 
     public static List<String> listFolder(String folderName) {
         try (S3Client s3Client = S3Client.builder().build()) {
-            var listRequest = ListObjectsRequest.builder().bucket(BUCKET_NAME).prefix(folderName).build();
+            var listRequest = ListObjectsRequest.builder().bucket(BUCKET_NAME).prefix(folderName + "/").build();
             var listResponse = s3Client.listObjects(listRequest);
 
             return listResponse.contents().stream()
@@ -69,7 +69,7 @@ public class AwsS3Util {
     }
 
     public static void removeFolder(String folderName) {
-        listFolder(folderName).forEach(AwsS3Util::deleteFile);
+        listFolder(folderName + "/").forEach(AwsS3Util::deleteFile);
     }
 
     private static String getContentType(String fileName) {
@@ -94,6 +94,7 @@ public class AwsS3Util {
 //        AwsS3Util.uploadFile(folderName, fileName, inputStream);
 
 //        AwsS3Util.deleteFile("test-upload/aws_s3_test_image.png");
-        AwsS3Util.removeFolder("test-upload");
+//        AwsS3Util.removeFolder("test-upload");
+        AwsS3Util.listFolder("user-photos/1/").forEach(System.out::println);
     }
 }
