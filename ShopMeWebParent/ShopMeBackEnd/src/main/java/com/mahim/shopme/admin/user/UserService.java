@@ -1,5 +1,6 @@
 package com.mahim.shopme.admin.user;
 
+import com.mahim.shopme.admin.AwsS3Util;
 import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
 import com.mahim.shopme.common.entity.Role;
@@ -105,7 +106,7 @@ public class UserService {
         }
 
         userRepository.deleteById(id);
-        FileUploadUtil.removeDir(USER_UPLOAD_DIR + "/" + id);
+        AwsS3Util.removeFolder(USER_UPLOAD_DIR + "/" + id);
     }
 
     public void updateEnabledStatus(Integer id, boolean enabled) throws UserNotFoundException {

@@ -1,5 +1,6 @@
 package com.mahim.shopme.admin.user.controller;
 
+import com.mahim.shopme.admin.AwsS3Util;
 import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
 import com.mahim.shopme.admin.paging.PagingAndSortingParam;
@@ -75,8 +76,10 @@ public class UserController {
             String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
             user.setPhotos(fileName);
             savedUser = userService.save(user);
-            FileUploadUtil.cleanDir(USER_UPLOAD_DIR + "/" + savedUser.getId());
-            FileUploadUtil.saveFile(USER_UPLOAD_DIR + "/" + savedUser.getId(), fileName, multipartFile);
+
+            String uploadDir = USER_UPLOAD_DIR + "/" + savedUser.getId();
+            AwsS3Util.removeFolder(uploadDir);
+            AwsS3Util.uploadFile(uploadDir, fileName, multipartFile.getInputStream());
         } else {
             savedUser = userService.save(user);
         }

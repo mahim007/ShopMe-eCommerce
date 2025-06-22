@@ -1,5 +1,6 @@
 package com.mahim.shopme.admin.setting;
 
+import com.mahim.shopme.admin.AwsS3Util;
 import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.admin.currency.CurrencyRepository;
 import com.mahim.shopme.common.Constants;
@@ -78,12 +79,15 @@ public class SettingController {
             String uploadDir = SITE_LOGO_DIR;
             generalSetting.updateSiteLogo(value);
 
-            Path path = Paths.get(uploadDir);
-            if (!Files.exists(path)) {
-                Files.createDirectories(path);
-            }
-            FileUploadUtil.cleanDir(uploadDir);
-            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+            AwsS3Util.removeFolder(uploadDir);
+            AwsS3Util.uploadFile(uploadDir, fileName, multipartFile.getInputStream());
+
+//            Path path = Paths.get(uploadDir);
+//            if (!Files.exists(path)) {
+//                Files.createDirectories(path);
+//            }
+//            FileUploadUtil.cleanDir(uploadDir);
+//            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
         }
     }
 
