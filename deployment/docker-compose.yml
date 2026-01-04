@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+    # MySQL Database
+    mysql-db:
+        image: mysql:8.0
+        container_name: shopme-mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+            MYSQL_DATABASE: shopmedb
+            MYSQL_USER: ${DB_USER}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+        ports:
+            -   "3306:3306"
+        volumes:
+            - mysql-data:/var/lib/mysql
+        command: --default-authentication-plugin=mysql_native_password
+        healthcheck:
+            test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+            timeout: 20s
+            retries: 10
+
+    # Backend Service (Admin Panel)
+    backend:
+        build:
+            context: ../.. # Root of the project
+            dockerfile: ./deployment/docker/Dockerfile.backend
+        container_name: shopme-backend
+        restart: always
+        environment:
+            SPRING_PROFILES_ACTIVE: prod
+            DB_USER: ${DB_USER}
+            DB_PASSWORD: ${DB_PASSWORD}
+            AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+            AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+            AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET}
+            AWS_REGION: ${AWS_REGION}
+        depends_on:
+            mysql-db:
+                condition: service_healthy
+        ports:
+            -   "8080:8080"
+
+    # Frontend Service (Consumer Portal)
+    frontend:
+        build:
+            context: ../..
+            dockerfile: ./deployment/docker/Dockerfile.frontend
+        container_name: shopme-frontend
+        restart: always
+        environment:
+            SPRING_PROFILES_ACTIVE: prod
+            DB_USER: ${DB_USER}
+            DB_PASSWORD: ${DB_PASSWORD}
+            PAYPAL_CLIENT_ID: ${PAYPAL_CLIENT_ID}
+            PAYPAL_CLIENT_SECRET: ${PAYPAL_CLIENT_SECRET}
+            PAYPAL_MODE: ${PAYPAL_MODE}
+            GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+            GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+            FACEBOOK_CLIENT_ID: ${FACEBOOK_CLIENT_ID}
+            FACEBOOK_CLIENT_SECRET: ${FACEBOOK_CLIENT_SECRET}
+        ports:
+            -   "8081:8081"
+        depends_on:
+            -   mysql-db
+            -   backend
+
+volumes:
+    mysql-data:                 # Named volume for database persistence
+
+networks:
+    default:
+        name: shopme-network    # Custom network for containers
