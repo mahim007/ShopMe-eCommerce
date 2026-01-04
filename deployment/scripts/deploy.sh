@@ -13,8 +13,8 @@ BACKUP_DIR="$HOME/shopme-backup"
 mkdir -p $DEPLOY_DIR $BACKUP_DIR
 
 # Copy deployment files
-echo "📦 Setting up deployment directory..."
-cp -r deployment/* $DEPLOY_DIR/
+#echo "📦 Setting up deployment directory..."
+#cp -r deployment/* $DEPLOY_DIR/
 
 # Clone application code
 echo "📥 Cloning application code..."
