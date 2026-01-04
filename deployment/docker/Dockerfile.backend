@@ -1,7 +1,7 @@
 # Multi-stage build: Stage 1 - Build
 FROM maven:3.8-openjdk-17 AS build
 WORKDIR /build
-COPY ../../../ .
+COPY ../../.. .
 
 # Build common module first (dependency)
 WORKDIR /build/ShopMeCommon
