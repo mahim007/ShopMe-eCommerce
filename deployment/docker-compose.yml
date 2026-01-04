@@ -24,8 +24,8 @@ services:
     # Backend Service (Admin Panel)
     backend:
         build:
-            context: ./app/deployment/docker # Root of the project
-            dockerfile: Dockerfile.backend
+            context: .
+            dockerfile: ./app/deployment/docker/Dockerfile.backend
         container_name: shopme-backend
         restart: always
         environment:
@@ -45,8 +45,8 @@ services:
     # Frontend Service (Consumer Portal)
     frontend:
         build:
-            context: ./app/deployment/docker
-            dockerfile: Dockerfile.frontend
+            context: .
+            dockerfile: ./app/deployment/docker/Dockerfile.frontend
         container_name: shopme-frontend
         restart: always
         environment:
