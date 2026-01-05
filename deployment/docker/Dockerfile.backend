@@ -12,7 +12,7 @@ WORKDIR /app/ShopMeWebParent/ShopMeBackEnd
 RUN mvn clean package -DskipTests
 
 # Multi-stage build: Stage 2 - Run (smaller image)
-FROM openjdk:17-jdk-slim
+FROM openjdk:17-slim
 WORKDIR /app
 
 # Copy built JAR from build stage
