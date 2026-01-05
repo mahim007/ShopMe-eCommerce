@@ -13,6 +13,9 @@ spring:
         hibernate:
             ddl-auto: update
         show-sql: false
+    mvc:
+        pathmatch:
+            matching-strategy: ant-path-matcher
 
     # OAuth2 - Use environment variables for production
     security:

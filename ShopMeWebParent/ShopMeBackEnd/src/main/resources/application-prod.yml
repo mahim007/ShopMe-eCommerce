@@ -17,6 +17,9 @@ spring:
           hibernate:
               dialect: org.hibernate.dialect.MySQL8Dialect
               format_sql: true
+    mvc:
+        pathmatch:
+            matching-strategy: ant-path-matcher
 
 # AWS S3 for production
 cloud:

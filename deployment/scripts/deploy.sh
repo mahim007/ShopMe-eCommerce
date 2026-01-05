@@ -29,7 +29,7 @@ fi
 echo "🐳 Building and deploying containers..."
 cd $DEPLOY_DIR
 docker-compose down || true     # Stop existing containers
-docker-compose build --no-cache
+docker-compose build
 docker-compose up -d
 
 echo "✅ Deployment completed!"
