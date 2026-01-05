@@ -12,7 +12,7 @@ WORKDIR /app/ShopMeWebParent/ShopMeFrontEnd
 RUN mvn clean package -DskipTests
 
 # Multi-stage build: Stage 2 - Run (smaller image)
-FROM openjdk:17-slim
+FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 
 # Copy built JAR from build stage
