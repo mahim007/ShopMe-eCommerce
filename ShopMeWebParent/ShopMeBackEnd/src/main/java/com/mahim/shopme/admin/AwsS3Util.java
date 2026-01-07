@@ -23,7 +23,7 @@ public class AwsS3Util {
     private static final String BUCKET_NAME;
 
     static {
-        BUCKET_NAME = System.getenv("AWS_BUCKET_NAME");
+        BUCKET_NAME = System.getenv("AWS_S3_BUCKET_NAME");
     }
 
     public static List<String> listFolder(String folderName) {

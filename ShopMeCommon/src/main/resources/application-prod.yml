@@ -1,0 +1,7 @@
+# AWS S3 configuration
+aws:
+    s3:
+        region: ${AWS_REGION}
+        bucket: ${AWS_S3_BUCKET_NAME}
+        access_key: ${AWS_ACCESS_KEY_ID}
+        secret_key: ${AWS_SECRET_ACCESS_KEY}

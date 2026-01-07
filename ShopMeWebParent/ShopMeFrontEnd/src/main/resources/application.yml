@@ -36,3 +36,11 @@ spring:
             matching-strategy: ant-path-matcher
     config:
         import: optional:secrets.yml
+
+# AWS S3 configuration
+aws:
+    s3:
+        region: ap-southeast-1
+        bucket: com-mahim-shopme
+        access_key: ${AWS_ACCESS_KEY_ID}
+        secret_key: ${AWS_SECRET_ACCESS_KEY}

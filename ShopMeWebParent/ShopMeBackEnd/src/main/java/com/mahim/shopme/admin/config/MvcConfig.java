@@ -1,21 +1,17 @@
-package com.mahim.shopme;
+package com.mahim.shopme.admin.config;
 
-import org.springframework.context.annotation.Bean;
+import com.mahim.shopme.admin.paging.PagingAndSortingArgumentResolver;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import static com.mahim.shopme.common.util.StaticPathUtils.SITE_LOGO_DIR;
-import static com.mahim.shopme.utils.StaticPathUtils.*;
+import java.util.List;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
 //    @Override
 //    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        exposeDirectory(USER_UPLOAD_DIR, registry);
 //        exposeDirectory(CATEGORY_UPLOAD_DIR, registry);
 //        exposeDirectory(BRAND_UPLOAD_DIR, registry);
 //        exposeDirectory(PRODUCT_UPLOAD_DIR, registry);
@@ -30,8 +26,8 @@ public class MvcConfig implements WebMvcConfigurer {
 //                .addResourceLocations("file:///" + absolutePath + "/");
 //    }
 
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(new PagingAndSortingArgumentResolver());
     }
 }

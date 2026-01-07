@@ -1,7 +1,6 @@
 package com.mahim.shopme.admin.setting;
 
 import com.mahim.shopme.admin.AwsS3Util;
-import com.mahim.shopme.admin.FileUploadUtil;
 import com.mahim.shopme.admin.currency.CurrencyRepository;
 import com.mahim.shopme.common.Constants;
 import com.mahim.shopme.common.entity.Currency;
@@ -18,9 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,6 +43,7 @@ public class SettingController {
         for (Setting setting : settings) {
             model.addAttribute(setting.getKey(), setting.getValue());
         }
+
         model.addAttribute("currencies", currencies);
         model.addAttribute("S3_BASE_URI", Constants.S3_BASE_URL);
 

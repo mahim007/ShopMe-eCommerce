@@ -1,7 +1,8 @@
-package com.mahim.shopme.setting;
+package com.mahim.shopme.filter;
 
-import com.mahim.shopme.common.Constants;
+import com.mahim.shopme.common.config.S3Config;
 import com.mahim.shopme.common.entity.Setting;
+import com.mahim.shopme.setting.SettingService;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -13,9 +14,11 @@ import java.util.List;
 public class SettingFilter implements Filter {
 
     private final SettingService settingService;
+    private final S3Config s3Config;
 
-    public SettingFilter(SettingService settingService) {
+    public SettingFilter(SettingService settingService, S3Config s3Config) {
         this.settingService = settingService;
+        this.s3Config = s3Config;
     }
 
     @Override
@@ -34,8 +37,7 @@ public class SettingFilter implements Filter {
             servletRequest.setAttribute(setting.getKey(), setting.getValue());
         }
 
-        servletRequest.setAttribute("S3_BASE_URI", Constants.S3_BASE_URL);
-
+        servletRequest.setAttribute("S3_BASE_URI", s3Config.getBaseS3Url());
         filterChain.doFilter(servletRequest, servletResponse);
     }
 }

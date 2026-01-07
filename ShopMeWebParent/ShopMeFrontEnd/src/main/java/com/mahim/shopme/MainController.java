@@ -1,6 +1,7 @@
 package com.mahim.shopme;
 
 import com.mahim.shopme.category.CategoryService;
+import com.mahim.shopme.common.Constants;
 import com.mahim.shopme.common.entity.Category;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
