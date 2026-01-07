@@ -2,26 +2,32 @@
 FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
 
+# 1️⃣ Copy parent + module POMs first (dependency caching)
 COPY pom.xml .
 COPY ShopMeCommon/pom.xml ShopMeCommon/pom.xml
 COPY ShopMeWebParent/pom.xml ShopMeWebParent/pom.xml
 COPY ShopMeWebParent/ShopMeFrontEnd/pom.xml ShopMeWebParent/ShopMeFrontEnd/pom.xml
+COPY ShopMeWebParent/ShopMeBackEnd/pom.xml ShopMeWebParent/ShopMeBackEnd/pom.xml
 
+# 2️⃣ Download dependencies only (cached)
 RUN mvn -B dependency:go-offline
 
+# 3️⃣ Copy full source code
 COPY ShopMeCommon ShopMeCommon
 COPY ShopMeWebParent ShopMeWebParent
 
+# 4️⃣ Build modules
 WORKDIR /app/ShopMeCommon
 RUN mvn -B install -DskipTests
 
 WORKDIR /app/ShopMeWebParent/ShopMeFrontEnd
 RUN mvn -B package -DskipTests
 
-# ---------- Stage 2 ----------
+# ---------- Stage 2: Runtime ----------
 FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 
+# Copy frontend JAR from build stage
 COPY --from=build /app/ShopMeWebParent/ShopMeFrontEnd/target/*.jar app.jar
 
 EXPOSE 8081
