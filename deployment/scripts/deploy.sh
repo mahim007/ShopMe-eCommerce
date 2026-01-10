@@ -1,6 +1,26 @@
 #!/bin/bash
 set -e
 
+# ----------------------------------------
+# Helper functions  for getting public IP address
+# ----------------------------------------
+get_public_ip() {
+  TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" \
+    -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+
+  if [ -z "$TOKEN" ]; then
+      echo "localhost"
+      return
+  fi
+
+  curl -s -H "X-aws-ec2-metadata-token: $TOKEN" \
+    http://169.254.169.254/latest/meta-data/public-ipv4 \
+    || echo "localhost"
+}
+
+# ----------------------------------------
+# Script starts here
+# ----------------------------------------
 echo "========================================"
 echo "🚀 ShopMe Deployment Script"
 echo "========================================"
@@ -61,18 +81,3 @@ echo "✅ Deployment completed!"
 echo "Frontend: http://$PUBLIC_IP:8081/shopme"
 echo "Backend : http://$PUBLIC_IP:8080/shopme-admin"
 echo "========================================"
-
-
-get_public_ip() {
-  TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" \
-    -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
-
-  if [ -z "$TOKEN" ]; then
-    echo "localhost"
-    return
-  fi
-
-  curl -s -H "X-aws-ec2-metadata-token: $TOKEN" \
-    http://169.254.169.254/latest/meta-data/public-ipv4 \
-    || echo "localhost"
-}
