@@ -54,7 +54,7 @@ docker volume prune -f
 # ----------------------------------------
 # Done
 # ----------------------------------------
-PUBLIC_IP=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)
+PUBLIC_IP=$(curl -s --connect-timeout 2 http://169.254.169.254/latest/meta-data/public-ipv4 || echo "localhost")
 
 echo "========================================"
 echo "✅ Deployment completed!"
