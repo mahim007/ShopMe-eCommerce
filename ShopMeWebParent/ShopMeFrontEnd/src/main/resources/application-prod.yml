@@ -1,7 +1,7 @@
 server:
     port: 8081
-    servlet:
-        context-path: /shopme  # Keep the same as local!
+#    servlet:
+#        context-path: /shopme  # Keep the same as local!
 
 spring:
     datasource:
