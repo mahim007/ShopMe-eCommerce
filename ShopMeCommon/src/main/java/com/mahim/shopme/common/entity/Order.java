@@ -51,6 +51,13 @@ public class Order extends AbstractAddress {
     @OrderBy("updatedTime asc")
     private List<OrderTrack> orderTracks = new ArrayList<>();
 
+    public Order(Integer id, Date orderTime, float productCost, float subtotal, float total) {
+        this.orderTime = orderTime;
+        this.productCost = productCost;
+        this.subtotal = subtotal;
+        this.total = total;
+    }
+
     @Transient
     public String getDestination() {
         String destination = "";
