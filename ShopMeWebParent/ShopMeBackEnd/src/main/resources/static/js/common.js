@@ -23,3 +23,19 @@ function customizeTabs() {
         $(`.nav-tabs a[href='#${hash}']`).tab('show');
     }
 }
+
+function fetchData(url, method, successCallback, errorCallback) {
+    fetch(url, {
+        method: method,
+        headers: {
+            "Content-Type": "application/json",
+            [csrfHeaderName]: csrfHeaderValue
+        }
+    })
+        .then(res => res.text())
+        .then(text => text.length > 0 ? JSON.parse(text) : {})
+        .then(data => {
+            successCallback(data);
+        })
+        .catch(error => errorCallback());
+}

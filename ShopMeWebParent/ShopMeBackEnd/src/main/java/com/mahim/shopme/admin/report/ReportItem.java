@@ -22,4 +22,28 @@ public class ReportItem {
         this.grossSales = grossSales;
         this.netSales = netSales;
     }
+
+    public void addGrossSales(float amount) {
+        this.grossSales += amount;
+    }
+
+    public void addNetSales(float amount) {
+        this.netSales += amount;
+    }
+
+    public void increaseOrdersCount() {
+        this.orderCount++;
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (!(o instanceof ReportItem that)) return false;
+
+        return identifier.equals(that.identifier);
+    }
+
+    @Override
+    public int hashCode() {
+        return identifier.hashCode();
+    }
 }
