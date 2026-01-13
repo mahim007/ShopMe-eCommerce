@@ -14,7 +14,6 @@ import java.util.List;
 @Service
 public class MasterOrderReportService {
     private final OrderRepository orderRepository;
-    private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public MasterOrderReportService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
@@ -33,22 +32,33 @@ public class MasterOrderReportService {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -days);
         Date startTime = calendar.getTime();
-        return getReportDataByDateRange(startTime, endTime);
+        return getReportDataByDateRange(startTime, endTime, PeriodType.DAYS);
     }
 
-    private List<ReportItem> getReportDataByDateRange(Date startTime, Date endTime) {
+    private List<ReportItem> getReportDataByDateRange(Date startTime, Date endTime, PeriodType periodType) {
         List<Order> orders = orderRepository.findByOrderTimeBetween(startTime, endTime);
         printRawData(orders);
-        List<ReportItem> reportItems = createReportData(startTime, endTime);
-        calculateSalesForReportData(orders, reportItems);
+
+        List<ReportItem> reportItems = createReportData(startTime, endTime, periodType);
+        calculateSalesForReportData(orders, reportItems, periodType);
         return reportItems;
     }
 
-    private void calculateSalesForReportData(List<Order> orders, List<ReportItem> reportItems) {
+    private DateFormat getDateFormatter(PeriodType periodType) {
+        return switch (periodType) {
+            case DAYS -> new SimpleDateFormat("yyyy-MM-dd");
+            case MONTHS -> new SimpleDateFormat("yyyy-MM");
+            default -> null;
+        };
+    }
+
+    private void calculateSalesForReportData(List<Order> orders, List<ReportItem> reportItems, PeriodType periodType) {
+        DateFormat dateFormat = getDateFormatter(periodType);
         orders.forEach(order -> {
             String orderDateString = dateFormat.format(order.getOrderTime());
             ReportItem reportItem = new ReportItem(orderDateString);
             int indexOf = reportItems.indexOf(reportItem);
+
             if (indexOf >= 0) {
                 reportItem = reportItems.get(indexOf);
                 reportItem.addGrossSales(order.getTotal());
@@ -63,7 +73,8 @@ public class MasterOrderReportService {
                 order.getId(), order.getOrderTime(), order.getProductCost(), order.getSubtotal()));
     }
 
-    private List<ReportItem> createReportData(Date startTime, Date endTime) {
+    private List<ReportItem> createReportData(Date startTime, Date endTime, PeriodType periodType) {
+        DateFormat dateFormat = getDateFormatter(periodType);
         List<ReportItem> reportItems = new ArrayList<>();
 
         Calendar startDate = Calendar.getInstance();
@@ -75,9 +86,30 @@ public class MasterOrderReportService {
             Date currentDate = startDate.getTime();
             String dateString = dateFormat.format(currentDate);
             reportItems.add(new ReportItem(dateString));
-            startDate.add(Calendar.DATE, 1);
+
+            if ( periodType == PeriodType.DAYS) {
+                startDate.add(Calendar.DATE, 1);
+            } else {
+                startDate.add(Calendar.MONTH, 1);
+            }
         }
 
         return reportItems;
+    }
+
+    public List<ReportItem> getReportDataLast6Months() {
+        return getReportDataLastXMonths(6);
+    }
+
+    public List<ReportItem> getReportDataLast12Months() {
+        return getReportDataLastXMonths(12);
+    }
+
+    private List<ReportItem> getReportDataLastXMonths(int months) {
+        Date endTime = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -months);
+        Date startTime = calendar.getTime();
+        return getReportDataByDateRange(startTime, endTime, PeriodType.MONTHS);
     }
 }
