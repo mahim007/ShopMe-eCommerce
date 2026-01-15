@@ -5,6 +5,40 @@ let chartOptions;
 let totalGrossSales;
 let totalNetSales;
 let totalOrders;
+let startDateField;
+let endDateField;
+
+function initCustomDateRange() {
+    startDateField = $("#startDate");
+    endDateField = $("#endDate");
+
+    let endDate = new Date();
+    endDateField.val(endDate.toISOString().split('T')[0]);
+
+    let startDate = new Date();
+    startDate.setDate(endDate.getDate() - 30);
+    startDateField.val(startDate.toISOString().split('T')[0]);
+}
+
+function getNumberOfDays() {
+    let startDate = new Date(startDateField.val());
+    let endDate = new Date(endDateField.val());
+
+    let differenceInMillis = endDate.getTime() - startDate.getTime();
+    return differenceInMillis / (1000 * 3600 * 24);
+}
+
+function validateDateRange() {
+    let differenceInDays = getNumberOfDays();
+    if (differenceInDays >= 1 && differenceInDays <= 30) {
+        startDateField[0].setCustomValidity("");
+        return true;
+    } else {
+        startDateField[0].setCustomValidity("Date range must be between 1 and 30 days");
+        startDateField[0].reportValidity();
+        return false;
+    }
+}
 
 $(document).ready(function () {
     $(".button_sales_by_date").on("click", function () {
@@ -15,13 +49,31 @@ $(document).ready(function () {
 
             $(this).removeClass("btn-light").addClass("btn-primary");
 
+            let divCustomDateRange = $("#divCustomDateRange");
             let period = $(this).attr("period");
-            loadSalesReportByDate(period);
+            if (period) {
+                divCustomDateRange.addClass('d-none')
+                loadSalesReportByDate(period);
+            } else {
+                divCustomDateRange.removeClass('d-none');
+            }
+        }
+    });
+
+    initCustomDateRange();
+    $("#btnViewReportByDateRange").on("click", function (e) {
+        e.preventDefault();
+        if (validateDateRange()) {
+            loadSalesReportByDate("custom")
         }
     });
 });
 
 function loadSalesReportByDate(period = "last_7_days") {
+    if (period === "custom") {
+        period = $("#startDate").val() + "/" + $("#endDate").val();
+    }
+
     let requestURL = contextPath + "reports/sales_by_date/" + period;
     fetchData(requestURL, "GET", res => {
         prepareChartData(res);
@@ -90,6 +142,7 @@ function getChartTitle(period) {
         case "last_28_days": return "Sales in Last 28 Days";
         case "last_6_months": return "Sales in Last 6 Moths";
         case "last_12_months": return "Sales in Last 12 Months";
+        case "custom": return "Sales in Custom Date Range";
     }
 
     return "";
@@ -101,6 +154,7 @@ function getDenominator(period) {
         case "last_28_days": return 28;
         case "last_6_months": return 6;
         case "last_12_months": return 12;
+        case "custom": return getNumberOfDays();
         default: return 1;
     }
 }

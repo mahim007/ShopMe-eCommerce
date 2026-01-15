@@ -5,6 +5,7 @@ import com.mahim.shopme.common.entity.Order;
 import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,6 +33,13 @@ public class MasterOrderReportService {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -days);
         Date startTime = calendar.getTime();
+        return getReportDataByDateRange(startTime, endTime, PeriodType.DAYS);
+    }
+
+    public List<ReportItem> getReportDataByDateRange(String startDate, String endDate) throws ParseException {
+        DateFormat formatter = getDateFormatter(PeriodType.DAYS);
+        Date startTime = formatter.parse(startDate);
+        Date endTime = formatter.parse(endDate);
         return getReportDataByDateRange(startTime, endTime, PeriodType.DAYS);
     }
 

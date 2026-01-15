@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -26,5 +27,10 @@ public class ReportRestController {
             case "last_12_months" -> masterOrderReportService.getReportDataLast12Months();
             default -> masterOrderReportService.getReportDataLast7Days();
         };
+    }
+
+    @GetMapping("/sales_by_date/{startDate}/{endDate}")
+    public List<ReportItem> getSalesByDate(@PathVariable String startDate, @PathVariable String endDate) throws ParseException {
+        return masterOrderReportService.getReportDataByDateRange(startDate, endDate);
     }
 }
