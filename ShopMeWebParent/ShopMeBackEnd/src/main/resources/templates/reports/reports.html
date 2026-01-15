@@ -58,6 +58,7 @@
 
     $(document).ready(function () {
         google.charts.load('current', {packages: ['corechart']});
+        google.charts.setOnLoadCallback(loadSalesReportByDateForCategory);
         google.charts.setOnLoadCallback(loadSalesReportByDate);
     });
 
@@ -66,5 +67,6 @@
 <script type="text/javascript" th:src="@{/library/jquery.number.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/reports/sales_report_common.js}"></script>
 <script type="text/javascript" th:src="@{/js/reports/sales_report_by_date.js}"></script>
+<script type="text/javascript" th:src="@{/js/reports/sales_report_by_category.js}"></script>
 </body>
 </html>

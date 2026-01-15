@@ -1,5 +1,11 @@
 // Sales report common scripts
 
+let data;
+let chartOptions;
+let totalGrossSales;
+let totalNetSales;
+let totalItems;
+
 function setupEventHandlers(reportType, callback) {
     $(".button_sales_by" + reportType).on("click", function () {
         if ($(this).hasClass("btn-light")) {
@@ -101,7 +107,7 @@ function setSalesAmount(period, reportType, labelTotalItems) {
     $("#textAvgGrossSales" + reportType).text(formatCurrency(totalGrossSales / getDenominator(period, reportType)));
     $("#textAvgNetSales" + reportType).text(formatCurrency(totalNetSales / getDenominator(period, reportType)));
     $("#labelTotalItems" + reportType).text(labelTotalItems);
-    $("#textTotalItems" + reportType).text($.number(totalOrders));
+    $("#textTotalItems" + reportType).text($.number(totalItems));
 }
 
 function formatChartData(data, colIndex1, colIndex2) {

@@ -12,9 +12,12 @@ import java.util.List;
 @RequestMapping("/reports")
 public class ReportRestController {
     private final MasterOrderReportService masterOrderReportService;
+    private final OrderDetailsReportService orderDetailsReportService;
 
-    public ReportRestController(MasterOrderReportService masterOrderReportService) {
+    public ReportRestController(MasterOrderReportService masterOrderReportService,
+                                OrderDetailsReportService orderDetailsReportService) {
         this.masterOrderReportService = masterOrderReportService;
+        this.orderDetailsReportService = orderDetailsReportService;
     }
 
     @GetMapping("/sales_by_date/{period}")
@@ -32,5 +35,24 @@ public class ReportRestController {
     @GetMapping("/sales_by_date/{startDate}/{endDate}")
     public List<ReportItem> getSalesByDate(@PathVariable String startDate, @PathVariable String endDate) throws ParseException {
         return masterOrderReportService.getReportDataByDateRange(startDate, endDate, ReportType.DATE);
+    }
+
+    @GetMapping("/{groupBy}/{period}")
+    public List<ReportItem> getReportDataByCategoryOrProduct(@PathVariable String groupBy, @PathVariable String period) {
+        ReportType reportType = ReportType.valueOf(groupBy.toUpperCase());
+
+        return switch (period) {
+            case "last_7_days" -> orderDetailsReportService.getReportDataLast7Days(reportType);
+            case "last_28_days" -> orderDetailsReportService.getReportDataLast28Days(reportType);
+            case "last_6_months" -> orderDetailsReportService.getReportDataLast6Months(reportType);
+            case "last_12_months" -> orderDetailsReportService.getReportDataLast12Months(reportType);
+            default -> orderDetailsReportService.getReportDataLast7Days(reportType);
+        };
+    }
+
+    @GetMapping("/{groupBy}/{startDate}/{endDate}")
+    public List<ReportItem> getSalesByDate(@PathVariable String groupBy, @PathVariable String startDate, @PathVariable String endDate) throws ParseException {
+        ReportType reportType = ReportType.valueOf(groupBy.toUpperCase());
+        return orderDetailsReportService.getReportDataByDateRange(startDate, endDate, reportType);
     }
 }

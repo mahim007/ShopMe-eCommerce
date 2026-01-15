@@ -20,6 +20,7 @@ public class MasterOrderReportService extends AbstractReportService {
         this.orderRepository = orderRepository;
     }
 
+    @Override
     protected List<ReportItem> getReportDataByDateRangeInternal(Date startTime, Date endTime, ReportType reportType, PeriodType periodType) {
         List<Order> orders = orderRepository.findByOrderTimeBetween(startTime, endTime);
         printRawData(orders);

@@ -12,6 +12,7 @@ public class ReportItem {
     private float grossSales;
     private float netSales;
     private int  orderCount;
+    private int productCount;
 
     public ReportItem(String identifier) {
         this.identifier = identifier;
@@ -21,6 +22,13 @@ public class ReportItem {
         this.identifier = identifier;
         this.grossSales = grossSales;
         this.netSales = netSales;
+    }
+
+    public ReportItem(String identifier, float grossSales, float netSales, int productCount) {
+        this.identifier = identifier;
+        this.grossSales = grossSales;
+        this.netSales = netSales;
+        this.productCount = productCount;
     }
 
     public void addGrossSales(float amount) {
@@ -45,5 +53,9 @@ public class ReportItem {
     @Override
     public int hashCode() {
         return identifier.hashCode();
+    }
+
+    public void increaseProductCount(int quantity) {
+        this.productCount += quantity;
     }
 }

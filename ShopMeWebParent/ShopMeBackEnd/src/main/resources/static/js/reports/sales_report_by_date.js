@@ -1,23 +1,18 @@
 // Sales report by date
 
-let data;
-let chartOptions;
-let totalGrossSales;
-let totalNetSales;
-let totalOrders;
-
 $(document).ready(function () {
     setupEventHandlers("_date", loadSalesReportByDate);
 });
 
 function loadSalesReportByDate(period = "last_7_days") {
+    console.log('hello from date report')
     let requestURL = contextPath + "reports/sales_by_date/" + getUrlSuffix(period, "_date");
     fetchData(requestURL, "GET", res => {
         prepareChartDataForSalesReportByDate(res);
         customizeChartForSalesReportByDate(period);
         formatChartData(data, 1, 2);
         drawChartForSalesReportByDate(period);
-        setSalesAmount(period, "_date", "Total Orders:");
+        setSalesAmount(period, "_date", "Total Orders");
     }, error => console.log(error))
 }
 
@@ -30,13 +25,13 @@ function prepareChartDataForSalesReportByDate(res) {
 
     totalGrossSales = 0.0;
     totalNetSales = 0.0;
-    totalOrders = 0;
+    totalItems = 0;
 
     res.forEach(item => {
         data.addRows([[item.identifier, item.grossSales, item.netSales, item.orderCount]]);
         totalGrossSales += parseFloat(item.grossSales);
         totalNetSales += parseFloat(item.netSales);
-        totalOrders += parseInt(item.orderCount);
+        totalItems += parseInt(item.orderCount);
     });
 }
 
