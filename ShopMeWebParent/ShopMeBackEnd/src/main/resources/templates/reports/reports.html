@@ -47,6 +47,14 @@
     const contextPath = "[[@{/}]]";
     const csrfHeaderName = "[[${_csrf.headerName}]]";
     const csrfHeaderValue = "[[${_csrf.token}]]";
+    const currencySymbol = "[[${CURRENCY_SYMBOL}]]";
+    const thousandPointType = "[[${THOUSANDS_POINT_TYPE == 'COMMA' ? ',' : '.'}]]";
+    const decimalPointType = "[[${DECIMAL_POINT_TYPE == 'COMMA' ? ',' : '.'}]]";
+    const currencySymbolPosition = "[[${CURRENCY_SYMBOL_POSITION}]]";
+    const decimalDigits = "[[${DECIMAL_DIGITS}]]";
+
+    const prefixCurrencySymbol = currencySymbolPosition === 'before' ? currencySymbol : '';
+    const suffixCurrencySymbol = currencySymbolPosition === 'after' ?  currencySymbol : '';
 
     $(document).ready(function () {
         google.charts.load('current', {packages: ['corechart']});

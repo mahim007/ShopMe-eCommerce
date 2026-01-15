@@ -118,7 +118,11 @@ function customizeChart(period) {
     };
 
     let formatter = new google.visualization.NumberFormat({
-        prefix: '$'
+        prefix: prefixCurrencySymbol,
+        suffix: suffixCurrencySymbol,
+        decimalSymbol: decimalPointType,
+        groupingSymbol: thousandPointType,
+        fractionDigits: decimalDigits
     });
 
     formatter.format(data, 1); // format currency for gross sales column
@@ -129,11 +133,16 @@ function drawChart(period) {
     let salesChart = new google.visualization.ColumnChart(document.getElementById("chart_sales_by_date"));
     salesChart.draw(data, chartOptions);
 
-    $("#textTotalGrossSales").text("$" + $.number(totalGrossSales, 2));
-    $("#textTotalNetSales").text("$" + $.number(totalNetSales, 2));
-    $("#textAvgGrossSales").text("$" + $.number(totalGrossSales / getDenominator(period), 2));
-    $("#textAvgNetSales").text("$" + $.number(totalNetSales / getDenominator(period), 2));
+    $("#textTotalGrossSales").text(formatCurrency(totalGrossSales));
+    $("#textTotalNetSales").text(formatCurrency(totalNetSales));
+    $("#textAvgGrossSales").text(formatCurrency(totalGrossSales / getDenominator(period)));
+    $("#textAvgNetSales").text(formatCurrency(totalNetSales / getDenominator(period)));
     $("#textTotalOrders").text($.number(totalOrders));
+}
+
+function formatCurrency(amount) {
+    let formattedAmount = $.number(amount, decimalDigits, decimalPointType, thousandPointType);
+    return prefixCurrencySymbol + formattedAmount + suffixCurrencySymbol;
 }
 
 function getChartTitle(period) {
