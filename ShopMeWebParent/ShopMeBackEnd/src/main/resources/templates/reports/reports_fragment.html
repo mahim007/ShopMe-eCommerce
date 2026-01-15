@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="content(reportType)" th:remove="tag">
+        <div th:with="buttonClass = 'button_sales_by' + ${reportType}">
+            <button period="last_7_days" class="btn btn-primary m-1" th:classappend="${buttonClass}">Last 7 days</button>
+            <button period="last_28_days" class="btn btn-light m-1" th:classappend="${buttonClass}">Last 28 days</button>
+            <button period="last_6_months" class="btn btn-light m-1" th:classappend="${buttonClass}">Last 6 Months</button>
+            <button period="last_12_months" class="btn btn-light m-1" th:classappend="${buttonClass}">Last 12 Months</button>
+            <button class="btn btn-light m-1" th:classappend="${buttonClass}">Custom Date Range</button>
+        </div>
+        <form>
+            <div th:id="'divCustomDateRange' + ${reportType}" class="d-none m-1">
+                From: <input type="date" th:id="'startDate' + ${reportType}" required/>
+                To: <input type="date" th:id="'endDate' + ${reportType}" required/>
+                <button th:id="'btnViewReportByDateRange' + ${reportType}" class="btn btn-secondary m-1">View</button>
+            </div>
+        </form>
+        <div th:id="'chart_sales_by' + ${reportType}" class="mt-3 justify-content-center"></div>
+        <div class="row justify-content-center">
+            <div class="col-sm-2">
+                <div class="card">
+                    <div class="card-header">Total Gross Sales</div>
+                    <div class="card-body">
+                        <span class="h3" th:id="'textTotalGrossSales' + ${reportType}"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="card">
+                    <div class="card-header">Total Net Sales</div>
+                    <div class="card-body">
+                        <span class="h3" th:id="'textTotalNetSales' + ${reportType}"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="card">
+                    <div class="card-header">Avg. Gross Sales</div>
+                    <div class="card-body">
+                        <span class="h3" th:id="'textAvgGrossSales' + ${reportType}"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="card">
+                    <div class="card-header">Avg. Net Sales</div>
+                    <div class="card-body">
+                        <span class="h3" th:id="'textAvgNetSales' + ${reportType}"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="card">
+                    <div class="card-header"><span th:id="'labelTotalItems' + ${reportType}"></span></div>
+                    <div class="card-body">
+                        <span class="h3" th:id="'textTotalItems' + ${reportType}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

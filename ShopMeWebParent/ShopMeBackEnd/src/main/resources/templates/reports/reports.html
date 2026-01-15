@@ -29,13 +29,13 @@
                 </ul>
                 <div class="tab-content" id="reportTabContent">
                     <div class="tab-pane fade show active p-3" id="date" role="tabpanel" aria-labelledby="date-tab" tabindex="0">
-                        <th:block th:replace="reports/by_date :: content"></th:block>
+                        <th:block th:replace="reports/reports_fragment :: content('_date')"></th:block>
                     </div>
                     <div class="tab-pane fade p-3" id="category" role="tabpanel" aria-labelledby="category-tab" tabindex="0">
-                        <th:block th:replace="reports/by_category :: content"></th:block>
+                        <th:block th:replace="reports/reports_fragment :: content('_category')"></th:block>
                     </div>
                     <div class="tab-pane fade p-3" id="product" role="tabpanel" aria-labelledby="product-tab" tabindex="0">
-                        <th:block th:replace="reports/by_product :: content"></th:block>
+                        <th:block th:replace="reports/reports_fragment :: content('_product')"></th:block>
                     </div>
                 </div>
         </div>
@@ -64,6 +64,7 @@
 </script>
 <script type="text/javascript" th:src="@{/js/common_form.js}"></script>
 <script type="text/javascript" th:src="@{/library/jquery.number.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/reports/sales_report_common.js}"></script>
 <script type="text/javascript" th:src="@{/js/reports/sales_report_by_date.js}"></script>
 </body>
 </html>
