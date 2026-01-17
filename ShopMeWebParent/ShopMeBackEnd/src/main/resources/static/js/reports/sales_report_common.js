@@ -1,7 +1,5 @@
 // Sales report common scripts
 
-let data;
-let chartOptions;
 let totalGrossSales;
 let totalNetSales;
 let totalItems;

@@ -58,8 +58,8 @@
 
     $(document).ready(function () {
         google.charts.load('current', {packages: ['corechart', 'table']});
-        google.charts.setOnLoadCallback(loadSalesReportByDateForCategory);
         google.charts.setOnLoadCallback(loadSalesReportByDate);
+        google.charts.setOnLoadCallback(loadSalesReportByDateForCategory);
         google.charts.setOnLoadCallback(loadSalesReportByDateForProduct);
     });
 

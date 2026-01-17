@@ -1,5 +1,8 @@
 // Sales report by date
 
+let dataByDate;
+let chartOptionsByDate;
+
 $(document).ready(function () {
     setupEventHandlers("_date", loadSalesReportByDate);
 });
@@ -9,25 +12,25 @@ function loadSalesReportByDate(period = "last_7_days") {
     fetchData(requestURL, "GET", res => {
         prepareChartDataForSalesReportByDate(res);
         customizeChartForSalesReportByDate(period);
-        formatChartData(data, 1, 2);
+        formatChartData(dataByDate, 1, 2);
         drawChartForSalesReportByDate(period);
         setSalesAmount(period, "_date", "Total Orders");
     }, error => console.log(error))
 }
 
 function prepareChartDataForSalesReportByDate(res) {
-    data = new google.visualization.DataTable();
-    data.addColumn("string", "Date");
-    data.addColumn("number", "Gross Sales");
-    data.addColumn("number", "Net Sales");
-    data.addColumn("number", "Orders");
+    dataByDate = new google.visualization.DataTable();
+    dataByDate.addColumn("string", "Date");
+    dataByDate.addColumn("number", "Gross Sales");
+    dataByDate.addColumn("number", "Net Sales");
+    dataByDate.addColumn("number", "Orders");
 
     totalGrossSales = 0.0;
     totalNetSales = 0.0;
     totalItems = 0;
 
     res.forEach(item => {
-        data.addRows([[item.identifier, item.grossSales, item.netSales, item.orderCount]]);
+        dataByDate.addRows([[item.identifier, item.grossSales, item.netSales, item.orderCount]]);
         totalGrossSales += parseFloat(item.grossSales);
         totalNetSales += parseFloat(item.netSales);
         totalItems += parseInt(item.orderCount);
@@ -35,7 +38,7 @@ function prepareChartDataForSalesReportByDate(res) {
 }
 
 function customizeChartForSalesReportByDate(period) {
-    chartOptions = {
+    chartOptionsByDate = {
         title: getChartTitle(period),
         height: 360,
         legend: {position: "top"},
@@ -56,7 +59,7 @@ function drawChartForSalesReportByDate() {
     const salesChart = new google.visualization.ColumnChart(container);
 
     const observer = new ResizeObserver(entries => {
-        salesChart.draw(data, chartOptions);
+        salesChart.draw(dataByDate, chartOptionsByDate);
     });
 
     observer.observe(container);

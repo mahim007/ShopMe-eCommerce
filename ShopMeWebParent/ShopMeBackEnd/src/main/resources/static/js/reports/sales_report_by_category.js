@@ -1,5 +1,8 @@
 // Sales report by category
 
+let dataByCategory;
+let chartOptionsByCategory;
+
 $(document).ready(function () {
     setupEventHandlers("_category", loadSalesReportByDateForCategory);
 });
@@ -9,24 +12,24 @@ function loadSalesReportByDateForCategory(period = "last_7_days") {
     fetchData(requestURL, "GET", res => {
         prepareChartDataForSalesReportByCategory(res);
         customizeChartForSalesReportByCategory(period);
-        formatChartData(data, 1, 2);
+        formatChartData(dataByCategory, 1, 2);
         drawChartForSalesReportByCategory(period);
         setSalesAmount(period, "_category", "Total Products");
     }, error => console.log(error))
 }
 
 function prepareChartDataForSalesReportByCategory(res) {
-    data = new google.visualization.DataTable();
-    data.addColumn("string", "Category");
-    data.addColumn("number", "Gross Sales");
-    data.addColumn("number", "Net Sales");
+    dataByCategory = new google.visualization.DataTable();
+    dataByCategory.addColumn("string", "Category");
+    dataByCategory.addColumn("number", "Gross Sales");
+    dataByCategory.addColumn("number", "Net Sales");
 
     totalGrossSales = 0.0;
     totalNetSales = 0.0;
     totalItems = 0;
 
     res.forEach(item => {
-        data.addRows([[item.identifier, item.grossSales, item.netSales]]);
+        dataByCategory.addRows([[item.identifier, item.grossSales, item.netSales]]);
         totalGrossSales += parseFloat(item.grossSales);
         totalNetSales += parseFloat(item.netSales);
         totalItems += parseInt(item.productCount);
@@ -34,7 +37,7 @@ function prepareChartDataForSalesReportByCategory(res) {
 }
 
 function customizeChartForSalesReportByCategory(period) {
-    chartOptions = {
+    chartOptionsByCategory = {
         height: 360,
         legend: {position: "right"},
     };
@@ -45,7 +48,7 @@ function drawChartForSalesReportByCategory() {
     const salesChart = new google.visualization.PieChart(container);
 
     const observer = new ResizeObserver(entries => {
-        salesChart.draw(data, chartOptions);
+        salesChart.draw(dataByCategory, chartOptionsByCategory);
     });
 
     observer.observe(container);
