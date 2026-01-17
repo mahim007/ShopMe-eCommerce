@@ -12,7 +12,7 @@ docker ps | grep shopme-mysql
 
 Import the SQL dump into the database:
 
-docker exec -i shopme-mysql mysql -uadmin -p shopmedb < Dump20260106.sql
+docker exec -i shopme-mysql mysql -uadmin -pPPPP shopmedb < Dump2026WXYZ.sql
 
 
 (Enter the database password when prompted; the security warning is normal.)
