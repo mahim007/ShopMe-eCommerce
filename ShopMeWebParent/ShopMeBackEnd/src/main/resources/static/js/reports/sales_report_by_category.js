@@ -5,7 +5,6 @@ $(document).ready(function () {
 });
 
 function loadSalesReportByDateForCategory(period = "last_7_days") {
-    console.log('hello from category report')
     let requestURL = contextPath + "reports/category/" + getUrlSuffix(period, "_category");
     fetchData(requestURL, "GET", res => {
         prepareChartDataForSalesReportByCategory(res);
@@ -42,6 +41,12 @@ function customizeChartForSalesReportByCategory(period) {
 }
 
 function drawChartForSalesReportByCategory() {
-    let salesChart = new google.visualization.PieChart(document.getElementById("chart_sales_by_category"));
-    salesChart.draw(data, chartOptions);
+    const container = document.getElementById("chart_sales_by_category");
+    const salesChart = new google.visualization.PieChart(container);
+
+    const observer = new ResizeObserver(entries => {
+        salesChart.draw(data, chartOptions);
+    });
+
+    observer.observe(container);
 }

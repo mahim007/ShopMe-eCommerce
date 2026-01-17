@@ -20,17 +20,21 @@ public class OrderDetailsReportService extends AbstractReportService {
     @Override
     protected List<ReportItem> getReportDataByDateRangeInternal(Date startTime, Date endTime, ReportType reportType, PeriodType periodType) {
         List<OrderDetail> orderDetails = new ArrayList<>();
-        if (reportType == ReportType.CATEGORY) {
+        if (reportType.equals(ReportType.CATEGORY)) {
             orderDetails = orderDetailsRepository.findByCategoryAndTimeBetween(startTime, endTime);
 
+        } else if ( reportType.equals(ReportType.PRODUCT)) {
+            orderDetails = orderDetailsRepository.findByProductAndTimeBetween(startTime, endTime);
         }
 
-        printRawData(orderDetails);
         List<ReportItem> reportItems = new ArrayList<>();
         orderDetails.forEach(item -> {
             String identifier = "";
+
             if (reportType.equals(ReportType.CATEGORY)) {
                 identifier = item.getProduct().getCategory().getName();
+            } else if (reportType.equals(ReportType.PRODUCT)) {
+                identifier = item.getProduct().getShortName();
             }
 
             ReportItem reportItem = new ReportItem(identifier);
@@ -49,20 +53,6 @@ public class OrderDetailsReportService extends AbstractReportService {
             }
         });
 
-        printReportData(reportItems);
-
         return reportItems;
-    }
-
-    private void printReportData(List<ReportItem> reportItems) {
-        reportItems.forEach(System.out::println);
-    }
-
-    private void printRawData(List<OrderDetail> orderDetails) {
-        for (OrderDetail od : orderDetails) {
-            System.out.printf("%d, %-20s, %10.2f, %10.2f, %10.2f \n",
-                    od.getQuantity(), od.getProduct().getCategory().getName(),
-                    od.getSubtotal(), od.getProductCost(), od.getShippingCost());
-        }
     }
 }

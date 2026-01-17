@@ -18,7 +18,7 @@ function setupEventHandlers(reportType, callback) {
             let divCustomDateRange = $("#divCustomDateRange" + reportType);
             let period = $(this).attr("period");
             if (period) {
-                divCustomDateRange.addClass('d-none')
+                divCustomDateRange.addClass('d-none');
                 callback(period);
             } else {
                 divCustomDateRange.removeClass('d-none');

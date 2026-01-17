@@ -5,8 +5,6 @@ import com.mahim.shopme.common.entity.Order;
 import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,7 +21,6 @@ public class MasterOrderReportService extends AbstractReportService {
     @Override
     protected List<ReportItem> getReportDataByDateRangeInternal(Date startTime, Date endTime, ReportType reportType, PeriodType periodType) {
         List<Order> orders = orderRepository.findByOrderTimeBetween(startTime, endTime);
-        printRawData(orders);
 
         List<ReportItem> reportItems = createReportData(startTime, endTime, reportType, periodType);
         calculateSalesForReportData(orders, reportItems, reportType, periodType);
@@ -44,11 +41,6 @@ public class MasterOrderReportService extends AbstractReportService {
                 reportItem.increaseOrdersCount();
             }
         });
-    }
-
-    private void printRawData(List<Order> orders) {
-        orders.forEach(order -> System.out.printf("%-3d | %s | %10.2f | %10.2f\n",
-                order.getId(), order.getOrderTime(), order.getProductCost(), order.getSubtotal()));
     }
 
     private List<ReportItem> createReportData(Date startTime, Date endTime, ReportType reportType, PeriodType periodType) {
