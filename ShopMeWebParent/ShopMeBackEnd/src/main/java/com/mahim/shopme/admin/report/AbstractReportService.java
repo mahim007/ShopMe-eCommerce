@@ -19,7 +19,7 @@ public abstract class AbstractReportService {
     protected List<ReportItem> getReportDataLastXDays(int days, ReportType reportType) {
         Date endTime = new Date();
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, -days);
+        calendar.add(Calendar.DATE, -(days - 1));
         Date startTime = calendar.getTime();
         return getReportDataByDateRangeInternal(startTime, endTime, reportType, PeriodType.DAYS);
     }
@@ -35,7 +35,7 @@ public abstract class AbstractReportService {
     protected List<ReportItem> getReportDataLastXMonths(int months, ReportType reportType) {
         Date endTime = new Date();
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH, -months);
+        calendar.add(Calendar.MONTH, -(months - 1));
         Date startTime = calendar.getTime();
         return getReportDataByDateRangeInternal(startTime, endTime, reportType, PeriodType.MONTHS);
     }

@@ -31,7 +31,7 @@ public class OrderDetail extends ParentEntity {
         this.product = new Product();
         this.product.setCategory(new Category(categoryName));
         this.quantity = quantity;
-        this.productCost = productCost;
+        this.productCost = productCost * quantity;
         this.shippingCost = shippingCost;
         this.subtotal = subtotal;
     }
@@ -39,7 +39,7 @@ public class OrderDetail extends ParentEntity {
     public OrderDetail(int quantity, String productName, float productCost, float shippingCost, float subtotal) {
         this.product = new Product(productName);
         this.quantity = quantity;
-        this.productCost = productCost;
+        this.productCost = productCost * quantity;
         this.shippingCost = shippingCost;
         this.subtotal = subtotal;
     }

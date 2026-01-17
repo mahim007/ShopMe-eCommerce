@@ -60,7 +60,7 @@ public class MasterOrderReportService extends AbstractReportService {
         Calendar endDate = Calendar.getInstance();
         endDate.setTime(endTime);
 
-        while (startDate.before(endDate)) {
+        while (startDate.before(endDate) || startDate.equals(endDate)) {
             Date currentDate = startDate.getTime();
             String dateString = dateFormat.format(currentDate);
             reportItems.add(new ReportItem(dateString));
