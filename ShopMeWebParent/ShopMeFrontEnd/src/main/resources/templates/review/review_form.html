@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments/page_structure :: page_header(${pageTitle})"></th:block>
+<body>
+    <div class="container">
+        <th:block th:replace="fragments/navigation :: header_nav"></th:block>
+        <th:block th:replace="fragments/navigation :: search_nav"></th:block>
+        <div>&nbsp;</div>
+        <div class="hero-title">
+            <h2>Write Product Review</h2>
+        </div>
+        <div class="container">
+            <div class="justify-content-center text-center mb-3">
+                <img th:src="@{${review.product.getMainImagePath()}}" width="200" class="img-fluid" />
+                <br>
+                <h3><span>[[${review.product.shortName}]]</span></h3>
+            </div>
+            <form th:action="@{/reviews/save}" method="post" th:object="${review}">
+                <input type="hidden" name="productAlias" th:value="${review.product.alias}" />
+                <input type="hidden" name="customerId" th:value="${review.customer.id}" />
+                <input type="hidden" th:field="*{rating}" id="ratingInput"/>
+                <div class="row">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-8">
+                        <div class="border border-secondary rounded p-3">
+                            <div class="row mb-3">
+                                <label class="col-form-label col-sm-3">Rating</label>
+                                <div class="col-sm-9">
+                                    <th:block th:replace="fragments/rating_fragment :: content"></th:block>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-form-label col-sm-3">Headline or Summary</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" th:field="*{headline}"
+                                           required minlength="2" maxlength="45" />
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-form-label col-sm-3">Write the details</label>
+                                <div class="col-sm-9">
+                            <textarea class="form-control" type="text" th:field="*{comment}"
+                                      required minlength="2" rows="5" ></textarea>
+                                </div>
+                            </div>
+                            <div class="text-center mb-3">
+                                <input type="submit" value="Post this Review" class="btn btn-primary">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2"></div>
+                </div>
+            </form>
+        </div>
+        <div>&nbsp;</div>
+        <th:block th:replace="fragments/modal::shopmeModal"></th:block>
+        <th:block th:replace="fragments/navigation :: footer_nav"></th:block>
+    </div>
+<script type="text/javascript">
+    const contextPath = "[[@{/}]]";
+    const csrfHeaderName = "[[${_csrf.headerName}]]";
+    const csrfHeaderValue = "[[${_csrf.token}]]";
+</script>
+<script type="text/javascript" th:src="@{/js/common_modal.js}"></script>
+<script type="text/javascript" th:src="@{/js/star_rating.js}"></script>
+</body>
+</html>

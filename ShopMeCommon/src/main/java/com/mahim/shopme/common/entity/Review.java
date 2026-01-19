@@ -1,8 +1,6 @@
 package com.mahim.shopme.common.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -12,7 +10,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "reviews")
-@Data
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Review extends ParentEntity {
@@ -29,4 +27,9 @@ public class Review extends ParentEntity {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    public Review(Customer customer, Product product) {
+        this.customer = customer;
+        this.product = product;
+    }
 }

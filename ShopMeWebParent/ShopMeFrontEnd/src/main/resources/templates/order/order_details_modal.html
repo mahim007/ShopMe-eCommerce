@@ -96,7 +96,7 @@
 							</div>
 							<div class="col-10 col-md-7 col-lg-8">
 								<div>
-									<a th:href="@{'/products/page/1?sortField=id&sortDir=asc&categoryId=' + ${item.product.category.id} + '&keyword=' + ${item.product.alias}}"
+									<a th:href="@{'/p/' + ${item.product.alias}}"
 									   target="_blank" th:title="${product.name}">
 										<b>[[${item.product.shortName}]]</b>
 									</a>
@@ -106,6 +106,12 @@
 									<th:block th:replace="fragments/currency_formatter :: format_currency_span(${item.unitPrice})"></th:block>
 									<span> = </span>
 									<th:block th:replace="fragments/currency_formatter :: format_currency_span(${item.quantity *  item.unitPrice})"></th:block>
+								</div>
+								<div class="mt-1" th:if="${item.review == null}">
+									<a th:href="@{'/reviews/product/' + ${item.product.alias} + '/new'}" class="btn btn-cyan text-white">Write Review</a>
+								</div>
+								<div class="mt-1" th:if="${item.review != null}">
+									<button class="btn btn-warning text-white">See your Review</button>
 								</div>
 							</div>
 						</div>

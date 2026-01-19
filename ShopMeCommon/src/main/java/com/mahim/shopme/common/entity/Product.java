@@ -14,7 +14,6 @@ import java.util.Set;
 @Entity
 @Table(name = "products")
 @Getter @Setter @NoArgsConstructor
-@ToString
 public class Product extends ParentEntity {
 
     @Column(unique = true, length = 256, nullable = false)

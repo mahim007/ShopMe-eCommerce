@@ -70,8 +70,7 @@ public class OrderController {
 
     @GetMapping("/details/{orderId}")
     public String getDetails(
-            @PathVariable(name = "orderId", required = true) Integer orderId, HttpServletRequest request, Model model,
-            RedirectAttributes ra) {
+            @PathVariable Integer orderId, HttpServletRequest request, Model model, RedirectAttributes ra) {
         try {
             Customer customer = customerService.getAuthenticatedCustomer(request);
             Order order = orderService.getOrder(orderId, customer);

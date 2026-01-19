@@ -27,6 +27,10 @@ public class OrderDetail extends ParentEntity {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    @OneToOne
+    @JoinColumn(name = "review_id")
+    private Review review;
+
     public OrderDetail(String categoryName, int quantity, float productCost, float shippingCost, float subtotal) {
         this.product = new Product();
         this.product.setCategory(new Category(categoryName));

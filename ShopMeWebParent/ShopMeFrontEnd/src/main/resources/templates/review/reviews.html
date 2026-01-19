@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<th:block th:replace="fragments/page_structure :: page_header(${pageTitle})"></th:block>
+<body>
+<div class="container">
+    <th:block th:replace="fragments/navigation :: header_nav"></th:block>
+    <th:block th:replace="fragments/navigation :: search_nav"></th:block>
+    <th:block th:replace="fragments/breadcrumb :: content"></th:block>
+    <div class="text-center my-2">
+        <h2>My Reviews</h2>
+    </div>
+    <div>
+        <form th:action="@{'/reviews/page/1'}" class="col-sm-12 col-md-8 col-lg-6 m-3">
+            <input type="hidden" name="sortField" th:value="${sortField}" />
+            <input type="hidden" name="sortDir" th:value="${sortDir}" />
+            <div class="row align-items-center">
+                <div class="col-sm-10 col-md-1">
+                    <label class="col-form-label"><b>Filter</b></label>
+                </div>
+                <div class="col-sm-10 col-md-7">
+                    <input type="search" name="keyword" th:value="${keyword}" class="form-control"  />
+                </div>
+                <div class="col-sm-10 col-md-4 my-2">
+                    <button type="submit" value="Search" class="btn btn-primary">
+                        <i class="fas fa-search icon-white"></i>
+                    </button>
+                    <button type="button" value="Clear" class="btn btn-secondary" onclick="clearFilter()">
+                        <i class="fas fa-eraser icon-white"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="full-details">
+        <table class="table table-bordered table-striped table-hover table-responsive-xl">
+            <thead class="table-dark">
+            <tr>
+                <th th:replace="fragments/column_element :: column_link('id', 'ID', 'none')"></th>
+                <th>Product</th>
+                <th>Headline</th>
+                <th th:replace="fragments/column_element :: column_link('rating', 'Rating', 'none')"></th>
+                <th th:replace="fragments/column_element :: column_link('reviewTime', 'Review Time', 'none')"></th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="review: ${reviews}">
+                <td th:text="${review.id}">ID</td>
+                <td th:utext="${review.product.shortName}"></td>
+                <td th:text="${review.headline}"></td>
+                <td th:text="${review.rating}"></td>
+                <td><div th:replace="fragments/datetime_formatter :: format_time(${review.reviewTime})">Review Time</div></td>
+                <td class="text-center">
+                    <a class="order-details fas fa-file-alt fa-2x icon-green" th:href="@{'/review/details/' + ${review.id}}" title="See review for the product"></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="less-details p-2">
+        <th:block th:each="review: ${reviews}">
+            <div class="row m-1">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-8">
+                                <span>Review ID # [[${review.id}]]</span>
+                            </div>
+                            <div class="col-4">
+                                <div class="text-end">
+                                    <a class="order-details fas fa-file-alt fa-2x icon-green" th:href="@{'/review/details/' + ${review.id}}"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <span th:utext="${review.product.shortName}"></span>
+                        </div>
+                        <div>
+                            <small>
+                                <div th:replace="fragments/datetime_formatter :: format_time(${review.reviewTime})"></div>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+    </div>
+    <div class="text-center m-1" th:if="${totalPageNo > 0}">
+        <span>Showing Reviews # [[${startNo}]] to [[${endNo}]] of [[${totalItems}]]</span>
+        <th:block th:replace="fragments/pagination::pagination_fragment('reviews')"></th:block>
+    </div>
+    <div class="text-center m-1" th:unless="${totalItems > 0}">
+        <h2>No Reviews found</h2>
+    </div>
+    <th:block th:replace="fragments/navigation :: footer_nav"></th:block>
+    <th:block th:replace="fragments/modal :: shopmeModal"></th:block>
+    <div class="modal fade text-center" id="orderDetailsModal" aria-labelledby="orderDetailsModal" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        moduleURL = "[[@{/reviews}]]";
+        const contextPath = "[[@{/}]]";
+        const csrfHeaderName = "[[${_csrf.headerName}]]";
+        const csrfHeaderValue = "[[${_csrf.token}]]";
+
+        function clearFilter() {
+            window.location = moduleURL;
+        }
+    </script>
+</div>
+</body>
+</html>
