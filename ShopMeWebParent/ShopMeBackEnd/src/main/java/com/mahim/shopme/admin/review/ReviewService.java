@@ -28,8 +28,7 @@ public class ReviewService {
         reviewToBeSaved.setHeadline(review.getHeadline());
         reviewToBeSaved.setComment(review.getComment());
         reviewToBeSaved.setModerated(true);
-        reviewToBeSaved.setReviewTime(new Date());
-        return reviewRepository.save(review);
+        return reviewRepository.save(reviewToBeSaved);
     }
 
     public List<Review> listAllReviews() {

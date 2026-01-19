@@ -26,7 +26,7 @@ public class ReviewController {
 
     @GetMapping("")
     public String listAll() {
-        return "redirect:reviews/page/1";
+        return "redirect:/reviews/page/1";
     }
 
     @GetMapping("/page/{pageNo}")
