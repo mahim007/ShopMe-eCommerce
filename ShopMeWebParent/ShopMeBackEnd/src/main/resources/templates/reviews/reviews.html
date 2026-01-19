@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/page_structure :: page_header('Reviews - Shopme Admin')"></head>
+<body>
+<div class="container-fluid">
+    <div th:replace="fragments/navigation :: page_nav"></div>
+    <div>
+        <h2>Manage Reviews</h2>
+    </div>
+    <div th:if="${message != null}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
+    <div th:if="${exceptionMessage != null}" class="alert alert-danger text-center">
+        [[${exceptionMessage}]]
+    </div>
+    <div th:replace="fragments/search_form :: search_form"></div>
+    <div class="full-details">
+        <table class="table table-striped table-hover table-bordered text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th:block th:replace="fragments/column_element::column_link('id', 'ID', 'none')" />
+                    <th:block th:replace="fragments/column_element::column_link('product', 'Product', 'none')"/>
+                    <th:block th:replace="fragments/column_element::column_link('customer', 'Customer', 'none')"/>
+                    <th:block th:replace="fragments/column_element::column_link('rating', 'Rating', 'none')"/>
+                    <th:block th:replace="fragments/column_element::column_link('reviewTime', 'Review Time', 'none')"/>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr th:each="review : ${reviews}">
+                <td class="hideable-column" th:text="${review.id}"></td>
+                <td>
+                    <a class="product-link-detail" th:href="@{'/products/details/' + ${review.product.id}}" th:text="${review.product.alias}"></a>
+                </td>
+                <td>
+                    <a class="customer-link-detail" th:href="@{'/customers/details/' + ${review.customer.id}}">[[${review.customer.fullName}]]</a>
+                </td>
+                <td>[[${review.rating}]]</td>
+                <td>
+                    <th:block th:replace="orders/datetime_formatter :: format_time(${review.reviewTime})"></th:block>
+                </td>
+                <td>
+                    <a class="link-detail" th:href="@{${moduleURL} + '/details/' + ${review.id}}"
+                       title="Review details"
+                    >
+                        <i class="fas fa-file-alt fa-2x icon-blue"></i>
+                    </a>
+                    &nbsp;
+                    <a th:href="@{${moduleURL} + '/edit/' + ${review.id}}"
+                       title="Edit this category"
+                    >
+                        <i class="fas fa-edit fa-2x icon-lightblue"></i>
+                    </a>
+                    &nbsp;
+                    <a th:href="@{${moduleURL} + '/delete/' + ${review.id}}"
+                       class="review-delete"
+                       title="Delete this review"
+                    >
+                        <i class="fas fa-trash fa-2x icon-danger"></i>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="less-details">
+        <div class="row m-1" th:each="review : ${reviews}">
+            <div class="col-8">
+                <div>[[${review.product.alias}]]</div>
+                <div>
+                    [[${review.customer.fullName}]]
+                </div>
+                <div>
+                    [[${review.rating}]]
+                </div>
+                <div class="mt-2">
+                    <th:block>
+                        <a th:href="@{${moduleURL} + '/edit/' + ${review.id}}"
+                           title="Edit this category"
+                        >
+                            <i class="fas fa-edit fa-2x icon-lightblue"></i>
+                        </a>
+                        &nbsp;
+                        <a th:href="@{${moduleURL} + '/delete/' + ${review.id}}"
+                           class="review-delete"
+                           title="Delete this review"
+                        >
+                            <i class="fas fa-trash fa-2x icon-danger"></i>
+                        </a>
+                    </th:block>
+                </div>
+            </div>
+            <div>&nbsp;</div>
+        </div>
+    </div>
+    <div class="text-center m-1" th:if="${total > 0}">
+        <span>Showing reviews # [[${startNo}]] to [[${endNo}]] of [[${total}]]</span>
+        <nav th:replace="fragments/pagination::pagination_fragment"></nav>
+    </div>
+    <div class="text-center m-1" th:unless="${total > 0}">
+        <h2>No reviews found</h2>
+    </div>
+    <div class="modal fade text-center" tabindex="-1" id="productDetailModal" aria-labelledby="productDetailModalTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+    <div class="modal fade text-center" tabindex="-1" id="customerDetailModal" aria-labelledby="customerDetailModalTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+    <div th:replace="fragments/modal::confirmDeleteModal"></div>
+    <div th:replace="fragments/page_structure :: page_footer"></div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".review-delete").on("click", function (e) {
+            e.preventDefault();
+            let deleteUrl = $(e.currentTarget).attr("href");
+            let splitUrl = deleteUrl.split("/");
+            let id = splitUrl[splitUrl.length - 1];
+
+            $("#modalYesBtn").attr("href", deleteUrl);
+            showModalDialog("Delete Confirmation", "Are you sure to delete Review? <br> (ID: <b>" + id + "</b>)?");
+        });
+
+        $(".product-link-detail").on("click", function (e) {
+            e.preventDefault();
+            let linkDetailURL = $(this).attr("href");
+            $("#productDetailModal").modal("show").find(".modal-content").load(linkDetailURL);
+        });
+
+        $(".customer-link-detail").on("click", function (e) {
+            e.preventDefault();
+            let linkDetailURL = $(this).attr("href");
+            $("#customerDetailModal").modal("show").find(".modal-content").load(linkDetailURL);
+        });
+    });
+
+    function clearFilter() {
+        window.location = "[[@{/reviews}]]";
+    }
+</script>
+<script th:src="@{/js/common.js}"></script>
+</body>
+</html>

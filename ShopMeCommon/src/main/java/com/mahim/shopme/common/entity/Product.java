@@ -51,6 +51,9 @@ public class Product extends ParentEntity {
     private float height;
     private float weight;
 
+    private int reviewCount;
+    private float averageRating;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
