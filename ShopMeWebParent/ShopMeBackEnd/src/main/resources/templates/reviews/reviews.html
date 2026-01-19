@@ -100,6 +100,12 @@
     <div class="text-center m-1" th:unless="${total > 0}">
         <h2>No reviews found</h2>
     </div>
+    <div class="modal fade text-center" tabindex="-1" id="reviewDetailModal" aria-labelledby="reviewDetailModalTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content"></div>
+        </div>
+    </div>
     <div class="modal fade text-center" tabindex="-1" id="productDetailModal" aria-labelledby="productDetailModalTitle"
          aria-hidden="true">
         <div class="modal-dialog modal-xl">
@@ -125,6 +131,12 @@
 
             $("#modalYesBtn").attr("href", deleteUrl);
             showModalDialog("Delete Confirmation", "Are you sure to delete Review? <br> (ID: <b>" + id + "</b>)?");
+        });
+
+        $(".link-detail").on("click", function (e) {
+            e.preventDefault();
+            let linkDetailURL = $(this).attr("href");
+            $("#reviewDetailModal").modal("show").find(".modal-content").load(linkDetailURL);
         });
 
         $(".product-link-detail").on("click", function (e) {
