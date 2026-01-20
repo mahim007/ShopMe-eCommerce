@@ -50,15 +50,15 @@
 							</th:block>
 						</div>
 					</div>
-					<div class="row form-group">
-						<label class="col-form-label col-sm-2">Enabled</label>
+					<div class="row mb-3">
+						<label class="col-sm-2">Enabled</label>
 						<div class="col-sm-1">
 							<input type="checkbox" class="form-check-inline"
 								   th:checked="${product.enabled}" onclick="return false;"/>
 						</div>
 					</div>
 					<div class="row mb-3">
-						<label class="col-form-label col-sm-2">In Stock</label>
+						<label class="col-sm-2">In Stock</label>
 						<div class="col-sm-1">
 							<input type="checkbox" class="form-check-inline"
 								   th:checked="${product.inStock}" onclick="return false;"/>
@@ -83,7 +83,7 @@
 						</div>
 					</div>
 					<div class="row mb-3">
-						<label class="col-form-label col-sm-2">Update Time:</label>
+						<label class="col-sm-2">Update Time:</label>
 						<div class="col-sm-2">
 							<span th:text="${#dates.format(product.updatedTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
 						</div>

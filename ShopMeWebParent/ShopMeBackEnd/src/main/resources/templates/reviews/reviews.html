@@ -30,12 +30,12 @@
             <tr th:each="review : ${reviews}">
                 <td class="hideable-column" th:text="${review.id}"></td>
                 <td>
-                    <a class="product-link-detail" th:href="@{'/products/details/' + ${review.product.id}}" th:text="${review.product.alias}"></a>
+                    <a class="product-link-detail" th:href="@{'/products/details/' + ${review.product.id}}" th:text="${review.product.shortName}"></a>
                 </td>
                 <td>
                     <a class="customer-link-detail" th:href="@{'/customers/details/' + ${review.customer.id}}">[[${review.customer.fullName}]]</a>
                 </td>
-                <td>[[${review.rating}]]</td>
+                <td>[[${review.rating}]] ☆</td>
                 <td>
                     <th:block th:replace="orders/datetime_formatter :: format_time(${review.reviewTime})"></th:block>
                 </td>
@@ -65,29 +65,37 @@
     </div>
     <div class="less-details">
         <div class="row m-1" th:each="review : ${reviews}">
-            <div class="col-8">
-                <div>[[${review.product.alias}]]</div>
-                <div>
-                    [[${review.customer.fullName}]]
-                </div>
-                <div>
-                    [[${review.rating}]]
-                </div>
-                <div class="mt-2">
-                    <th:block>
-                        <a th:href="@{${moduleURL} + '/edit/' + ${review.id}}"
-                           title="Edit this category"
-                        >
-                            <i class="fas fa-edit fa-2x icon-lightblue"></i>
-                        </a>
-                        &nbsp;
-                        <a th:href="@{${moduleURL} + '/delete/' + ${review.id}}"
-                           class="review-delete"
-                           title="Delete this review"
-                        >
-                            <i class="fas fa-trash fa-2x icon-danger"></i>
-                        </a>
-                    </th:block>
+            <div class="row">
+                <div class="col-2">[[${review.id}]]</div>
+                <div class="col-10">
+                    <div>[[${review.product.shortName}]]</div>
+                    <div class="row mt-2">
+                        <div class="col-3">
+                            [[${review.rating}]] ☆
+                        </div>
+                        <div class="col-9">
+                            <th:block>
+                                <a class="link-detail" th:href="@{${moduleURL} + '/details/' + ${review.id}}"
+                                   title="Review details"
+                                >
+                                    <i class="fas fa-file-alt fa-2x icon-blue"></i>
+                                </a>
+                                &nbsp;
+                                <a th:href="@{${moduleURL} + '/edit/' + ${review.id}}"
+                                   title="Edit this category"
+                                >
+                                    <i class="fas fa-edit fa-2x icon-lightblue"></i>
+                                </a>
+                                &nbsp;
+                                <a th:href="@{${moduleURL} + '/delete/' + ${review.id}}"
+                                   class="review-delete"
+                                   title="Delete this review"
+                                >
+                                    <i class="fas fa-trash fa-2x icon-danger"></i>
+                                </a>
+                            </th:block>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div>&nbsp;</div>
@@ -102,7 +110,7 @@
     </div>
     <div class="modal fade text-center" tabindex="-1" id="reviewDetailModal" aria-labelledby="reviewDetailModalTitle"
          aria-hidden="true">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content"></div>
         </div>
     </div>
@@ -114,7 +122,7 @@
     </div>
     <div class="modal fade text-center" tabindex="-1" id="customerDetailModal" aria-labelledby="customerDetailModalTitle"
          aria-hidden="true">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content"></div>
         </div>
     </div>

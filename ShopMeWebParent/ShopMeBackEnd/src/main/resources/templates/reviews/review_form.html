@@ -15,7 +15,7 @@
                 <div class="row mb-3">
                     <label class="col-form-label col-sm-3">Product</label>
                     <div class="col-sm-9">
-                        <input class="form-control" type="text" th:field="*{product.alias}" readonly />
+                        <input class="form-control" type="text" th:field="*{product.shortName}" readonly />
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -51,7 +51,7 @@
                 <div class="row mb-3">
                     <label class="col-form-label col-sm-3">Comment</label>
                     <div class="col-sm-9">
-                        <textarea rows="3" class="form-control" th:field="*{comment}" th:readonly="${isReadOnly}"></textarea>
+                        <textarea rows="3" class="form-control" minlength="10" maxlength="300" th:field="*{comment}" th:readonly="${isReadOnly}"></textarea>
                     </div>
                 </div>
                 <div class="text-center mb-3">
