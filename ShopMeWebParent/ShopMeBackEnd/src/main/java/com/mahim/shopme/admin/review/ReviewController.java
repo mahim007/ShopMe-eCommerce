@@ -44,7 +44,7 @@ public class ReviewController {
         try {
             Review updated = reviewService.saveReview(review);
             ra.addFlashAttribute("message", "Review id: " + updated.getId() + " updated successfully");
-        } catch (ReviewNotFoundException e) {
+        } catch (com.mahim.shopme.common.exception.ReviewNotFoundException e) {
             ra.addFlashAttribute("exceptionMessage", "Review with id: " + review.getId() + " not found");
         } catch (Exception e) {
             ra.addFlashAttribute("exceptionMessage", "Review could not be updated");
@@ -57,7 +57,7 @@ public class ReviewController {
         try {
             Review review = reviewService.findById(id);
             model.addAttribute("review", review);
-        } catch (ReviewNotFoundException e) {
+        } catch (com.mahim.shopme.common.exception.ReviewNotFoundException e) {
             ra.addFlashAttribute("exceptionMessage", "Review with id: " + id + " not found.");
             return listAll();
         }
@@ -77,7 +77,7 @@ public class ReviewController {
 
             model.addAttribute("review", review);
             model.addAttribute("isReadOnly", isReadOnly);
-        } catch (ReviewNotFoundException e) {
+        } catch (com.mahim.shopme.common.exception.ReviewNotFoundException e) {
             ra.addFlashAttribute("exceptionMessage", "Review with id: " + id + " not found.");
             return listAll();
         }
@@ -89,7 +89,7 @@ public class ReviewController {
         try {
             reviewService.deleteReview(id);
             ra.addFlashAttribute("message", "Review deleted successfully");
-        } catch (ReviewNotFoundException e) {
+        } catch (com.mahim.shopme.common.exception.ReviewNotFoundException e) {
             ra.addFlashAttribute("exceptionMessage", "Review with id: " + id + " not found");
         }
 

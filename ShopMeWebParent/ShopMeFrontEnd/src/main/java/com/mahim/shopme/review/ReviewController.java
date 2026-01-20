@@ -67,9 +67,11 @@ public class ReviewController {
             return "review/reviews";
         } catch (CustomerNotFoundException e) {
             ra.addFlashAttribute("exceptionMessage", "Customer is not logged in");
+            return "redirect:/login";
+        } catch (Exception e) {
+            return listAll();
         }
 
-        return listAll();
     }
 
     @GetMapping("/product/{alias}/new")
@@ -78,10 +80,6 @@ public class ReviewController {
             Customer customer = customerService.getAuthenticatedCustomer(request);
             Product product = productService.getProduct(alias);
             Review review = new Review(customer, product);
-
-            System.out.println(review.getCustomer().getClass());
-            System.out.println(review.getCustomer().toString());
-            System.out.println(review.getProduct().getClass());
 
             model.addAttribute("pageTitle", "Write Product Review");
             model.addAttribute("review", review);
@@ -113,6 +111,22 @@ public class ReviewController {
             return "redirect:/login";
         } catch (ProductNotFoundException e) {
             ra.addFlashAttribute("exceptionMessage", "Product with alias: " + productAlias + " not found.");
+        }
+
+        return listAll();
+    }
+
+    @GetMapping("/details/{id}")
+    public String details(@PathVariable("id") Integer id, HttpServletRequest request, Model model, RedirectAttributes ra) {
+        try {
+            Customer customer = customerService.getAuthenticatedCustomer(request);
+            Review review = reviewService.getReviewById(id);
+            model.addAttribute("review", review);
+            return "review/review_details_modal";
+        } catch (CustomerNotFoundException e) {
+            return "redirect:/login";
+        } catch (com.mahim.shopme.common.exception.ReviewNotFoundException e) {
+            ra.addFlashAttribute("exceptionMessage", "Review with id: " + id + " not found.");
         }
 
         return listAll();

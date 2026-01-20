@@ -1,4 +1,4 @@
-package com.mahim.shopme.admin.review;
+package com.mahim.shopme.common.exception;
 
 public class ReviewNotFoundException extends RuntimeException {
     public ReviewNotFoundException(String message) {

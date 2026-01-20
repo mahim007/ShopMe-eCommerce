@@ -1,7 +1,7 @@
 package com.mahim.shopme.review;
 
 import com.mahim.shopme.common.entity.Review;
-import org.apache.commons.lang3.StringUtils;
+import com.mahim.shopme.common.exception.ReviewNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,5 +41,15 @@ public class ReviewService {
     public Review save(Review review) {
         review.setReviewTime(new Date());
         return reviewRepository.save(review);
+    }
+
+    public Review getReviewById(Integer id) {
+        return findById(id);
+    }
+
+    public Review findById(Integer id) {
+        Optional<Review> reviewOptional = reviewRepository.findById(id);
+        if (reviewOptional.isEmpty()) throw new ReviewNotFoundException("Review with id: " + id + " not found.");
+        return reviewOptional.get();
     }
 }

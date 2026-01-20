@@ -1,0 +1,61 @@
+<th:block>
+    <div class="modal-header">
+        <h4 class="modal-title" id="reviewDetailModalTitle">Review Details</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <div class="tab-content" id="reviewDetailContent">
+            <div class="border border-secondary rounded p-3">
+                <div class="row mb-3">
+                    <label class="col-form-label col-sm-3">Review ID</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" th:value="${review.id}" readonly />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-form-label col-sm-3">Product</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" th:value="${review.product.shortName}" readonly />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-form-label col-sm-3">Customer</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" th:value="${review.customer.fullName}" readonly />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-form-label col-sm-3">Headline</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" th:value="${review.headline}" readonly />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-form-label col-sm-3">Rating</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" th:value="${review.rating}" readonly />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-form-label col-sm-3">Comment</label>
+                    <div class="col-sm-9">
+                        <textarea rows="3" class="form-control" readonly >[[${review.comment}]]</textarea>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-3">Review Time:</label>
+                    <span class="col-9 text-start" th:text="${#dates.format(review.reviewTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-3">Moderated</label>
+                    <div class="col-sm-1">
+                        <input class="form-check-inline" type="checkbox" th:checked="${review.moderated}" disabled="disabled" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+    </div>
+</th:block>

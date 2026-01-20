@@ -8,11 +8,11 @@
         <div class="hero-title">
             <h2>Shopping by Categories</h2>
         </div>
-        <div class="row m-4">
+        <div class="row d-flex align-items-center">
             <th:block th:each="cat : ${categories}">
-                <div class="col col-lg-2 col-md-3 col-sm-6 mb-4">
+                <div class="col col-lg-2 col-md-3 col-sm-6 mb-4 text-center">
                     <div>
-                        <img  th:src="@{${cat.imagePath}}" width="100">
+                        <img  th:src="@{${cat.imagePath}}" width="120">
                     </div>
                     <div>
                         <a th:href="@{'/c/' + ${cat.alias}}">[[${cat.name}]]</a>

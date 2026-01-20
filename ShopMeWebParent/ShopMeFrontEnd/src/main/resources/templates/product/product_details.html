@@ -6,7 +6,7 @@
         <th:block th:replace="fragments/navigation :: header_nav"></th:block>
         <th:block th:replace="fragments/navigation :: search_nav"></th:block>
         <th:block th:replace="fragments/breadcrumb :: content"></th:block>
-        <div class="row">
+        <div class="row p-3">
             <div class="col-sm">
                 <div>
                     <img id="bigImage" class="m-2" th:src="@{${product.mainImagePath}}" height="300" width="300" />
@@ -41,14 +41,14 @@
                 </th:block>
             </div>
         </div>
-        <div class="row">
+        <div class="row  p-3">
             <div class="col-12">
                 <div><hr></div>
                 <div><h3>Product Description</h3></div>
                 <div th:utext="${product.fullDescription}"></div>
             </div>
         </div>
-        <div class="row">
+        <div class="row  p-3">
             <div class="col-12">
                 <div><hr></div>
                 <div><h3>Product Details</h3></div>

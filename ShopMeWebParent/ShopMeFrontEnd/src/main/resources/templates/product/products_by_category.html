@@ -14,7 +14,7 @@
                 <th:block th:each="cat : ${category.children}">
                     <div class="col col-lg-2 col-md-3 col-sm-6 mb-4" th:if="${cat.enabled}">
                         <a th:href="@{'/c/' + ${cat.alias}}">
-                            <img th:src="@{${cat.imagePath}}" height="100" />
+                            <img th:src="@{${cat.imagePath}}" height="150" />
                             <br/>
                             <b>[[${cat.name}]]</b>
                         </a>
@@ -23,7 +23,7 @@
             </div>
         </th:block>
         <th:block th:if="${!products.empty}">
-            <div>
+            <div class="p-3 text-center">
                 <h2>Products in [[${pageTitle}]]</h2>
             </div>
             <div class="row m-4">

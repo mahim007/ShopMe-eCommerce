@@ -31,61 +31,59 @@
             </div>
         </form>
     </div>
-    <div class="full-details">
+    <div class="full-details p-3">
         <table class="table table-bordered table-striped table-hover table-responsive-xl">
             <thead class="table-dark">
-            <tr>
-                <th th:replace="fragments/column_element :: column_link('id', 'ID', 'none')"></th>
-                <th>Product</th>
-                <th>Headline</th>
-                <th th:replace="fragments/column_element :: column_link('rating', 'Rating', 'none')"></th>
-                <th th:replace="fragments/column_element :: column_link('reviewTime', 'Review Time', 'none')"></th>
-                <th>Action</th>
-            </tr>
+                <tr>
+                    <th th:replace="fragments/column_element :: column_link('id', 'ID', 'none')"></th>
+                    <th>Product</th>
+                    <th>Headline</th>
+                    <th th:replace="fragments/column_element :: column_link('rating', 'Rating', 'none')"></th>
+                    <th th:replace="fragments/column_element :: column_link('reviewTime', 'Review Time', 'none')"></th>
+                    <th>Action</th>
+                </tr>
             </thead>
             <tbody>
-            <tr th:each="review: ${reviews}">
-                <td th:text="${review.id}">ID</td>
-                <td th:utext="${review.product.shortName}"></td>
-                <td th:text="${review.headline}"></td>
-                <td th:text="${review.rating}"></td>
-                <td><div th:replace="fragments/datetime_formatter :: format_time(${review.reviewTime})">Review Time</div></td>
-                <td class="text-center">
-                    <a class="order-details fas fa-file-alt fa-2x icon-green" th:href="@{'/review/details/' + ${review.id}}" title="See review for the product"></a>
-                </td>
-            </tr>
+                <tr th:each="review: ${reviews}">
+                    <td th:text="${review.id}">ID</td>
+                    <td>
+                        <a target="_blank" th:href="@{'/p/' + ${review.product.alias}}">[[${review.product.shortName}]]</a>
+                    </td>
+                    <td th:text="${review.headline}"></td>
+                    <td>[[${review.rating}]] ☆</td>
+                    <td><div th:replace="fragments/datetime_formatter :: format_time(${review.reviewTime})">Review Time</div></td>
+                    <td class="text-center">
+                        <a class="link-detail fas fa-file-alt fa-2x icon-green"
+                           th:href="@{${moduleURL} + '/details/' + ${review.id}}" title="Review details"></a>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
-    <div class="less-details p-2">
-        <th:block th:each="review: ${reviews}">
-            <div class="row m-1">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-8">
-                                <span>Review ID # [[${review.id}]]</span>
-                            </div>
-                            <div class="col-4">
-                                <div class="text-end">
-                                    <a class="order-details fas fa-file-alt fa-2x icon-green" th:href="@{'/review/details/' + ${review.id}}"></a>
-                                </div>
-                            </div>
+    <div class="less-details">
+        <div class="row m-1" th:each="review : ${reviews}">
+            <div class="row">
+                <div class="col-2">[[${review.id}]]</div>
+                <div class="col-10">
+                    <div>[[${review.product.shortName}]]</div>
+                    <div class="row mt-2">
+                        <div class="col-3">
+                            [[${review.rating}]] ☆
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <div>
-                            <span th:utext="${review.product.shortName}"></span>
-                        </div>
-                        <div>
-                            <small>
-                                <div th:replace="fragments/datetime_formatter :: format_time(${review.reviewTime})"></div>
-                            </small>
+                        <div class="col-9">
+                            <th:block>
+                                <a class="link-detail" th:href="@{${moduleURL} + '/details/' + ${review.id}}"
+                                   title="Review details"
+                                >
+                                    <i class="fas fa-file-alt fa-2x icon-blue"></i>
+                                </a>
+                            </th:block>
                         </div>
                     </div>
                 </div>
             </div>
-        </th:block>
+            <div>&nbsp;</div>
+        </div>
     </div>
     <div class="text-center m-1" th:if="${totalPageNo > 0}">
         <span>Showing Reviews # [[${startNo}]] to [[${endNo}]] of [[${totalItems}]]</span>
@@ -96,8 +94,8 @@
     </div>
     <th:block th:replace="fragments/navigation :: footer_nav"></th:block>
     <th:block th:replace="fragments/modal :: shopmeModal"></th:block>
-    <div class="modal fade text-center" id="orderDetailsModal" aria-labelledby="orderDetailsModal" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
+    <div class="modal fade text-center" id="reviewDetailModal" aria-labelledby="reviewDetailModal" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content"></div>
         </div>
     </div>
@@ -106,6 +104,12 @@
         const contextPath = "[[@{/}]]";
         const csrfHeaderName = "[[${_csrf.headerName}]]";
         const csrfHeaderValue = "[[${_csrf.token}]]";
+
+        $(".link-detail").on("click", function (e) {
+            e.preventDefault();
+            let linkDetailURL = $(this).attr("href");
+            $("#reviewDetailModal").modal("show").find(".modal-content").load(linkDetailURL);
+        });
 
         function clearFilter() {
             window.location = moduleURL;

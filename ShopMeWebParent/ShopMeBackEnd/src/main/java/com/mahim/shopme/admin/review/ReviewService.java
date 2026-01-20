@@ -5,7 +5,6 @@ import com.mahim.shopme.common.entity.Review;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +36,7 @@ public class ReviewService {
 
     public Review findById(Integer id) {
         Optional<Review> reviewOptional = reviewRepository.findById(id);
-        if (reviewOptional.isEmpty()) throw new ReviewNotFoundException("Review with id: " + id + " not found.");
+        if (reviewOptional.isEmpty()) throw new com.mahim.shopme.common.exception.ReviewNotFoundException("Review with id: " + id + " not found.");
         return reviewOptional.get();
     }
 
