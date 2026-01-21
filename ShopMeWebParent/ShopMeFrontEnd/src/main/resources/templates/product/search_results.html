@@ -23,4 +23,14 @@
         <th:block th:replace="fragments/navigation :: footer_nav"></th:block>
     </div>
 </body>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".product-details-star-rating").rating({
+            displayOnly: true,
+            hoverOnClear: false,
+            showCaption: false,
+            theme: "krajee-svg",
+        });
+    });
+</script>
 </html>

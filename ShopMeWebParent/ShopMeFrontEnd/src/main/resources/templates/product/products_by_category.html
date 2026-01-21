@@ -14,7 +14,7 @@
                 <th:block th:each="cat : ${category.children}">
                     <div class="col col-lg-2 col-md-3 col-sm-6 mb-4" th:if="${cat.enabled}">
                         <a th:href="@{'/c/' + ${cat.alias}}">
-                            <img th:src="@{${cat.imagePath}}" height="150" />
+                            <img class="mb-2" th:src="@{${cat.imagePath}}" height="180" width="180" />
                             <br/>
                             <b>[[${cat.name}]]</b>
                         </a>
@@ -41,5 +41,15 @@
         </div>
         <th:block th:replace="fragments/navigation :: footer_nav"></th:block>
     </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".product-details-star-rating").rating({
+                displayOnly: true,
+                hoverOnClear: false,
+                showCaption: false,
+                theme: "krajee-svg",
+            });
+        });
+    </script>
 </body>
 </html>

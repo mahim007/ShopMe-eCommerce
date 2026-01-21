@@ -10,9 +10,9 @@
         </div>
         <div class="row d-flex align-items-center">
             <th:block th:each="cat : ${categories}">
-                <div class="col col-lg-2 col-md-3 col-sm-6 mb-4 text-center">
+                <div class="col col-lg-2 col-md-3 col-sm-6 m-4 text-center">
                     <div>
-                        <img  th:src="@{${cat.imagePath}}" width="120">
+                        <img class="mb-2" th:src="@{${cat.imagePath}}" width="150" height="150" th:alt="${cat.name}">
                     </div>
                     <div>
                         <a th:href="@{'/c/' + ${cat.alias}}">[[${cat.name}]]</a>

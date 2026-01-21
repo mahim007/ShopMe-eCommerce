@@ -9,15 +9,16 @@
         <div class="row p-3">
             <div class="col-sm-4">
                 <div class="d-flex justify-content-center">
-                    <img id="bigImage" class="m-2" th:src="@{${product.mainImagePath}}" height="300" width="300" />
+                    <img id="bigImage" style="height: 320px; max-width: 500px; object-fit: contain;"
+                         class="m-2" th:src="@{${product.mainImagePath}}" height="320" />
                 </div>
                 <div class="row justify-content-center">
                     <div class="col-2 col-sm-2 col-md-2 col-lg-1 m-2 p-1 border border-secondary">
-                        <img class="image-thumbnail img-fluid" th:src="@{${product.mainImagePath}}" height="50" index="0" />
+                        <img class="image-thumbnail img-fluid" th:src="@{${product.mainImagePath}}" width="50" index="0" />
                     </div>
                     <th:block th:each="extraImage, status : ${product.images}">
                         <div class="col-2 col-sm-2 col-md-2 col-lg-1 m-2 p-1 border border-secondary">
-                            <img class="image-thumbnail img-fluid" th:src="@{${extraImage.imagePath}}" height="50" th:index="${status.count}" />
+                            <img class="image-thumbnail img-fluid" th:src="@{${extraImage.imagePath}}" width="50" th:index="${status.count}" />
                         </div>
                     </th:block>
                 </div>
