@@ -10,4 +10,8 @@
         <span class="star" data-value="5">★</span>
     </div>
 </div>
+
+<div th:fragment="rating_formatter(value)" th:remove="tag">
+    <div>[[${#numbers.formatDecimal(value, 2, 'COMMA' , 2, 'POINT')}]] of 5</div>
+</div>
 </html>

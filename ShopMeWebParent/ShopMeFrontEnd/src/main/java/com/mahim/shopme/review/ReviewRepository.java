@@ -22,4 +22,7 @@ public interface ReviewRepository extends PagingAndSortingRepository<Review, Int
 
     @Query("select r from Review r where r.comment like %:keyword% or r.headline like %:keyword% and r.customer.email like %:customerEmail%")
     Page<Review> searchAllReviews(String keyword, String customerEmail, Pageable pageable);
+
+    @Query("select r from Review r where r.product.alias = :alias")
+    Page<Review> findAllByProductId(String alias, Pageable pageRequest);
 }
