@@ -26,6 +26,11 @@ public class ReviewService {
         return reviewOpt.orElse(null);
     }
 
+    public List<Review> getReviewsByProductId(Integer productId) {
+        return reviewRepository.findByProductId(productId);
+
+    }
+
     public List<Review> getReviewsByCustomerEmail(String customerEmail) {
         return reviewRepository.getReviewsByCustomerEmail(customerEmail);
     }

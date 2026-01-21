@@ -14,6 +14,9 @@ public interface ReviewRepository extends PagingAndSortingRepository<Review, Int
     @Query("select r from Review r where r.product.id = :productId and r.customer.id = :customerEmail")
     Optional<Review> findByProductIdAndCustomerEmail(Integer productId, String customerEmail);
 
+    @Query("select r from Review r where r.product.id = :productId order by r.reviewTime desc")
+    List<Review> findByProductId(Integer productId);
+
     @Query("select r from Review r where r.customer.email = :customerEmail")
     List<Review> getReviewsByCustomerEmail(String customerEmail);
 

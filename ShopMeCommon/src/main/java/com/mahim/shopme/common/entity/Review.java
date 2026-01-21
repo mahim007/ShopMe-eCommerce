@@ -2,10 +2,7 @@ package com.mahim.shopme.common.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -14,7 +11,9 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Review extends ParentEntity {
+    @Column(length = 100)
     private String headline;
+    @Column(length = 512)
     private String comment;
     private int rating;
     private Date reviewTime;
