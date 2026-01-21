@@ -104,7 +104,9 @@ public class ProductService {
             productToBeSaved = product;
         }
 
-        return productRepository.save(productToBeSaved);
+        Product saved = productRepository.save(productToBeSaved);
+        productRepository.updateReviewCountAndAverageRating(saved.getId());
+        return saved;
     }
 
     public void saveProductPrice(Product product) {

@@ -7,8 +7,8 @@
         <th:block th:replace="fragments/navigation :: search_nav"></th:block>
         <th:block th:replace="fragments/breadcrumb :: content"></th:block>
         <div class="row p-3">
-            <div class="col-sm">
-                <div>
+            <div class="col-sm-4">
+                <div class="d-flex justify-content-center">
                     <img id="bigImage" class="m-2" th:src="@{${product.mainImagePath}}" height="300" width="300" />
                 </div>
                 <div class="row justify-content-center">
@@ -22,17 +22,23 @@
                     </th:block>
                 </div>
             </div>
-            <div class="col-sm">
+            <div class="col p-3">
                 <div><h3>[[${product.name}]]</h3></div>
+                <div class="d-flex ml-1 mb-1">
+                    <div>
+                        <input type="text" class="product-details-star-rating" dir="ltr" data-size="md" th:value="${product.averageRating}" />
+                    </div>
+                    <div class="mt-4">[[${product.reviewCount}]] rating(s)</div>
+                </div>
                 <div><span>Brand: [[${product.brand.name}]]</span></div>
                 <th:block th:replace="fragments/product_fragment :: price_for_details"></th:block>
                 <div th:utext="${product.shortDescription}"></div>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-2 d-flex flex-column align-items-center">
                 <th:block th:if="${product.inStock}">
-                    <span class="text-success"><b>In Stock</b></span>
+                    <span class="text-success mb-2"><b>In Stock</b></span>
                     <th:block th:replace="cart/quantity_control::content(1, ${product.id})"></th:block>
-                    <div class="mt-3">
+                    <div>
                         <input type="button" id="addToCart" value="Add to Card" class="btn btn-primary">
                     </div>
                 </th:block>
@@ -84,6 +90,13 @@
             $("#carouselModal").modal("show");
             let imageIndex = parseInt(bigImage.attr("index"));
             $("#carouselExampleIndicators").carousel(imageIndex);
+        });
+
+        $(".product-details-star-rating").rating({
+            displayOnly: true,
+            hoverOnClear: false,
+            showCaption: false,
+            theme: "krajee-svg",
         });
     });
 </script>

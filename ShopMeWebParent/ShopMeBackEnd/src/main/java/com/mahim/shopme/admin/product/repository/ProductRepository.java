@@ -3,11 +3,9 @@ package com.mahim.shopme.admin.product.repository;
 import com.mahim.shopme.admin.paging.SearchRepository;
 import com.mahim.shopme.common.entity.Product;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -51,4 +49,10 @@ public interface ProductRepository extends SearchRepository<Product, Integer> {
             "p.shortDescription like %:keyword% or " +
             "p.fullDescription like %:keyword%")
     Page<Product> searchProductsByName(String keyword, Pageable pageable);
+
+    @Modifying
+    @Query("UPDATE Product p SET p.reviewCount = COALESCE((SELECT COUNT (r.id) FROM Review r WHERE r.product.id = :productId), 0) , " +
+            "p.averageRating = COALESCE((SELECT AVG(r.rating) FROM Review r WHERE r.product.id = :productId), 0.0) " +
+            "WHERE p.id = :productId")
+    void updateReviewCountAndAverageRating(Integer productId);
 }

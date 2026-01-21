@@ -110,8 +110,8 @@ public class Product extends ParentEntity {
 
     @Transient
     public String getShortName() {
-        if (this.name.length() > 56) {
-            return this.name.substring(0, 56).concat("...");
+        if (this.name.length() > 64) {
+            return this.name.substring(0, 64).concat("...");
         }
 
         return this.name;

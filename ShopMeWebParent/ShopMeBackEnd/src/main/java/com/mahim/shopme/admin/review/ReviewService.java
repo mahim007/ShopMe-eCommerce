@@ -1,21 +1,26 @@
 package com.mahim.shopme.admin.review;
 
 import com.mahim.shopme.admin.paging.PagingAndSortingHelper;
+import com.mahim.shopme.admin.product.repository.ProductRepository;
 import com.mahim.shopme.common.entity.Review;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class ReviewService {
     public static final int REVIEWS_PER_PAGE = 10;
 
     private final ReviewRepository reviewRepository;
+    private final ProductRepository productRepository;
 
-    public ReviewService(ReviewRepository reviewRepository) {
+    public ReviewService(ReviewRepository reviewRepository, ProductRepository productRepository) {
         this.reviewRepository = reviewRepository;
+        this.productRepository = productRepository;
     }
 
     public Page<Review> listByKeyword(int pageNo, PagingAndSortingHelper helper) {
@@ -27,7 +32,10 @@ public class ReviewService {
         reviewToBeSaved.setHeadline(review.getHeadline());
         reviewToBeSaved.setComment(review.getComment());
         reviewToBeSaved.setModerated(true);
-        return reviewRepository.save(reviewToBeSaved);
+
+        Review saved = reviewRepository.save(reviewToBeSaved);
+        productRepository.updateReviewCountAndAverageRating(saved.getProduct().getId());
+        return saved;
     }
 
     public List<Review> listAllReviews() {
